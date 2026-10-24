@@ -16,11 +16,13 @@ export function useAction<TVariables = void, TResultat = unknown>(
   return useMutation({
     mutationFn: action,
     onSuccess: async (resultat) => {
+      // `apres` d'abord (réinitialiser le formulaire, naviguer) : sinon une saisie faite pendant le
+      // rechargement des données serait effacée après coup.
+      options.apres?.(resultat);
       if (options.succes) toast.success(options.succes);
       await Promise.all(
         (options.invalider ?? []).map((cle) => client.invalidateQueries({ queryKey: cle })),
       );
-      options.apres?.(resultat);
     },
     onError: (erreur) => toast.error(erreur.message),
   });

@@ -19,6 +19,15 @@ LECTURE_PARAMETRAGE = [
     "core.view_journeecomptable",
 ]
 
+# Accueil et suivi des dossiers : créer un prospect, compléter le KYC, ajouter des documents.
+GESTION_DOSSIERS_MEMBRES = [
+    "members.view_membre",
+    "members.add_membre",
+    "members.change_membre",
+    "members.view_documentmembre",
+    "members.add_documentmembre",
+]
+
 ROLES: dict[str, dict] = {
     "ADMINISTRATEUR": {
         "libelle": "Administrateur",
@@ -38,6 +47,9 @@ ROLES: dict[str, dict] = {
             "accounting.valider_ecriture",
             "accounting.contre_passer_ecriture",
             "accounting.voir_etats",
+            "members.activer_membre",
+            "members.changer_statut_membre",
+            "members.gerer_liste_noire",
         ],
     },
     "CHEF_AGENCE": {
@@ -51,25 +63,38 @@ ROLES: dict[str, dict] = {
             "accounting.view_*",
             "accounting.valider_ecriture",
             "accounting.voir_etats",
+            *GESTION_DOSSIERS_MEMBRES,
+            "members.activer_membre",
+            "members.changer_statut_membre",
+            "members.gerer_liste_noire",
+            "members.encaisser_adhesion",
         ],
     },
     "AGENT_RECEPTION": {
-        # Accueil : simulations de crédit et enregistrement des demandes (phase 4),
-        # création de membres en statut prospect (phase 2). Aucun accès caisse ni approbation.
+        # Accueil : création des dossiers membres (prospects) ; simulations et demandes de crédit
+        # en phase 4. Aucun accès caisse, aucune activation ni approbation.
         "libelle": "Agent de réception",
-        "permissions": [*LECTURE_PARAMETRAGE],
+        "permissions": [*LECTURE_PARAMETRAGE, *GESTION_DOSSIERS_MEMBRES],
     },
     "AGENT_CREDIT": {
         "libelle": "Agent de crédit",
-        "permissions": [*LECTURE_PARAMETRAGE],
+        "permissions": [*LECTURE_PARAMETRAGE, *GESTION_DOSSIERS_MEMBRES],
     },
     "MEMBRE_COMITE": {
         "libelle": "Membre du comité",
-        "permissions": [*LECTURE_PARAMETRAGE],
+        "permissions": [*LECTURE_PARAMETRAGE, "members.view_membre", "members.view_documentmembre"],
     },
     "CAISSIER": {
         "libelle": "Caissier",
-        "permissions": [*LECTURE_PARAMETRAGE],
+        # Consulte photo et signature pour vérifier l'identité au guichet.
+        "permissions": [
+            *LECTURE_PARAMETRAGE,
+            "members.view_membre",
+            "members.view_documentmembre",
+            "members.encaisser_adhesion",
+            # Choix du compte de caisse ou de mobile money qui reçoit l'argent.
+            "accounting.view_comptecomptable",
+        ],
     },
     "COMPTABLE": {
         "libelle": "Comptable",
@@ -87,6 +112,7 @@ ROLES: dict[str, dict] = {
             "accounting.valider_ecriture",
             "accounting.contre_passer_ecriture",
             "accounting.voir_etats",
+            "members.view_membre",
         ],
     },
     "AUDITEUR": {

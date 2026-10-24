@@ -13,7 +13,6 @@ import { useMoi, usePermission } from "@/lib/auth";
 import { formatDate, formatTaux } from "@/lib/format";
 
 const MODULES_A_VENIR = [
-  "Membres et KYC",
   "Épargne et caisse",
   "Crédits Éducation et Secours (simulateur, demandes, comité, décaissement)",
   "Garanties et groupes solidaires",
@@ -107,7 +106,7 @@ export default function TableauDeBord() {
         <CardHeader>
           <CardTitle>Prochains modules</CardTitle>
           <CardDescription>
-            Les fondations, la sécurité et la comptabilité sont en place. Les modules métiers
+            Les fondations, la sécurité, la comptabilité et les membres sont en place. Les modules métiers
             arrivent dans cet ordre.
           </CardDescription>
         </CardHeader>

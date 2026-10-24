@@ -95,15 +95,17 @@ export async function api<T = unknown>(chemin: string, requete: Requete = {}): P
     }
   }
 
+  // Les fichiers partent en multipart (le navigateur fixe lui-même le Content-Type).
+  const multipart = body instanceof FormData;
   const envoyer = async () => {
     const headers: Record<string, string> = { Accept: "application/json" };
-    if (body !== undefined) headers["Content-Type"] = "application/json";
+    if (body !== undefined && !multipart) headers["Content-Type"] = "application/json";
     if (method !== "GET") headers["X-CSRFToken"] = await jetonCsrf();
     return fetch(url, {
       method,
       headers,
       credentials: "same-origin",
-      body: body !== undefined ? JSON.stringify(body) : undefined,
+      body: multipart ? body : body !== undefined ? JSON.stringify(body) : undefined,
     });
   };
 

@@ -59,6 +59,16 @@ Le backend choisit la base selon la variable `DATABASE_URL` :
   docker compose -f docker-compose.dev.yml up -d     # PostgreSQL (5432) et Redis (6379)
   ```
 
+  Avec un PostgreSQL déjà installé sur la machine, créez une base vide (par exemple
+  `proxicredit`) et indiquez-la dans `backend/.env` :
+
+  ```
+  DATABASE_URL=postgres://UTILISATEUR:MOT_DE_PASSE@localhost:5432/proxicredit
+  ```
+
+  Pour les tests, l'utilisateur doit pouvoir créer une base (`pytest` crée puis supprime
+  `test_proxicredit`).
+
 ### 1.3 Backend (Django)
 
 **Windows (PowerShell)**

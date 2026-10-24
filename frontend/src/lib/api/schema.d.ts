@@ -602,6 +602,302 @@ export interface paths {
         patch: operations["jours_feries_partial_update"];
         trace?: never;
     };
+    "/api/membres": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Dossiers des membres. On ne supprime jamais un membre : on clôture son dossier. */
+        get: operations["membres_list"];
+        put?: never;
+        /** @description Dossiers des membres. On ne supprime jamais un membre : on clôture son dossier. */
+        post: operations["membres_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/membres/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Dossiers des membres. On ne supprime jamais un membre : on clôture son dossier. */
+        get: operations["membres_retrieve"];
+        /** @description Dossiers des membres. On ne supprime jamais un membre : on clôture son dossier. */
+        put: operations["membres_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** @description Dossiers des membres. On ne supprime jamais un membre : on clôture son dossier. */
+        patch: operations["membres_partial_update"];
+        trace?: never;
+    };
+    "/api/membres/{id}/activer": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Dossiers des membres. On ne supprime jamais un membre : on clôture son dossier. */
+        post: operations["membres_activer_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/membres/{id}/adhesion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Dossiers des membres. On ne supprime jamais un membre : on clôture son dossier. */
+        post: operations["membres_adhesion_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/membres/{id}/beneficiaires": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Dossiers des membres. On ne supprime jamais un membre : on clôture son dossier. */
+        get: operations["membres_beneficiaires_list"];
+        put?: never;
+        /** @description Dossiers des membres. On ne supprime jamais un membre : on clôture son dossier. */
+        post: operations["membres_beneficiaires_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/membres/{id}/beneficiaires/{beneficiaire_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** @description Dossiers des membres. On ne supprime jamais un membre : on clôture son dossier. */
+        delete: operations["membres_beneficiaires_destroy"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/membres/{id}/composition": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Dossiers des membres. On ne supprime jamais un membre : on clôture son dossier. */
+        get: operations["membres_composition_list"];
+        put?: never;
+        /** @description Dossiers des membres. On ne supprime jamais un membre : on clôture son dossier. */
+        post: operations["membres_composition_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/membres/{id}/composition/{lien_id}/retirer": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Dossiers des membres. On ne supprime jamais un membre : on clôture son dossier. */
+        post: operations["membres_composition_retirer_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/membres/{id}/controle-activation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Dossiers des membres. On ne supprime jamais un membre : on clôture son dossier. */
+        get: operations["membres_controle_activation_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/membres/{id}/documents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Dossiers des membres. On ne supprime jamais un membre : on clôture son dossier. */
+        get: operations["membres_documents_list"];
+        put?: never;
+        /** @description Dossiers des membres. On ne supprime jamais un membre : on clôture son dossier. */
+        post: operations["membres_documents_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/membres/{id}/documents/{document_id}/fichier": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Dossiers des membres. On ne supprime jamais un membre : on clôture son dossier. */
+        get: operations["membres_documents_fichier_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/membres/{id}/historique": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Dossiers des membres. On ne supprime jamais un membre : on clôture son dossier. */
+        get: operations["membres_historique_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/membres/{id}/liste-noire": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Dossiers des membres. On ne supprime jamais un membre : on clôture son dossier. */
+        post: operations["membres_liste_noire_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/membres/{id}/parts-sociales": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Dossiers des membres. On ne supprime jamais un membre : on clôture son dossier. */
+        get: operations["membres_parts_sociales_list"];
+        put?: never;
+        /** @description Dossiers des membres. On ne supprime jamais un membre : on clôture son dossier. */
+        post: operations["membres_parts_sociales_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/membres/{id}/statut": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Dossiers des membres. On ne supprime jamais un membre : on clôture son dossier. */
+        post: operations["membres_statut_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/membres/conditions-adhesion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Dossiers des membres. On ne supprime jamais un membre : on clôture son dossier. */
+        get: operations["membres_conditions_adhesion_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/membres/doublons": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Membres existants (toutes agences) qui ressemblent à celui qu'on va créer. */
+        get: operations["membres_doublons_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/parametres": {
         parameters: {
             query?: never;
@@ -824,6 +1120,26 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /**
+         * @description * `suspendre` - suspendre
+         *     * `reactiver` - reactiver
+         *     * `demission` - demission
+         *     * `deces` - deces
+         * @enum {string}
+         */
+        ActionEnum: "suspendre" | "reactiver" | "demission" | "deces";
+        Adhesion: {
+            /** Format: decimal */
+            readonly frais: string;
+            readonly devise: string;
+            /** Format: date */
+            readonly date_comptable: string;
+            readonly encaisse_par: string;
+            /** Format: date-time */
+            readonly encaisse_le: string;
+            readonly ecriture: number;
+            ecriture_numero: string;
+        };
         Agence: {
             readonly id: number;
             code: string;
@@ -852,14 +1168,49 @@ export interface components {
             est_siege?: boolean;
             active?: boolean;
         };
+        AjoutDocumentRequest: {
+            type: components["schemas"]["TypeDocumentEnum"];
+            /** Format: binary */
+            fichier: string;
+            /** @default  */
+            description: string;
+        };
+        AjoutGroupeRequest: {
+            membre: number;
+            /** @default MEMBRE */
+            fonction: components["schemas"]["FonctionEnum"];
+        };
         Balance: {
             lignes: components["schemas"]["LigneBalance"][];
             classes: components["schemas"]["ClasseBalance"][];
             total: components["schemas"]["TotauxBalance"];
         };
+        Beneficiaire: {
+            readonly id: number;
+            nom_complet: string;
+            /** Lien de parenté */
+            lien: string;
+            telephone?: string;
+            /** Format: decimal */
+            pourcentage?: string;
+        };
+        BeneficiaireRequest: {
+            nom_complet: string;
+            /** Lien de parenté */
+            lien: string;
+            telephone?: string;
+            /** Format: decimal */
+            pourcentage?: string;
+        };
+        /** @enum {unknown} */
+        BlankEnum: "";
         ChangerMotDePasseRequest: {
             ancien: string;
             nouveau: string;
+        };
+        ChangerStatutRequest: {
+            action: components["schemas"]["ActionEnum"];
+            motif: string;
         };
         ClasseBalance: {
             /** Format: decimal */
@@ -901,6 +1252,14 @@ export interface components {
             devise?: string | null;
             actif?: boolean;
         };
+        ConditionsAdhesion: {
+            devise: string;
+            /** Format: decimal */
+            frais: string;
+            /** Format: decimal */
+            valeur_part: string;
+            parts_minimum: number;
+        };
         ConnexionRequest: {
             username: string;
             password: string;
@@ -908,6 +1267,10 @@ export interface components {
         };
         ContrePasserRequest: {
             motif: string;
+        };
+        ControleActivation: {
+            pret: boolean;
+            manquants: string[];
         };
         Desactiver2FARequest: {
             mot_de_passe: string;
@@ -917,10 +1280,7 @@ export interface components {
             code: string;
             nom: string;
             symbole: string;
-            /**
-             * Format: int64
-             * @description Nombre de décimales utilisées pour l'arrondi des montants.
-             */
+            /** @description Nombre de décimales utilisées pour l'arrondi des montants. */
             decimales?: number;
             /** @description Devise de référence comptable (contre-valeurs). */
             est_reference?: boolean;
@@ -930,14 +1290,22 @@ export interface components {
             code: string;
             nom: string;
             symbole: string;
-            /**
-             * Format: int64
-             * @description Nombre de décimales utilisées pour l'arrondi des montants.
-             */
+            /** @description Nombre de décimales utilisées pour l'arrondi des montants. */
             decimales?: number;
             /** @description Devise de référence comptable (contre-valeurs). */
             est_reference?: boolean;
             active?: boolean;
+        };
+        DocumentMembre: {
+            readonly id: number;
+            readonly type: components["schemas"]["TypeDocumentEnum"];
+            readonly nom_origine: string;
+            readonly type_contenu: string;
+            readonly taille: number;
+            readonly description: string;
+            readonly ajoute_par: string;
+            /** Format: date-time */
+            readonly ajoute_le: string;
         };
         Ecriture: {
             readonly id: number;
@@ -990,6 +1358,22 @@ export interface components {
             reference: string;
             lignes: components["schemas"]["LigneSaisieRequest"][];
         };
+        EncaisserAdhesionRequest: {
+            /** @description Compte de classe 5 qui reçoit l'argent (caisse, mobile money). */
+            compte_tresorerie: string;
+            /** @description Identifiant unique généré par le client pour cette opération. */
+            cle_idempotence: string;
+            nombre_parts: number;
+        };
+        /**
+         * @description * `CELIBATAIRE` - Célibataire
+         *     * `MARIE` - Marié(e)
+         *     * `DIVORCE` - Divorcé(e)
+         *     * `VEUF` - Veuf / veuve
+         *     * `UNION_LIBRE` - Union libre
+         * @enum {string}
+         */
+        EtatCivilEnum: "CELIBATAIRE" | "MARIE" | "DIVORCE" | "VEUF" | "UNION_LIBRE";
         /**
          * @description * `SUCCES` - Connexion réussie
          *     * `ECHEC` - Échec
@@ -1002,6 +1386,14 @@ export interface components {
         FermerJourneeRequest: {
             agence: number;
         };
+        /**
+         * @description * `PRESIDENT` - Président(e)
+         *     * `SECRETAIRE` - Secrétaire
+         *     * `TRESORIER` - Trésorier(ère)
+         *     * `MEMBRE` - Membre
+         * @enum {string}
+         */
+        FonctionEnum: "PRESIDENT" | "SECRETAIRE" | "TRESORIER" | "MEMBRE";
         GrandLivre: {
             compte: string;
             libelle: string;
@@ -1010,6 +1402,21 @@ export interface components {
             mouvements: components["schemas"]["Mouvement"][];
             /** Format: decimal */
             solde_final: string;
+        };
+        GroupeActuel: {
+            id: number;
+            numero: string;
+            nom: string;
+            fonction: string;
+        };
+        HistoriqueStatut: {
+            readonly id: number;
+            readonly ancien: string;
+            readonly nouveau: string;
+            readonly motif: string;
+            readonly par: string;
+            /** Format: date-time */
+            readonly le: string;
         };
         JourFerie: {
             readonly id: number;
@@ -1117,6 +1524,166 @@ export interface components {
             /** @default  */
             libelle: string;
         };
+        ListeNoireRequest: {
+            inscrire: boolean;
+            motif: string;
+        };
+        Membre: {
+            readonly id: number;
+            readonly numero: string;
+            type: components["schemas"]["TypeMembreEnum"];
+            readonly statut: components["schemas"]["StatutMembreEnum"];
+            /** @description Calculé : sert à la recherche. */
+            readonly nom_complet: string;
+            readonly agence: number;
+            readonly agence_code: string;
+            nom?: string;
+            postnom?: string;
+            prenom?: string;
+            sexe?: components["schemas"]["SexeEnum"] | components["schemas"]["BlankEnum"];
+            /** Format: date */
+            date_naissance?: string | null;
+            lieu_naissance?: string;
+            nationalite?: string;
+            etat_civil?: components["schemas"]["EtatCivilEnum"] | components["schemas"]["BlankEnum"];
+            personnes_a_charge?: number | null;
+            type_piece?: components["schemas"]["TypePieceEnum"] | components["schemas"]["BlankEnum"];
+            numero_piece?: string;
+            /** Format: date */
+            piece_delivree_le?: string | null;
+            /** Format: date */
+            piece_expire_le?: string | null;
+            profession?: string;
+            employeur?: string;
+            raison_sociale?: string;
+            /** @description SARL, ASBL, SA... */
+            forme_juridique?: string;
+            rccm?: string;
+            /** Identification nationale */
+            id_nat?: string;
+            numero_impot?: string;
+            /** Format: date */
+            date_creation?: string | null;
+            /** Représentant légal */
+            representant_nom?: string;
+            representant_fonction?: string;
+            representant_telephone?: string;
+            nom_groupe?: string;
+            telephone?: string;
+            telephone_secondaire?: string;
+            email?: string;
+            province?: string;
+            ville?: string;
+            commune?: string;
+            quartier?: string;
+            avenue?: string;
+            /** Numéro (adresse) */
+            numero_adresse?: string;
+            /**
+             * Activité principale
+             * @description Commerce, enseignement...
+             */
+            activite?: string;
+            /** Format: decimal */
+            revenu_mensuel?: string | null;
+            devise_revenu?: string | null;
+            /** Format: decimal */
+            charges_mensuelles?: string | null;
+            readonly en_liste_noire: boolean;
+            readonly motif_liste_noire: string;
+            readonly cree_par: string;
+            /** Format: date-time */
+            readonly cree_le: string;
+            readonly active_par: string;
+            /** Format: date-time */
+            readonly active_le: string | null;
+            readonly adhesion: components["schemas"]["Adhesion"] | null;
+            readonly nombre_parts: number;
+            readonly photo: number | null;
+            readonly signature: number | null;
+            readonly groupe_actuel: components["schemas"]["GroupeActuel"] | null;
+        };
+        MembreGroupe: {
+            readonly id: number;
+            readonly membre: number;
+            readonly membre_numero: string;
+            readonly membre_nom: string;
+            readonly membre_statut: string;
+            readonly fonction: components["schemas"]["FonctionEnum"];
+            /** Format: date */
+            readonly date_entree: string;
+            /** Format: date */
+            readonly date_sortie: string | null;
+        };
+        MembreListe: {
+            readonly id: number;
+            readonly numero: string;
+            readonly type: components["schemas"]["TypeMembreEnum"];
+            readonly statut: components["schemas"]["StatutMembreEnum"];
+            /** @description Calculé : sert à la recherche. */
+            readonly nom_complet: string;
+            readonly telephone: string;
+            readonly agence: number;
+            readonly agence_code: string;
+            readonly en_liste_noire: boolean;
+            /** Format: date-time */
+            readonly cree_le: string;
+        };
+        MembreRequest: {
+            type: components["schemas"]["TypeMembreEnum"];
+            nom?: string;
+            postnom?: string;
+            prenom?: string;
+            sexe?: components["schemas"]["SexeEnum"] | components["schemas"]["BlankEnum"];
+            /** Format: date */
+            date_naissance?: string | null;
+            lieu_naissance?: string;
+            nationalite?: string;
+            etat_civil?: components["schemas"]["EtatCivilEnum"] | components["schemas"]["BlankEnum"];
+            personnes_a_charge?: number | null;
+            type_piece?: components["schemas"]["TypePieceEnum"] | components["schemas"]["BlankEnum"];
+            numero_piece?: string;
+            /** Format: date */
+            piece_delivree_le?: string | null;
+            /** Format: date */
+            piece_expire_le?: string | null;
+            profession?: string;
+            employeur?: string;
+            raison_sociale?: string;
+            /** @description SARL, ASBL, SA... */
+            forme_juridique?: string;
+            rccm?: string;
+            /** Identification nationale */
+            id_nat?: string;
+            numero_impot?: string;
+            /** Format: date */
+            date_creation?: string | null;
+            /** Représentant légal */
+            representant_nom?: string;
+            representant_fonction?: string;
+            representant_telephone?: string;
+            nom_groupe?: string;
+            telephone?: string;
+            telephone_secondaire?: string;
+            email?: string;
+            province?: string;
+            ville?: string;
+            commune?: string;
+            quartier?: string;
+            avenue?: string;
+            /** Numéro (adresse) */
+            numero_adresse?: string;
+            /**
+             * Activité principale
+             * @description Commerce, enseignement...
+             */
+            activite?: string;
+            /** Format: decimal */
+            revenu_mensuel?: string | null;
+            devise_revenu?: string | null;
+            /** Format: decimal */
+            charges_mensuelles?: string | null;
+        };
         Moi: {
             readonly id: number;
             /**
@@ -1163,10 +1730,64 @@ export interface components {
             /** Format: decimal */
             solde: string;
         };
+        MouvementParts: {
+            readonly id: number;
+            readonly type: components["schemas"]["MouvementPartsTypeEnum"];
+            /** @description Positif en souscription, négatif en remboursement. */
+            readonly nombre: number;
+            /** Format: decimal */
+            readonly valeur_unitaire: string;
+            /** Format: decimal */
+            readonly montant: string;
+            readonly devise: string;
+            /** Format: date */
+            readonly date_comptable: string;
+            readonly ecriture: number;
+            ecriture_numero: string;
+            readonly cree_par: string;
+            /** Format: date-time */
+            readonly cree_le: string;
+        };
+        /**
+         * @description * `SOUSCRIPTION` - Souscription
+         *     * `REMBOURSEMENT` - Remboursement
+         * @enum {string}
+         */
+        MouvementPartsTypeEnum: "SOUSCRIPTION" | "REMBOURSEMENT";
         OuvrirJourneeRequest: {
             agence: number;
             /** Format: date */
             date: string;
+        };
+        PaginatedBeneficiaireList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Beneficiaire"][];
+        };
+        PaginatedDocumentMembreList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["DocumentMembre"][];
         };
         PaginatedEcritureList: {
             /** @example 123 */
@@ -1182,6 +1803,21 @@ export interface components {
              */
             previous?: string | null;
             results: components["schemas"]["Ecriture"][];
+        };
+        PaginatedHistoriqueStatutList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["HistoriqueStatut"][];
         };
         PaginatedJournalConnexionList: {
             /** @example 123 */
@@ -1212,6 +1848,51 @@ export interface components {
              */
             previous?: string | null;
             results: components["schemas"]["JourneeComptable"][];
+        };
+        PaginatedMembreGroupeList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["MembreGroupe"][];
+        };
+        PaginatedMembreListeList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["MembreListe"][];
+        };
+        PaginatedMouvementPartsList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["MouvementParts"][];
         };
         PaginatedParametreList: {
             /** @example 123 */
@@ -1311,10 +1992,7 @@ export interface components {
             code?: string;
             nom?: string;
             symbole?: string;
-            /**
-             * Format: int64
-             * @description Nombre de décimales utilisées pour l'arrondi des montants.
-             */
+            /** @description Nombre de décimales utilisées pour l'arrondi des montants. */
             decimales?: number;
             /** @description Devise de référence comptable (contre-valeurs). */
             est_reference?: boolean;
@@ -1341,6 +2019,61 @@ export interface components {
             code?: string;
             libelle?: string;
             actif?: boolean;
+        };
+        PatchedMembreRequest: {
+            type?: components["schemas"]["TypeMembreEnum"];
+            nom?: string;
+            postnom?: string;
+            prenom?: string;
+            sexe?: components["schemas"]["SexeEnum"] | components["schemas"]["BlankEnum"];
+            /** Format: date */
+            date_naissance?: string | null;
+            lieu_naissance?: string;
+            nationalite?: string;
+            etat_civil?: components["schemas"]["EtatCivilEnum"] | components["schemas"]["BlankEnum"];
+            personnes_a_charge?: number | null;
+            type_piece?: components["schemas"]["TypePieceEnum"] | components["schemas"]["BlankEnum"];
+            numero_piece?: string;
+            /** Format: date */
+            piece_delivree_le?: string | null;
+            /** Format: date */
+            piece_expire_le?: string | null;
+            profession?: string;
+            employeur?: string;
+            raison_sociale?: string;
+            /** @description SARL, ASBL, SA... */
+            forme_juridique?: string;
+            rccm?: string;
+            /** Identification nationale */
+            id_nat?: string;
+            numero_impot?: string;
+            /** Format: date */
+            date_creation?: string | null;
+            /** Représentant légal */
+            representant_nom?: string;
+            representant_fonction?: string;
+            representant_telephone?: string;
+            nom_groupe?: string;
+            telephone?: string;
+            telephone_secondaire?: string;
+            email?: string;
+            province?: string;
+            ville?: string;
+            commune?: string;
+            quartier?: string;
+            avenue?: string;
+            /** Numéro (adresse) */
+            numero_adresse?: string;
+            /**
+             * Activité principale
+             * @description Commerce, enseignement...
+             */
+            activite?: string;
+            /** Format: decimal */
+            revenu_mensuel?: string | null;
+            devise_revenu?: string | null;
+            /** Format: decimal */
+            charges_mensuelles?: string | null;
         };
         PatchedParametreRequest: {
             cle?: string;
@@ -1416,7 +2149,6 @@ export interface components {
         };
         RegleComptableLigne: {
             readonly id: number;
-            /** Format: int64 */
             ordre?: number;
             sens: components["schemas"]["SensEnum"];
             /** @description Clé du montant fourni par le module, ex. « capital », « frais ». */
@@ -1427,7 +2159,6 @@ export interface components {
             libelle?: string;
         };
         RegleComptableLigneRequest: {
-            /** Format: int64 */
             ordre?: number;
             sens: components["schemas"]["SensEnum"];
             /** @description Clé du montant fourni par le module, ex. « capital », « frais ». */
@@ -1467,6 +2198,19 @@ export interface components {
          */
         SensEnum: "D" | "C";
         /**
+         * @description * `M` - Masculin
+         *     * `F` - Féminin
+         * @enum {string}
+         */
+        SexeEnum: "M" | "F";
+        SouscrirePartsRequest: {
+            /** @description Compte de classe 5 qui reçoit l'argent (caisse, mobile money). */
+            compte_tresorerie: string;
+            /** @description Identifiant unique généré par le client pour cette opération. */
+            cle_idempotence: string;
+            nombre: number;
+        };
+        /**
          * @description * `BROUILLON` - Brouillon
          *     * `VALIDEE` - Validée
          * @enum {string}
@@ -1478,6 +2222,15 @@ export interface components {
          * @enum {string}
          */
         StatutJourneeEnum: "OUVERTE" | "FERMEE";
+        /**
+         * @description * `PROSPECT` - Prospect
+         *     * `ACTIF` - Actif
+         *     * `SUSPENDU` - Suspendu
+         *     * `DEMISSIONNAIRE` - Démissionnaire
+         *     * `DECEDE` - Décédé
+         * @enum {string}
+         */
+        StatutMembreEnum: "PROSPECT" | "ACTIF" | "SUSPENDU" | "DEMISSIONNAIRE" | "DECEDE";
         TauxChange: {
             readonly id: number;
             /** Format: date */
@@ -1518,6 +2271,34 @@ export interface components {
             /** Format: decimal */
             solde_crediteur: string;
         };
+        /**
+         * @description * `PIECE_IDENTITE` - Pièce d'identité
+         *     * `PHOTO` - Photo
+         *     * `SIGNATURE` - Spécimen de signature
+         *     * `JUSTIFICATIF_DOMICILE` - Justificatif de domicile
+         *     * `STATUTS` - Statuts / RCCM
+         *     * `PV_GROUPE` - PV de constitution du groupe
+         *     * `AUTRE` - Autre
+         * @enum {string}
+         */
+        TypeDocumentEnum: "PIECE_IDENTITE" | "PHOTO" | "SIGNATURE" | "JUSTIFICATIF_DOMICILE" | "STATUTS" | "PV_GROUPE" | "AUTRE";
+        /**
+         * @description * `PHYSIQUE` - Personne physique
+         *     * `MORALE` - Personne morale
+         *     * `GROUPE` - Groupe solidaire
+         * @enum {string}
+         */
+        TypeMembreEnum: "PHYSIQUE" | "MORALE" | "GROUPE";
+        /**
+         * @description * `CARTE_ELECTEUR` - Carte d'électeur
+         *     * `PASSEPORT` - Passeport
+         *     * `PERMIS` - Permis de conduire
+         *     * `CARTE_SERVICE` - Carte de service
+         *     * `CARTE_ETUDIANT` - Carte d'étudiant
+         *     * `AUTRE` - Autre
+         * @enum {string}
+         */
+        TypePieceEnum: "CARTE_ELECTEUR" | "PASSEPORT" | "PERMIS" | "CARTE_SERVICE" | "CARTE_ETUDIANT" | "AUTRE";
         Utilisateur: {
             readonly id: number;
             /**
@@ -3018,6 +3799,753 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["JourFerie"];
+                };
+            };
+        };
+    };
+    membres_list: {
+        parameters: {
+            query?: {
+                en_liste_noire?: boolean;
+                /** @description Quel champ utiliser pour classer les résultats. */
+                ordering?: string;
+                /** @description Un numéro de page de l'ensemble des résultats. */
+                page?: number;
+                /** @description Un terme de recherche. */
+                search?: string;
+                /**
+                 * @description * `PROSPECT` - Prospect
+                 *     * `ACTIF` - Actif
+                 *     * `SUSPENDU` - Suspendu
+                 *     * `DEMISSIONNAIRE` - Démissionnaire
+                 *     * `DECEDE` - Décédé
+                 */
+                statut?: "ACTIF" | "DECEDE" | "DEMISSIONNAIRE" | "PROSPECT" | "SUSPENDU";
+                /** @description Nombre de résultats à retourner par page. */
+                taille?: number;
+                /**
+                 * @description * `PHYSIQUE` - Personne physique
+                 *     * `MORALE` - Personne morale
+                 *     * `GROUPE` - Groupe solidaire
+                 */
+                type?: "GROUPE" | "MORALE" | "PHYSIQUE";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedMembreListeList"];
+                };
+            };
+        };
+    };
+    membres_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MembreRequest"];
+                "multipart/form-data": components["schemas"]["MembreRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["MembreRequest"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Membre"];
+                };
+            };
+        };
+    };
+    membres_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) membre. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Membre"];
+                };
+            };
+        };
+    };
+    membres_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) membre. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MembreRequest"];
+                "multipart/form-data": components["schemas"]["MembreRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["MembreRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Membre"];
+                };
+            };
+        };
+    };
+    membres_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) membre. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedMembreRequest"];
+                "multipart/form-data": components["schemas"]["PatchedMembreRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedMembreRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Membre"];
+                };
+            };
+        };
+    };
+    membres_activer_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) membre. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Membre"];
+                };
+            };
+        };
+    };
+    membres_adhesion_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) membre. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EncaisserAdhesionRequest"];
+                "multipart/form-data": components["schemas"]["EncaisserAdhesionRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["EncaisserAdhesionRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Membre"];
+                };
+            };
+        };
+    };
+    membres_beneficiaires_list: {
+        parameters: {
+            query?: {
+                en_liste_noire?: boolean;
+                /** @description Quel champ utiliser pour classer les résultats. */
+                ordering?: string;
+                /** @description Un numéro de page de l'ensemble des résultats. */
+                page?: number;
+                /** @description Un terme de recherche. */
+                search?: string;
+                /**
+                 * @description * `PROSPECT` - Prospect
+                 *     * `ACTIF` - Actif
+                 *     * `SUSPENDU` - Suspendu
+                 *     * `DEMISSIONNAIRE` - Démissionnaire
+                 *     * `DECEDE` - Décédé
+                 */
+                statut?: "ACTIF" | "DECEDE" | "DEMISSIONNAIRE" | "PROSPECT" | "SUSPENDU";
+                /** @description Nombre de résultats à retourner par page. */
+                taille?: number;
+                /**
+                 * @description * `PHYSIQUE` - Personne physique
+                 *     * `MORALE` - Personne morale
+                 *     * `GROUPE` - Groupe solidaire
+                 */
+                type?: "GROUPE" | "MORALE" | "PHYSIQUE";
+            };
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) membre. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedBeneficiaireList"];
+                };
+            };
+        };
+    };
+    membres_beneficiaires_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) membre. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BeneficiaireRequest"];
+                "multipart/form-data": components["schemas"]["BeneficiaireRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["BeneficiaireRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Beneficiaire"];
+                };
+            };
+        };
+    };
+    membres_beneficiaires_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                beneficiaire_id: string;
+                /** @description Un(une) valeur entière unique identifiant ce(cette) membre. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    membres_composition_list: {
+        parameters: {
+            query?: {
+                en_liste_noire?: boolean;
+                /** @description Quel champ utiliser pour classer les résultats. */
+                ordering?: string;
+                /** @description Un numéro de page de l'ensemble des résultats. */
+                page?: number;
+                /** @description Un terme de recherche. */
+                search?: string;
+                /**
+                 * @description * `PROSPECT` - Prospect
+                 *     * `ACTIF` - Actif
+                 *     * `SUSPENDU` - Suspendu
+                 *     * `DEMISSIONNAIRE` - Démissionnaire
+                 *     * `DECEDE` - Décédé
+                 */
+                statut?: "ACTIF" | "DECEDE" | "DEMISSIONNAIRE" | "PROSPECT" | "SUSPENDU";
+                /** @description Nombre de résultats à retourner par page. */
+                taille?: number;
+                /**
+                 * @description * `PHYSIQUE` - Personne physique
+                 *     * `MORALE` - Personne morale
+                 *     * `GROUPE` - Groupe solidaire
+                 */
+                type?: "GROUPE" | "MORALE" | "PHYSIQUE";
+            };
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) membre. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedMembreGroupeList"];
+                };
+            };
+        };
+    };
+    membres_composition_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) membre. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AjoutGroupeRequest"];
+                "multipart/form-data": components["schemas"]["AjoutGroupeRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["AjoutGroupeRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MembreGroupe"];
+                };
+            };
+        };
+    };
+    membres_composition_retirer_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) membre. */
+                id: number;
+                lien_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MembreGroupe"];
+                };
+            };
+        };
+    };
+    membres_controle_activation_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) membre. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ControleActivation"];
+                };
+            };
+        };
+    };
+    membres_documents_list: {
+        parameters: {
+            query?: {
+                en_liste_noire?: boolean;
+                /** @description Quel champ utiliser pour classer les résultats. */
+                ordering?: string;
+                /** @description Un numéro de page de l'ensemble des résultats. */
+                page?: number;
+                /** @description Un terme de recherche. */
+                search?: string;
+                /**
+                 * @description * `PROSPECT` - Prospect
+                 *     * `ACTIF` - Actif
+                 *     * `SUSPENDU` - Suspendu
+                 *     * `DEMISSIONNAIRE` - Démissionnaire
+                 *     * `DECEDE` - Décédé
+                 */
+                statut?: "ACTIF" | "DECEDE" | "DEMISSIONNAIRE" | "PROSPECT" | "SUSPENDU";
+                /** @description Nombre de résultats à retourner par page. */
+                taille?: number;
+                /**
+                 * @description * `PHYSIQUE` - Personne physique
+                 *     * `MORALE` - Personne morale
+                 *     * `GROUPE` - Groupe solidaire
+                 */
+                type?: "GROUPE" | "MORALE" | "PHYSIQUE";
+            };
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) membre. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedDocumentMembreList"];
+                };
+            };
+        };
+    };
+    membres_documents_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) membre. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["AjoutDocumentRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DocumentMembre"];
+                };
+            };
+        };
+    };
+    membres_documents_fichier_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                document_id: string;
+                /** @description Un(une) valeur entière unique identifiant ce(cette) membre. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+        };
+    };
+    membres_historique_list: {
+        parameters: {
+            query?: {
+                en_liste_noire?: boolean;
+                /** @description Quel champ utiliser pour classer les résultats. */
+                ordering?: string;
+                /** @description Un numéro de page de l'ensemble des résultats. */
+                page?: number;
+                /** @description Un terme de recherche. */
+                search?: string;
+                /**
+                 * @description * `PROSPECT` - Prospect
+                 *     * `ACTIF` - Actif
+                 *     * `SUSPENDU` - Suspendu
+                 *     * `DEMISSIONNAIRE` - Démissionnaire
+                 *     * `DECEDE` - Décédé
+                 */
+                statut?: "ACTIF" | "DECEDE" | "DEMISSIONNAIRE" | "PROSPECT" | "SUSPENDU";
+                /** @description Nombre de résultats à retourner par page. */
+                taille?: number;
+                /**
+                 * @description * `PHYSIQUE` - Personne physique
+                 *     * `MORALE` - Personne morale
+                 *     * `GROUPE` - Groupe solidaire
+                 */
+                type?: "GROUPE" | "MORALE" | "PHYSIQUE";
+            };
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) membre. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedHistoriqueStatutList"];
+                };
+            };
+        };
+    };
+    membres_liste_noire_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) membre. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ListeNoireRequest"];
+                "multipart/form-data": components["schemas"]["ListeNoireRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["ListeNoireRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Membre"];
+                };
+            };
+        };
+    };
+    membres_parts_sociales_list: {
+        parameters: {
+            query?: {
+                en_liste_noire?: boolean;
+                /** @description Quel champ utiliser pour classer les résultats. */
+                ordering?: string;
+                /** @description Un numéro de page de l'ensemble des résultats. */
+                page?: number;
+                /** @description Un terme de recherche. */
+                search?: string;
+                /**
+                 * @description * `PROSPECT` - Prospect
+                 *     * `ACTIF` - Actif
+                 *     * `SUSPENDU` - Suspendu
+                 *     * `DEMISSIONNAIRE` - Démissionnaire
+                 *     * `DECEDE` - Décédé
+                 */
+                statut?: "ACTIF" | "DECEDE" | "DEMISSIONNAIRE" | "PROSPECT" | "SUSPENDU";
+                /** @description Nombre de résultats à retourner par page. */
+                taille?: number;
+                /**
+                 * @description * `PHYSIQUE` - Personne physique
+                 *     * `MORALE` - Personne morale
+                 *     * `GROUPE` - Groupe solidaire
+                 */
+                type?: "GROUPE" | "MORALE" | "PHYSIQUE";
+            };
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) membre. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedMouvementPartsList"];
+                };
+            };
+        };
+    };
+    membres_parts_sociales_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) membre. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SouscrirePartsRequest"];
+                "multipart/form-data": components["schemas"]["SouscrirePartsRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["SouscrirePartsRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MouvementParts"];
+                };
+            };
+        };
+    };
+    membres_statut_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) membre. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChangerStatutRequest"];
+                "multipart/form-data": components["schemas"]["ChangerStatutRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["ChangerStatutRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Membre"];
+                };
+            };
+        };
+    };
+    membres_conditions_adhesion_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConditionsAdhesion"];
+                };
+            };
+        };
+    };
+    membres_doublons_list: {
+        parameters: {
+            query?: {
+                en_liste_noire?: boolean;
+                nom?: string;
+                numero_piece?: string;
+                /** @description Quel champ utiliser pour classer les résultats. */
+                ordering?: string;
+                /** @description Un numéro de page de l'ensemble des résultats. */
+                page?: number;
+                /** @description Un terme de recherche. */
+                search?: string;
+                /**
+                 * @description * `PROSPECT` - Prospect
+                 *     * `ACTIF` - Actif
+                 *     * `SUSPENDU` - Suspendu
+                 *     * `DEMISSIONNAIRE` - Démissionnaire
+                 *     * `DECEDE` - Décédé
+                 */
+                statut?: "ACTIF" | "DECEDE" | "DEMISSIONNAIRE" | "PROSPECT" | "SUSPENDU";
+                /** @description Nombre de résultats à retourner par page. */
+                taille?: number;
+                telephone?: string;
+                /**
+                 * @description * `PHYSIQUE` - Personne physique
+                 *     * `MORALE` - Personne morale
+                 *     * `GROUPE` - Groupe solidaire
+                 */
+                type?: "GROUPE" | "MORALE" | "PHYSIQUE";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedMembreListeList"];
                 };
             };
         };

@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     "apps.core",
     "apps.accounts",
     "apps.accounting",
+    "apps.members",
 ]
 
 MIDDLEWARE = [
@@ -124,6 +125,9 @@ SPECTACULAR_SETTINGS = {
         "StatutEcritureEnum": "apps.accounting.models.Ecriture.Statut",
         "StatutJourneeEnum": "apps.core.models.JourneeComptable.Statut",
         "SensEnum": "apps.accounting.models.Sens",
+        "StatutMembreEnum": "apps.members.models.Membre.Statut",
+        "TypeMembreEnum": "apps.members.models.Membre.Type",
+        "TypeDocumentEnum": "apps.members.models.DocumentMembre.Type",
     },
 }
 

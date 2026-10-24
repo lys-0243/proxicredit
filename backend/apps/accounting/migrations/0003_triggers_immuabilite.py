@@ -64,7 +64,8 @@ SQLITE_INVERSE = [
 def creer(apps, schema_editor):
     vendor = schema_editor.connection.vendor
     if vendor == "postgresql":
-        schema_editor.execute(POSTGRES)
+        # params=None : le « % » de RAISE EXCEPTION ne doit pas être lu comme un paramètre SQL.
+        schema_editor.execute(POSTGRES, params=None)
     elif vendor == "sqlite":
         for sql in SQLITE:
             schema_editor.execute(sql)
@@ -73,7 +74,7 @@ def creer(apps, schema_editor):
 def supprimer(apps, schema_editor):
     vendor = schema_editor.connection.vendor
     if vendor == "postgresql":
-        schema_editor.execute(POSTGRES_INVERSE)
+        schema_editor.execute(POSTGRES_INVERSE, params=None)
     elif vendor == "sqlite":
         for sql in SQLITE_INVERSE:
             schema_editor.execute(sql)

@@ -4,10 +4,11 @@ from django.db import transaction
 from apps.accounting.initialisation import charger_plan_comptable
 from apps.accounts.roles import synchroniser_roles
 from apps.core.initialisation import charger_referentiel
+from apps.members.initialisation import charger_parametrage_membres
 
 
 class Command(BaseCommand):
-    help = "Charge le référentiel de départ (devises, agence, plan comptable, rôles). Idempotent."
+    help = "Charge le référentiel de départ (devises, agence, plan comptable, modules, rôles)."
 
     @transaction.atomic
     def handle(self, *args, **options):
@@ -15,6 +16,8 @@ class Command(BaseCommand):
         self.stdout.write("Devises et agence principale : OK")
         crees = charger_plan_comptable()
         self.stdout.write(f"Plan comptable SYSCOHADA et journaux : OK ({crees} compte(s) créé(s))")
+        charger_parametrage_membres()
+        self.stdout.write("Membres : paramètres d'adhésion et règles comptables : OK")
         synchroniser_roles()
         self.stdout.write("Rôles et permissions : OK")
         self.stdout.write(self.style.SUCCESS("Initialisation terminée."))

@@ -6,6 +6,7 @@ import {
   CalendarDaysIcon,
   CalendarOffIcon,
   CoinsIcon,
+  ContactIcon,
   FileTextIcon,
   LayoutDashboardIcon,
   ListTreeIcon,
@@ -44,6 +45,12 @@ type Entree = { href: string; libelle: string; icone: React.ElementType; permiss
 
 const NAVIGATION: { titre?: string; entrees: Entree[] }[] = [
   { entrees: [{ href: "/", libelle: "Tableau de bord", icone: LayoutDashboardIcon }] },
+  {
+    titre: "Clientèle",
+    entrees: [
+      { href: "/membres", libelle: "Membres", icone: ContactIcon, permission: "members.view_membre" },
+    ],
+  },
   {
     titre: "Comptabilité",
     entrees: [

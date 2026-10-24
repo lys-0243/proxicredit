@@ -9,6 +9,7 @@ from apps.accounts.models import Utilisateur
 from apps.accounts.roles import synchroniser_roles
 from apps.core.initialisation import charger_referentiel
 from apps.core.models import Agence, Devise, TauxChange
+from apps.members.initialisation import charger_parametrage_membres
 
 JOUR = date(2026, 10, 1)
 MOT_DE_PASSE = "Motdepasse-solide-2026"
@@ -18,6 +19,7 @@ MOT_DE_PASSE = "Motdepasse-solide-2026"
 def referentiel(db):
     charger_referentiel()
     charger_plan_comptable()
+    charger_parametrage_membres()
     synchroniser_roles()
 
 
