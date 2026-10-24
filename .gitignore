@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+.hypothesis/
+backend/db.sqlite3
+backend/staticfiles/
+backend/media/
+backend/schema.yml
+
+# Node
+node_modules/
+frontend/.next/
+frontend/out/
+*.tsbuildinfo
+next-env.d.ts
+
+# Environnement / secrets
+.env
+.env.local
+*.pem
+
+# Divers
+.DS_Store
+Thumbs.db

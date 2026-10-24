@@ -1,0 +1,6 @@
+-r base.txt
+pytest>=8.3
+pytest-django>=4.11
+factory-boy>=3.3
+hypothesis>=6.130
+ruff>=0.11
