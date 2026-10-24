@@ -20,45 +20,30 @@ comptabilité SYSCOHADA, Mobile Money et SMS. Multi-devises (CDF / USD) et multi
 | 4. Moteur et workflow de crédit | | à venir |
 | 5 à 9 | Garanties, clôture et risque, Mobile Money et SMS, reporting, mise en production | à venir |
 
-## Démarrage en développement
+## Démarrage rapide
 
-### Backend
+Le guide complet est dans **[docs/LANCEMENT.md](docs/LANCEMENT.md)** : développement local
+(Windows, Linux, macOS), première utilisation, production avec Docker Compose et dépannage.
+
+En résumé, pour le développement (SQLite par défaut, aucun service à installer) :
 
 ```bash
+# Terminal 1 : backend
 cd backend
-python -m venv .venv
-.venv/Scripts/activate            # Windows (Linux/macOS : source .venv/bin/activate)
+python -m venv .venv && .venv/Scripts/activate   # Linux/macOS : source .venv/bin/activate
 pip install -r requirements/dev.txt
-python manage.py migrate
-python manage.py initialiser      # devises, agence principale, plan comptable, rôles
+python manage.py migrate && python manage.py initialiser
 python manage.py createsuperuser
-python manage.py runserver        # http://localhost:8000/api/docs
-```
+python manage.py runserver
 
-Sans `DATABASE_URL`, le développement utilise SQLite. Pour travailler sur PostgreSQL (recommandé,
-identique à la production) :
-
-```bash
-docker compose -f docker-compose.dev.yml up -d
-# puis dans backend/.env : DATABASE_URL=postgres://proxicredit:proxicredit@localhost:5432/proxicredit
-```
-
-### Frontend
-
-```bash
+# Terminal 2 : frontend
 cd frontend
-npm install
-npm run dev                       # http://localhost:3000 (les appels /api sont relayés vers Django)
+npm install && npm run dev
 ```
 
-Après une modification de l'API, régénérer les types TypeScript : `npm run api:types`.
-
-### Tests
-
-```bash
-cd backend && pytest              # backend
-cd frontend && npm run lint && npm run typecheck
-```
+Ouvrez ensuite http://localhost:3000. Sur une base neuve, rattachez votre compte à une agence
+puis ouvrez la journée comptable : voir
+[Première utilisation](docs/LANCEMENT.md#2-première-utilisation).
 
 ## Principes non négociables
 
@@ -81,11 +66,5 @@ La 2FA est obligatoire pour les rôles Administrateur, Directeur et Comptable.
 
 ## Production
 
-```bash
-cp .env.example .env              # puis renseigner les secrets
-docker compose up -d --build
-docker compose exec backend python manage.py createsuperuser
-```
-
-Une sauvegarde PostgreSQL quotidienne est écrite dans `./backups/` (30 jours). Elle doit être
-copiée hors du serveur, chiffrée.
+Déploiement sur VPS avec Docker Compose (HTTPS obligatoire, sauvegardes quotidiennes) :
+voir [docs/LANCEMENT.md](docs/LANCEMENT.md#3-production-sur-un-vps-docker-compose).
