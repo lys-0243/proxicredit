@@ -21,6 +21,7 @@ class MoiSerializer(serializers.ModelSerializer):
     permissions = serializers.SerializerMethodField()
     doit_configurer_2fa = serializers.BooleanField(read_only=True)
     date_comptable = serializers.SerializerMethodField()
+    photo = serializers.SerializerMethodField()
 
     class Meta:
         model = Utilisateur
@@ -31,6 +32,7 @@ class MoiSerializer(serializers.ModelSerializer):
             "last_name",
             "email",
             "telephone",
+            "photo",
             "agence",
             "roles",
             "roles_libelles",
@@ -52,6 +54,22 @@ class MoiSerializer(serializers.ModelSerializer):
     def get_date_comptable(self, obj) -> str | None:
         journee = journee_ouverte(obj.agence) if obj.agence else None
         return journee.date.isoformat() if journee else None
+
+    def get_photo(self, obj) -> str | None:
+        if not obj.photo:
+            return None
+        # Le nom de fichier change à chaque dépôt : sert de cache-buster côté navigateur.
+        return f"/api/auth/moi/photo?v={obj.photo.name.rsplit('/', 1)[-1]}"
+
+
+class MettreAJourProfilSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Utilisateur
+        fields = ["first_name", "last_name", "email", "telephone"]
+
+
+class PhotoProfilSerializer(serializers.Serializer):
+    photo = serializers.FileField()
 
 
 class ConnexionSerializer(serializers.Serializer):

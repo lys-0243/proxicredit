@@ -1,9 +1,11 @@
+import mimetypes
+
 import pyotp
 from axes.utils import reset as axes_reset
 from django.conf import settings
 from django.contrib.auth import authenticate, update_session_auth_hash
 from django.contrib.auth.models import Group
-from django.http import JsonResponse
+from django.http import FileResponse, JsonResponse
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -21,7 +23,25 @@ from apps.accounts import serializers as s
 from apps.accounts.authentication import verifier_csrf
 from apps.accounts.models import JournalConnexion, Utilisateur
 from apps.core.audit import adresse_ip
+from apps.core.exceptions import ErreurMetier
 from apps.core.scoping import FiltreAgenceMixin
+
+TAILLE_MAX_PHOTO = 2 * 1024 * 1024
+SIGNATURES_PHOTO = {
+    "image/jpeg": (b"\xff\xd8\xff",),
+    "image/png": (b"\x89PNG\r\n\x1a\n",),
+}
+
+
+def _extension_photo(fichier) -> str:
+    if getattr(fichier, "size", 0) > TAILLE_MAX_PHOTO:
+        raise ErreurMetier("Photo trop volumineuse (2 Mo maximum).", "taille")
+    debut = fichier.read(8)
+    fichier.seek(0)
+    for type_contenu, signatures in SIGNATURES_PHOTO.items():
+        if any(debut.startswith(sig) for sig in signatures):
+            return {"image/jpeg": "jpg", "image/png": "png"}[type_contenu]
+    raise ErreurMetier("Format non accepté : JPEG ou PNG uniquement.", "format")
 
 EMETTEUR_OTP = "ProxiCrédit"
 
@@ -204,6 +224,48 @@ class MoiView(APIView):
     @extend_schema(responses=s.MoiSerializer)
     def get(self, request):
         return Response(s.MoiSerializer(request.user).data)
+
+    @extend_schema(request=s.MettreAJourProfilSerializer, responses=s.MoiSerializer)
+    def patch(self, request):
+        ser = s.MettreAJourProfilSerializer(request.user, data=request.data, partial=True)
+        ser.is_valid(raise_exception=True)
+        ser.save()
+        return Response(s.MoiSerializer(request.user).data)
+
+
+class PhotoProfilView(APIView):
+    """Photo de profil : lecture authentifiée, dépôt et suppression par le titulaire du compte."""
+
+    permission_classes = [IsAuthenticated]
+    exempt_obligations = True
+
+    @extend_schema(responses={200: bytes, 404: None})
+    def get(self, request):
+        if not request.user.photo:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        type_contenu = mimetypes.guess_type(request.user.photo.name)[0] or "application/octet-stream"
+        reponse = FileResponse(request.user.photo.open("rb"), content_type=type_contenu)
+        reponse["Cache-Control"] = "private, max-age=3600"
+        return reponse
+
+    @extend_schema(request=s.PhotoProfilSerializer, responses=s.MoiSerializer)
+    def post(self, request):
+        ser = s.PhotoProfilSerializer(data=request.data)
+        ser.is_valid(raise_exception=True)
+        fichier = ser.validated_data["photo"]
+        extension = _extension_photo(fichier)
+        user = request.user
+        if user.photo:
+            user.photo.delete(save=False)
+        user.photo.save(f"photo.{extension}", fichier, save=True)
+        return Response(s.MoiSerializer(user).data)
+
+    @extend_schema(request=None, responses=s.MoiSerializer)
+    def delete(self, request):
+        user = request.user
+        if user.photo:
+            user.photo.delete(save=True)
+        return Response(s.MoiSerializer(user).data)
 
 
 class ChangerMotDePasseView(APIView):

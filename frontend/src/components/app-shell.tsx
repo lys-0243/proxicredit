@@ -1,5 +1,6 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import {
   BookOpenIcon,
   BuildingIcon,
@@ -27,6 +28,7 @@ import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useState } from "react";
 
+import { AvatarUtilisateur } from "@/components/avatar-utilisateur";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -39,9 +41,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { api } from "@/lib/api/client";
+import { api, type Page, type Schemas } from "@/lib/api/client";
 import { aPermission, type Moi } from "@/lib/auth";
-import { formatDate } from "@/lib/format";
+import { formatDate, formatTaux } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
 type Entree = { href: string; libelle: string; icone: React.ElementType; permission?: string };
@@ -108,16 +110,6 @@ function titrePage(pathname: string) {
   return entreeActive(pathname)?.libelle ?? "ProxiCrédit";
 }
 
-function initiales(moi: Moi) {
-  const nom = [moi.first_name, moi.last_name].filter(Boolean).join(" ") || moi.username;
-  return nom
-    .split(/\s+/)
-    .map((mot) => mot[0])
-    .join("")
-    .toUpperCase()
-    .slice(0, 2);
-}
-
 function lireReplie() {
   try {
     return localStorage.getItem(CLE_REPLIE) === "1";
@@ -131,6 +123,17 @@ export function AppShell({ moi, children }: { moi: Moi; children: React.ReactNod
   const [menuOuvert, setMenuOuvert] = useState(false);
   const [replie, setReplie] = useState(lireReplie);
   const { resolvedTheme, setTheme } = useTheme();
+  const voitTaux = aPermission(moi, "core.view_tauxchange");
+  const taux = useQuery({
+    queryKey: ["taux-change", "dernier"],
+    queryFn: () =>
+      api<Page<Schemas["TauxChange"]>>("/api/taux-change", {
+        query: { devise_source: "USD", devise_cible: "CDF", taille: 1 },
+      }),
+    enabled: voitTaux,
+    staleTime: 60_000,
+  });
+  const dernierTaux = taux.data?.results[0];
 
   const actif = entreeActive(pathname)?.href;
   const nomComplet = [moi.first_name, moi.last_name].filter(Boolean).join(" ") || moi.username;
@@ -161,13 +164,22 @@ export function AppShell({ moi, children }: { moi: Moi; children: React.ReactNod
         className={cn(
           "fixed inset-y-0 left-0 z-40 flex w-64 flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground transition-[width,translate] duration-200",
           "lg:sticky lg:top-0 lg:h-screen lg:translate-x-0",
-          replie && "lg:w-17",
+          replie && "lg:w-20",
           menuOuvert ? "translate-x-0 shadow-2xl" : "-translate-x-full",
         )}
       >
-        {/* En-tête : monogramme + nom */}
-        <div className={cn("flex h-16 shrink-0 items-center gap-3 px-4", replie && "lg:justify-center lg:px-0")}>
-          <Link href="/" className="flex min-w-0 items-center gap-3" onClick={() => setMenuOuvert(false)}>
+        {/* En-tête : monogramme + nom + repli à droite */}
+        <div
+          className={cn(
+            "relative flex h-16 shrink-0 items-center gap-1 px-4",
+            replie && "lg:justify-center lg:px-0",
+          )}
+        >
+          <Link
+            href="/"
+            className={cn("flex min-w-0 items-center gap-3", !replie && "flex-1")}
+            onClick={() => setMenuOuvert(false)}
+          >
             <span className="degrade-marque flex size-9 shrink-0 items-center justify-center rounded-xl text-sm font-bold shadow-md shadow-brand-500/25">
               PC
             </span>
@@ -179,7 +191,19 @@ export function AppShell({ moi, children }: { moi: Moi; children: React.ReactNod
           <Button
             variant="ghost"
             size="icon-sm"
-            className="ml-auto text-muted-foreground lg:hidden"
+            className={cn(
+              "hidden shrink-0 text-muted-foreground hover:text-foreground lg:inline-flex",
+              !replie && "ml-auto",
+            )}
+            onClick={basculerReplie}
+            aria-label={replie ? "Déplier le menu" : "Replier le menu"}
+          >
+            {replie ? <ChevronsRightIcon className="size-4" /> : <ChevronsLeftIcon className="size-4" />}
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            className="ml-auto shrink-0 text-muted-foreground lg:hidden"
             onClick={() => setMenuOuvert(false)}
             aria-label="Fermer le menu"
           >
@@ -206,11 +230,11 @@ export function AppShell({ moi, children }: { moi: Moi; children: React.ReactNod
                       onClick={() => setMenuOuvert(false)}
                       aria-current={estActif ? "page" : undefined}
                       className={cn(
-                        "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-all duration-150",
+                        "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-all duration-150 active:scale-[0.98]",
                         replie && "lg:justify-center lg:px-0",
                         estActif
                           ? "degrade-marque shadow-md shadow-brand-500/25"
-                          : "text-sidebar-foreground/85 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                          : "text-sidebar-foreground/85 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground active:bg-sidebar-accent",
                       )}
                     >
                       <Icone
@@ -219,7 +243,10 @@ export function AppShell({ moi, children }: { moi: Moi; children: React.ReactNod
                           estActif ? "text-white" : "text-muted-foreground group-hover:text-sidebar-accent-foreground",
                         )}
                       />
-                      <span className={cn("truncate", replie && "lg:sr-only")}>{libelle}</span>
+                      <span className={cn("flex-1 truncate", replie && "lg:sr-only")}>{libelle}</span>
+                      {estActif && (
+                        <span aria-hidden className={cn("size-1.5 shrink-0 rounded-full bg-white", replie && "lg:hidden")} />
+                      )}
                     </Link>
                   );
                   return (
@@ -241,54 +268,6 @@ export function AppShell({ moi, children }: { moi: Moi; children: React.ReactNod
             </div>
           ))}
         </nav>
-
-        {/* Pied : utilisateur, repli, déconnexion */}
-        <div className="shrink-0 space-y-1 border-t border-sidebar-border p-3">
-          <Link
-            href="/profil"
-            onClick={() => setMenuOuvert(false)}
-            className={cn(
-              "group flex items-center gap-3 rounded-xl px-2 py-2 transition-colors hover:bg-sidebar-accent",
-              replie && "lg:justify-center lg:px-0",
-            )}
-            title="Profil et sécurité"
-          >
-            <span className="degrade-marque flex size-9 shrink-0 items-center justify-center rounded-full text-xs font-bold ring-2 ring-brand-500/20 ring-offset-2 ring-offset-sidebar">
-              {initiales(moi)}
-            </span>
-            <span className={cn("min-w-0 leading-tight", replie && "lg:sr-only")}>
-              <span className="block truncate text-sm font-semibold text-foreground group-hover:text-primary">
-                {nomComplet}
-              </span>
-              <span className="block truncate text-[11px] text-muted-foreground">
-                {moi.roles_libelles[0] ?? moi.email}
-              </span>
-            </span>
-          </Link>
-          <button
-            type="button"
-            onClick={deconnecter}
-            className={cn(
-              "flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold text-destructive transition-colors hover:bg-destructive-soft",
-              replie && "lg:justify-center lg:px-0",
-            )}
-          >
-            <LogOutIcon className="size-4.5 shrink-0" />
-            <span className={cn(replie && "lg:sr-only")}>Déconnexion</span>
-          </button>
-          <button
-            type="button"
-            onClick={basculerReplie}
-            className={cn(
-              "hidden w-full items-center gap-3 rounded-xl px-3 py-2 text-xs font-semibold text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground lg:flex",
-              replie && "lg:justify-center lg:px-0",
-            )}
-            aria-label={replie ? "Déplier le menu" : "Replier le menu"}
-          >
-            {replie ? <ChevronsRightIcon className="size-4" /> : <ChevronsLeftIcon className="size-4" />}
-            <span className={cn(replie && "lg:sr-only")}>Replier le menu</span>
-          </button>
-        </div>
       </aside>
       {menuOuvert && (
         <div
@@ -324,6 +303,26 @@ export function AppShell({ moi, children }: { moi: Moi; children: React.ReactNod
               <CalendarOffIcon /> Journée fermée
             </Badge>
           )}
+          {voitTaux && (
+            dernierTaux ? (
+              <Badge
+                variant="info"
+                className="hidden sm:inline-flex"
+                title={`Achat ${formatTaux(dernierTaux.taux_achat)} · Vente ${formatTaux(dernierTaux.taux_vente)} · ${formatDate(dernierTaux.date)}`}
+                render={<Link href="/parametres/taux-change" />}
+              >
+                <RefreshCwIcon /> 1 USD = {formatTaux(dernierTaux.taux_reference)} CDF
+              </Badge>
+            ) : (
+              <Badge
+                variant="warning"
+                className="hidden sm:inline-flex"
+                render={<Link href="/parametres/taux-change" />}
+              >
+                <RefreshCwIcon /> Taux non saisi
+              </Badge>
+            )
+          )}
           <Button
             variant="ghost"
             size="icon"
@@ -342,9 +341,7 @@ export function AppShell({ moi, children }: { moi: Moi; children: React.ReactNod
                 />
               }
             >
-              <span className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
-                {initiales(moi)}
-              </span>
+              <AvatarUtilisateur moi={moi} taille="sm" />
               <span className="hidden text-left leading-tight md:block">
                 <span className="block max-w-36 truncate text-sm font-semibold text-foreground">
                   {moi.first_name || moi.username}

@@ -1,10 +1,14 @@
 import pyotp
 import pytest
 from django.contrib.auth.models import Group, Permission
+from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework.test import APIClient
 
 from apps.accounts.models import JournalConnexion, Utilisateur
 from conftest import MOT_DE_PASSE
+
+# En-tête minimal JPEG (signature FF D8 FF).
+JPEG = b"\xff\xd8\xff\xe0" + b"\x00" * 64
 
 pytestmark = pytest.mark.django_db
 
@@ -124,6 +128,66 @@ class TestObligations:
             connexion(navigateur, "caissier", code_otp="000000")
         reponse = connexion(navigateur, "caissier", code_otp=pyotp.TOTP(user.otp_secret).now())
         assert reponse.status_code == 429
+
+
+class TestProfil:
+    def test_mettre_a_jour_informations(self, navigateur, creer_utilisateur):
+        creer_utilisateur("CAISSIER", username="caissier", first_name="Jean")
+        connexion(navigateur, "caissier")
+        reponse = navigateur.patch(
+            "/api/auth/moi",
+            {
+                "first_name": "Grace",
+                "last_name": "Mbuyi",
+                "email": "grace@exemple.cd",
+                "telephone": "+243900000000",
+            },
+            format="json",
+            HTTP_X_CSRFTOKEN=navigateur.csrf,
+        )
+        assert reponse.status_code == 200, reponse.data
+        assert reponse.data["first_name"] == "Grace"
+        assert reponse.data["last_name"] == "Mbuyi"
+        assert reponse.data["email"] == "grace@exemple.cd"
+        assert reponse.data["telephone"] == "+243900000000"
+        assert reponse.data["photo"] is None
+
+    def test_photo_profil_depot_lecture_suppression(self, navigateur, creer_utilisateur):
+        user = creer_utilisateur("CAISSIER", username="caissier")
+        connexion(navigateur, "caissier")
+        depot = navigateur.post(
+            "/api/auth/moi/photo",
+            {"photo": SimpleUploadedFile("avatar.jpg", JPEG, content_type="image/jpeg")},
+            format="multipart",
+            HTTP_X_CSRFTOKEN=navigateur.csrf,
+        )
+        assert depot.status_code == 200, depot.data
+        assert depot.data["photo"]
+        user.refresh_from_db()
+        assert user.photo
+
+        lecture = navigateur.get("/api/auth/moi/photo")
+        assert lecture.status_code == 200
+        assert lecture["Content-Type"].startswith("image/")
+
+        suppression = navigateur.delete(
+            "/api/auth/moi/photo", HTTP_X_CSRFTOKEN=navigateur.csrf
+        )
+        assert suppression.status_code == 200
+        assert suppression.data["photo"] is None
+        user.refresh_from_db()
+        assert not user.photo
+
+    def test_photo_refus_si_pas_une_image(self, navigateur, creer_utilisateur):
+        creer_utilisateur("CAISSIER", username="caissier")
+        connexion(navigateur, "caissier")
+        reponse = navigateur.post(
+            "/api/auth/moi/photo",
+            {"photo": SimpleUploadedFile("x.txt", b"pas une image", content_type="text/plain")},
+            format="multipart",
+            HTTP_X_CSRFTOKEN=navigateur.csrf,
+        )
+        assert reponse.status_code == 400
 
 
 class TestRoles:

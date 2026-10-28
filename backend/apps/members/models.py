@@ -57,7 +57,9 @@ class Membre(Horodatage):
     sexe = models.CharField(max_length=1, choices=Sexe.choices, blank=True)
     date_naissance = models.DateField(null=True, blank=True)
     lieu_naissance = models.CharField(max_length=100, blank=True)
-    nationalite = models.CharField(max_length=50, blank=True, default="Congolaise")
+    nationalite = models.CharField(
+        max_length=80, blank=True, default="République démocratique du Congo"
+    )
     etat_civil = models.CharField(max_length=15, choices=EtatCivil.choices, blank=True)
     personnes_a_charge = models.PositiveSmallIntegerField(null=True, blank=True)
     type_piece = models.CharField(max_length=20, choices=TypePiece.choices, blank=True)

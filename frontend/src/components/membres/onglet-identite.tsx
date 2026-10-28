@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatDate, formatDateHeure, formatMontant } from "@/lib/format";
 import { ETATS_CIVILS, SEXES, TYPES_PIECE, type Membre } from "@/lib/membres";
+import { libelleNationalite } from "@/lib/pays";
 
 type Ligne = [string, React.ReactNode];
 
@@ -40,7 +41,8 @@ export function OngletIdentite({ membre: m }: { membre: Membre }) {
             ["Nom", m.nom], ["Postnom", m.postnom], ["Prénom", m.prenom],
             ["Sexe", m.sexe ? SEXES[m.sexe] : ""],
             ["Date de naissance", formatDate(m.date_naissance)], ["Lieu de naissance", m.lieu_naissance],
-            ["Nationalité", m.nationalite], ["État civil", m.etat_civil ? ETATS_CIVILS[m.etat_civil] : ""],
+            ["Nationalité", libelleNationalite(m.nationalite)],
+            ["État civil", m.etat_civil ? ETATS_CIVILS[m.etat_civil] : ""],
             ["Personnes à charge", m.personnes_a_charge ?? ""],
           ]} />
           <Bloc titre="Pièce d'identité" lignes={[

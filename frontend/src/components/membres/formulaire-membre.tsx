@@ -14,11 +14,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ApiError, api, type Schemas } from "@/lib/api/client";
 import { ETATS_CIVILS, SEXES, TYPES_MEMBRE, TYPES_PIECE, type Membre, type TypeMembre } from "@/lib/membres";
+import { NATIONALITE_DEFAUT, normaliserNationalite, PAYS } from "@/lib/pays";
 
 type Definition = {
   nom: string;
   libelle: string;
-  type?: "text" | "date" | "tel" | "email" | "number" | "montant";
+  type?: "text" | "date" | "tel" | "email" | "number" | "montant" | "pays";
   options?: Record<string, string>;
   requis?: boolean;
   aide?: string;
@@ -45,7 +46,7 @@ const SECTIONS: Record<TypeMembre, Section[]> = {
         { nom: "sexe", libelle: "Sexe", options: SEXES },
         { nom: "date_naissance", libelle: "Date de naissance", type: "date" },
         { nom: "lieu_naissance", libelle: "Lieu de naissance" },
-        { nom: "nationalite", libelle: "Nationalité" },
+        { nom: "nationalite", libelle: "Nationalité", type: "pays" },
         { nom: "etat_civil", libelle: "État civil", options: ETATS_CIVILS },
         { nom: "personnes_a_charge", libelle: "Personnes à charge", type: "number" },
       ],
@@ -125,12 +126,18 @@ const NULLABLES = new Set([
 type Valeurs = Record<string, string>;
 
 function valeursDepuis(membre: Membre | null, type: TypeMembre): Valeurs {
-  const valeurs: Valeurs = { province: "Kinshasa", ville: "Kinshasa", nationalite: "Congolaise" };
+  const valeurs: Valeurs = {
+    province: "Kinshasa",
+    ville: "Kinshasa",
+    nationalite: NATIONALITE_DEFAUT,
+  };
   const source = (membre ?? {}) as Record<string, unknown>;
   for (const section of [...SECTIONS[type], COORDONNEES]) {
     for (const { nom } of section.champs) {
       const v = source[nom];
-      if (v !== null && v !== undefined) valeurs[nom] = String(v);
+      if (v !== null && v !== undefined) {
+        valeurs[nom] = nom === "nationalite" ? normaliserNationalite(String(v)) : String(v);
+      }
     }
   }
   return valeurs;
@@ -213,7 +220,18 @@ export function FormulaireMembre({
     return (
       <Champ key={d.nom} label={d.requis ? `${d.libelle} *` : d.libelle} htmlFor={id} aide={d.aide}
         erreur={champsErreur[d.nom]}>
-        {d.options ? (
+        {d.type === "pays" ? (
+          <ListeDeroulante id={id} value={valeur} onChange={maj} aria-invalid={Boolean(champsErreur[d.nom])}>
+            {!PAYS.some((p) => p.nom === valeur) && valeur && (
+              <option value={valeur}>{valeur}</option>
+            )}
+            {PAYS.map((p) => (
+              <option key={p.code} value={p.nom}>
+                {p.drapeau} {p.nom}
+              </option>
+            ))}
+          </ListeDeroulante>
+        ) : d.options ? (
           <ListeDeroulante id={id} value={valeur} onChange={maj}>
             <option value="">—</option>
             {Object.entries(d.options).map(([code, libelle]) => (

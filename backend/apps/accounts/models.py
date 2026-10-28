@@ -1,3 +1,5 @@
+import uuid
+
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -6,17 +8,24 @@ from simple_history.models import HistoricalRecords
 from apps.core.audit import ModeleHistoriqueAudit
 
 
+def chemin_photo_profil(instance, nom_fichier: str) -> str:
+    extension = nom_fichier.rsplit(".", 1)[-1].lower()
+    return f"profils/{instance.pk}/{uuid.uuid4().hex}.{extension}"
+
+
 class Utilisateur(AbstractUser):
     agence = models.ForeignKey(
         "core.Agence", on_delete=models.PROTECT, null=True, blank=True, related_name="utilisateurs"
     )
     telephone = models.CharField(max_length=30, blank=True)
+    photo = models.FileField("photo de profil", upload_to=chemin_photo_profil, blank=True)
     otp_secret = models.CharField(max_length=64, blank=True)
     otp_active = models.BooleanField("2FA activée", default=False)
     doit_changer_mdp = models.BooleanField("doit changer son mot de passe", default=False)
 
     history = HistoricalRecords(
-        bases=[ModeleHistoriqueAudit], excluded_fields=["password", "last_login", "otp_secret"]
+        bases=[ModeleHistoriqueAudit],
+        excluded_fields=["password", "last_login", "otp_secret", "photo"],
     )
 
     class Meta:

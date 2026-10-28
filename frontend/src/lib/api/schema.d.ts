@@ -152,6 +152,22 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
+        patch: operations["auth_moi_partial_update"];
+        trace?: never;
+    };
+    "/api/auth/moi/photo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["auth_moi_photo_retrieve"];
+        put?: never;
+        post: operations["auth_moi_photo_create"];
+        delete: operations["auth_moi_photo_destroy"];
+        options?: never;
+        head?: never;
         patch?: never;
         trace?: never;
     };
@@ -1701,6 +1717,8 @@ export interface components {
              */
             readonly email: string;
             readonly telephone: string;
+            /** URL authentifiée de la photo de profil, ou null. */
+            readonly photo: string | null;
             readonly agence: components["schemas"]["AgenceCourte"];
             readonly roles: string[];
             readonly roles_libelles: string[];
@@ -1716,6 +1734,22 @@ export interface components {
              * @description Précise que l’utilisateur possède toutes les permissions sans les assigner explicitement.
              */
             readonly is_superuser: boolean;
+        };
+        MettreAJourProfilRequest: {
+            /** Prénom */
+            first_name?: string;
+            /** Nom */
+            last_name?: string;
+            /**
+             * Adresse électronique
+             * Format: email
+             */
+            email?: string;
+            telephone?: string;
+        };
+        PhotoProfilRequest: {
+            /** Format: binary */
+            photo: string;
         };
         Mouvement: {
             /** Format: date */
@@ -2628,6 +2662,99 @@ export interface operations {
         };
     };
     auth_moi_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Moi"];
+                };
+            };
+        };
+    };
+    auth_moi_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MettreAJourProfilRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["MettreAJourProfilRequest"];
+                "multipart/form-data": components["schemas"]["MettreAJourProfilRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Moi"];
+                };
+            };
+        };
+    };
+    auth_moi_photo_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "image/jpeg": string;
+                    "image/png": string;
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    auth_moi_photo_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["PhotoProfilRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Moi"];
+                };
+            };
+        };
+    };
+    auth_moi_photo_destroy: {
         parameters: {
             query?: never;
             header?: never;

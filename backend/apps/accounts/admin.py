@@ -10,7 +10,10 @@ class UtilisateurAdmin(UserAdmin, SimpleHistoryAdmin):
     list_display = ["username", "first_name", "last_name", "agence", "is_active", "otp_active"]
     list_filter = ["agence", "is_active", "groups"]
     fieldsets = UserAdmin.fieldsets + (
-        ("ProxiCrédit", {"fields": ("agence", "telephone", "otp_active", "doit_changer_mdp")}),
+        (
+            "ProxiCrédit",
+            {"fields": ("agence", "telephone", "photo", "otp_active", "doit_changer_mdp")},
+        ),
     )
 
 
