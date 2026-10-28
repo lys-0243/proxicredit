@@ -23,7 +23,7 @@ export function OngletHistorique({ membre }: { membre: Membre }) {
     queryFn: () => api<Schemas["HistoriqueStatut"][]>(`/api/membres/${membre.id}/historique`),
   });
   return (
-    <div className="rounded-xl border">
+    <div className="carte-nue">
       <Table>
         <TableHeader>
           <TableRow>

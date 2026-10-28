@@ -220,7 +220,7 @@ export default function PageEcriture() {
               </dl>
             </CardContent>
           </Card>
-          <div className="rounded-xl border">
+          <div className="carte-nue">
             <Table>
               <TableHeader>
                 <TableRow>

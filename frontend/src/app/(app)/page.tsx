@@ -1,13 +1,13 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { CalendarDaysIcon, RefreshCwIcon, ShieldCheckIcon } from "lucide-react";
+import { ArrowRightIcon, CalendarDaysIcon, RefreshCwIcon, ShieldCheckIcon } from "lucide-react";
 import Link from "next/link";
 
 import { PageHeader } from "@/components/page-header";
+import { StatCard } from "@/components/stat-card";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { api, type Page, type Schemas } from "@/lib/api/client";
 import { useMoi, usePermission } from "@/lib/auth";
 import { formatDate, formatTaux } from "@/lib/format";
@@ -37,87 +37,102 @@ export default function TableauDeBord() {
   return (
     <>
       <PageHeader
+        surtitre="Tableau de bord"
         titre={`Bonjour ${moi?.first_name || moi?.username || ""}`}
         description={moi?.agence ? `${moi.agence.code} – ${moi.agence.nom}` : undefined}
       />
       <div className="grid gap-4 md:grid-cols-3">
-        <Card>
-          <CardHeader>
-            <CardDescription className="flex items-center gap-2">
-              <CalendarDaysIcon className="size-4" /> Journée comptable
-            </CardDescription>
-            <CardTitle className="text-2xl">
-              {moi?.date_comptable ? formatDate(moi.date_comptable) : "Fermée"}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="text-sm text-muted-foreground">
-            {moi?.date_comptable
+        <StatCard
+          titre="Journée comptable"
+          icone={CalendarDaysIcon}
+          ton={moi?.date_comptable ? "success" : "danger"}
+          valeur={moi?.date_comptable ? formatDate(moi.date_comptable) : "Fermée"}
+          detail={
+            moi?.date_comptable
               ? "Les opérations sont datées de ce jour."
-              : "Aucune opération financière n'est possible tant qu'une journée n'est pas ouverte."}
-            <div className="mt-3">
-              <Link
-                href="/parametres/journees"
-                className={buttonVariants({ variant: "outline", size: "sm" })}
-              >
-                Gérer les journées
-              </Link>
-            </div>
-          </CardContent>
-        </Card>
+              : "Aucune opération financière n'est possible tant qu'une journée n'est pas ouverte."
+          }
+        >
+          <Link
+            href="/parametres/journees"
+            className={buttonVariants({ variant: "outline", size: "sm", className: "mt-auto w-fit" })}
+          >
+            Gérer les journées <ArrowRightIcon />
+          </Link>
+        </StatCard>
 
         {voitTaux && (
-          <Card>
-            <CardHeader>
-              <CardDescription className="flex items-center gap-2">
-                <RefreshCwIcon className="size-4" /> Taux de change USD / CDF
-              </CardDescription>
-              <CardTitle className="montant text-2xl">
-                {dernierTaux ? `${formatTaux(dernierTaux.taux_reference)} FC` : "Non saisi"}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="text-sm text-muted-foreground">
-              {dernierTaux
+          <StatCard
+            titre="Taux USD / CDF"
+            icone={RefreshCwIcon}
+            ton={dernierTaux ? "brand" : "warning"}
+            valeur={
+              dernierTaux ? (
+                <span className="montant">
+                  {formatTaux(dernierTaux.taux_reference)}
+                  <span className="ml-1 text-base font-semibold text-muted-foreground">FC</span>
+                </span>
+              ) : (
+                "Non saisi"
+              )
+            }
+            detail={
+              dernierTaux
                 ? `Taux du ${formatDate(dernierTaux.date)} · achat ${formatTaux(dernierTaux.taux_achat)} · vente ${formatTaux(dernierTaux.taux_vente)}`
-                : "Saisissez le taux du jour avant toute opération en USD."}
-            </CardContent>
-          </Card>
+                : "Saisissez le taux du jour avant toute opération en USD."
+            }
+          />
         )}
 
-        <Card>
-          <CardHeader>
-            <CardDescription className="flex items-center gap-2">
-              <ShieldCheckIcon className="size-4" /> Mon accès
-            </CardDescription>
-            <CardTitle className="flex flex-wrap gap-1.5">
-              {moi?.roles_libelles.map((role) => (
-                <Badge key={role} variant="secondary">
-                  {role}
-                </Badge>
-              ))}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="text-sm text-muted-foreground">
-            Double authentification : {moi?.otp_active ? "activée" : "non activée"}.
-          </CardContent>
-        </Card>
+        <StatCard
+          titre="Mon accès"
+          icone={ShieldCheckIcon}
+          ton={moi?.otp_active ? "success" : "warning"}
+          valeur={
+            <span className="flex flex-wrap gap-1.5">
+              {moi?.roles_libelles.length ? (
+                moi.roles_libelles.map((role) => (
+                  <Badge key={role} variant="info">
+                    {role}
+                  </Badge>
+                ))
+              ) : (
+                <span className="text-base text-muted-foreground">Aucun rôle</span>
+              )}
+            </span>
+          }
+          detail={
+            <span className="flex items-center gap-1.5">
+              Double authentification :
+              <Badge variant={moi?.otp_active ? "success" : "warning"}>
+                {moi?.otp_active ? "activée" : "non activée"}
+              </Badge>
+            </span>
+          }
+        />
       </div>
 
-      <Card className="mt-6">
-        <CardHeader>
-          <CardTitle>Prochains modules</CardTitle>
-          <CardDescription>
-            Les fondations, la sécurité, la comptabilité et les membres sont en place. Les modules métiers
-            arrivent dans cet ordre.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ol className="list-decimal space-y-1 pl-5 text-sm">
-            {MODULES_A_VENIR.map((m) => (
-              <li key={m}>{m}</li>
-            ))}
-          </ol>
-        </CardContent>
-      </Card>
+      <section className="carte mt-6">
+        <p className="surtitre mb-1">Feuille de route</p>
+        <h2 className="text-lg font-bold tracking-tight">Prochains modules</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Les fondations, la sécurité, la comptabilité et les membres sont en place. Les modules métiers
+          arrivent dans cet ordre.
+        </p>
+        <ol className="mt-5 grid gap-2 sm:grid-cols-2">
+          {MODULES_A_VENIR.map((m, i) => (
+            <li
+              key={m}
+              className="flex items-start gap-3 rounded-xl border border-border-soft bg-surface/60 px-4 py-3 text-sm"
+            >
+              <span className="flex size-6 shrink-0 items-center justify-center rounded-lg bg-info-soft text-xs font-bold text-info-strong">
+                {i + 1}
+              </span>
+              <span className="pt-0.5">{m}</span>
+            </li>
+          ))}
+        </ol>
+      </section>
     </>
   );
 }

@@ -70,7 +70,7 @@ export function OngletBeneficiaires({ membre }: { membre: Membre }) {
           </CardContent>
         </Card>
       )}
-      <div className="rounded-xl border">
+      <div className="carte-nue">
         <Table>
           <TableHeader>
             <TableRow>

@@ -1,7 +1,19 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { BanIcon, CheckCircle2Icon, CircleIcon, MoreHorizontalIcon, PencilIcon, UserCheckIcon } from "lucide-react";
+import {
+  BanIcon,
+  BuildingIcon,
+  CalendarDaysIcon,
+  CheckCircle2Icon,
+  CircleIcon,
+  HashIcon,
+  MoreHorizontalIcon,
+  PencilIcon,
+  TagIcon,
+  UserCheckIcon,
+  UsersIcon,
+} from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -41,7 +53,7 @@ function Avatar({ membre }: { membre: Membre }) {
       <img
         src={urlDocument(membre.id, membre.photo)}
         alt={`Photo de ${membre.nom_complet}`}
-        className="size-16 rounded-xl border object-cover"
+        className="size-20 rounded-2xl object-cover shadow-lg ring-4 ring-card lg:size-24"
       />
     );
   }
@@ -51,7 +63,7 @@ function Avatar({ membre }: { membre: Membre }) {
     .map((m) => m[0])
     .join("");
   return (
-    <div className="flex size-16 items-center justify-center rounded-xl bg-muted text-lg font-semibold text-muted-foreground">
+    <div className="degrade-marque flex size-20 items-center justify-center rounded-2xl text-2xl font-bold shadow-lg ring-4 ring-card lg:size-24 lg:text-3xl">
       {initiales}
     </div>
   );
@@ -79,7 +91,7 @@ function DialogueActivation({ membre, fermer }: { membre: Membre; fermer: () => 
       {controle.data && (
         controle.data.pret ? (
           <p className="flex items-center gap-2 text-sm">
-            <CheckCircle2Icon className="size-4 text-primary" /> Dossier complet.
+            <CheckCircle2Icon className="size-4 text-success-strong" /> Dossier complet.
           </p>
         ) : (
           <ul className="space-y-1.5 text-sm">
@@ -197,52 +209,83 @@ export function EnTeteMembre({ membre }: { membre: Membre }) {
   const fermer = () => setDialogue(null);
 
   return (
-    <div className="mb-6 flex flex-wrap items-start gap-4">
-      <Avatar membre={membre} />
-      <div className="min-w-0 flex-1">
-        <h1 className="text-2xl font-semibold tracking-tight">{membre.nom_complet}</h1>
-        <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
-          <span className="font-mono">{membre.numero}</span>
-          <span>{TYPES_MEMBRE[membre.type]}</span>
-          <span>Agence {membre.agence_code}</span>
-          {membre.active_le && <span>Membre depuis le {formatDate(membre.active_le)}</span>}
-          <StatutMembreBadge statut={membre.statut} listeNoire={membre.en_liste_noire} />
-        </div>
-        {membre.groupe_actuel && (
-          <p className="mt-1 text-sm">
-            {membre.groupe_actuel.fonction} du groupe{" "}
-            <Link className="underline" href={`/membres/${membre.groupe_actuel.id}`}>{membre.groupe_actuel.nom}</Link>
-          </p>
-        )}
+    <div className="carte-nue mb-6">
+      {/* Bandeau décoratif */}
+      <div className="relative h-20 bg-linear-to-br from-brand-200 via-brand-50 to-surface lg:h-24">
+        <div aria-hidden className="grille-fond absolute inset-0 text-brand-700 opacity-60" />
       </div>
-      <div className="flex items-center gap-2">
-        {membre.statut === "PROSPECT" && peutActiver && (
-          <Button onClick={() => setDialogue("activation")}>
-            <UserCheckIcon /> Activer
-          </Button>
-        )}
-        {peutModifier && !clos && (
-          <Link href={`/membres/${membre.id}/modifier`} className={buttonVariants({ variant: "outline" })}>
-            <PencilIcon /> Modifier
-          </Link>
-        )}
-        {((peutChangerStatut && actionsStatut) || (peutListeNoire && !clos)) && (
-          <DropdownMenu>
-            <DropdownMenuTrigger render={<Button variant="outline" size="icon" aria-label="Autres actions" />}>
-              <MoreHorizontalIcon />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {peutChangerStatut && actionsStatut && (
-                <DropdownMenuItem onClick={() => setDialogue("statut")}>Changer le statut…</DropdownMenuItem>
-              )}
-              {peutListeNoire && !clos && (
-                <DropdownMenuItem onClick={() => setDialogue("liste-noire")}>
-                  <BanIcon /> {membre.en_liste_noire ? "Retirer de la liste noire…" : "Inscrire sur la liste noire…"}
-                </DropdownMenuItem>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        )}
+
+      <div className="flex flex-wrap items-end gap-4 px-5 pb-5 lg:px-6">
+        <div className="-mt-10 shrink-0 lg:-mt-12">
+          <Avatar membre={membre} />
+        </div>
+        <div className="min-w-0 flex-1 pt-3">
+          <div className="flex flex-wrap items-center gap-2">
+            <h1 className="text-xl font-bold tracking-tight lg:text-2xl">{membre.nom_complet}</h1>
+            <StatutMembreBadge statut={membre.statut} listeNoire={membre.en_liste_noire} />
+          </div>
+          <div className="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
+            <span className="inline-flex items-center gap-1.5 font-mono text-xs">
+              <HashIcon className="size-3.5" />
+              {membre.numero}
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <TagIcon className="size-3.5" />
+              {TYPES_MEMBRE[membre.type]}
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <BuildingIcon className="size-3.5" />
+              Agence {membre.agence_code}
+            </span>
+            {membre.active_le && (
+              <span className="inline-flex items-center gap-1.5">
+                <CalendarDaysIcon className="size-3.5" />
+                Membre depuis le {formatDate(membre.active_le)}
+              </span>
+            )}
+            {membre.groupe_actuel && (
+              <span className="inline-flex items-center gap-1.5">
+                <UsersIcon className="size-3.5" />
+                {membre.groupe_actuel.fonction} du groupe
+                <Link
+                  className="font-semibold text-primary hover:underline"
+                  href={`/membres/${membre.groupe_actuel.id}`}
+                >
+                  {membre.groupe_actuel.nom}
+                </Link>
+              </span>
+            )}
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          {membre.statut === "PROSPECT" && peutActiver && (
+            <Button onClick={() => setDialogue("activation")}>
+              <UserCheckIcon /> Activer
+            </Button>
+          )}
+          {peutModifier && !clos && (
+            <Link href={`/membres/${membre.id}/modifier`} className={buttonVariants({ variant: "outline" })}>
+              <PencilIcon /> Modifier
+            </Link>
+          )}
+          {((peutChangerStatut && actionsStatut) || (peutListeNoire && !clos)) && (
+            <DropdownMenu>
+              <DropdownMenuTrigger render={<Button variant="outline" size="icon" aria-label="Autres actions" />}>
+                <MoreHorizontalIcon />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {peutChangerStatut && actionsStatut && (
+                  <DropdownMenuItem onClick={() => setDialogue("statut")}>Changer le statut…</DropdownMenuItem>
+                )}
+                {peutListeNoire && !clos && (
+                  <DropdownMenuItem onClick={() => setDialogue("liste-noire")}>
+                    <BanIcon /> {membre.en_liste_noire ? "Retirer de la liste noire…" : "Inscrire sur la liste noire…"}
+                  </DropdownMenuItem>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
+        </div>
       </div>
       <Dialog open={dialogue !== null} onOpenChange={(ouvert) => !ouvert && fermer()}>
         {dialogue === "activation" && <DialogueActivation membre={membre} fermer={fermer} />}

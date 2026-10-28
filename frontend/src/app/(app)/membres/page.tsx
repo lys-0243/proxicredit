@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { UserPlusIcon } from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon, ContactIcon, SearchIcon, UserPlusIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -55,11 +55,16 @@ export default function PageMembres() {
         }
       />
       <div className="mb-4 grid gap-3 sm:grid-cols-[1fr_auto_auto]">
-        <Input
-          placeholder="Nom, numéro de membre, téléphone, n° de pièce, RCCM…"
-          value={filtres.search}
-          onChange={filtrer("search")}
-        />
+        <div className="relative">
+          <SearchIcon className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            placeholder="Nom, numéro de membre, téléphone, n° de pièce, RCCM…"
+            aria-label="Rechercher un membre"
+            className="pl-9"
+            value={filtres.search}
+            onChange={filtrer("search")}
+          />
+        </div>
         <ListeDeroulante aria-label="Type" className="sm:w-48" value={filtres.type} onChange={filtrer("type")}>
           <option value="">Tous les types</option>
           {Object.entries(TYPES_MEMBRE).map(([code, libelle]) => (
@@ -73,7 +78,7 @@ export default function PageMembres() {
           ))}
         </ListeDeroulante>
       </div>
-      <div className="rounded-xl border">
+      <div className="carte-nue">
         <Table>
           <TableHeader>
             <TableRow>
@@ -91,12 +96,16 @@ export default function PageMembres() {
             ) : membres.data?.results.length ? (
               membres.data.results.map((m) => (
                 <TableRow key={m.id} className="cursor-pointer" onClick={() => router.push(`/membres/${m.id}`)}>
-                  <TableCell className="font-mono text-xs">
-                    <Link href={`/membres/${m.id}`} onClick={(e) => e.stopPropagation()}>
+                  <TableCell className="font-mono text-xs text-muted-foreground">
+                    <Link
+                      href={`/membres/${m.id}`}
+                      className="hover:text-primary hover:underline"
+                      onClick={(e) => e.stopPropagation()}
+                    >
                       {m.numero}
                     </Link>
                   </TableCell>
-                  <TableCell className="font-medium">{m.nom_complet}</TableCell>
+                  <TableCell className="font-semibold">{m.nom_complet}</TableCell>
                   <TableCell className="text-sm">{TYPES_MEMBRE[m.type]}</TableCell>
                   <TableCell className="text-sm">{m.telephone}</TableCell>
                   <TableCell><StatutMembreBadge statut={m.statut} listeNoire={m.en_liste_noire} /></TableCell>
@@ -104,21 +113,33 @@ export default function PageMembres() {
                 </TableRow>
               ))
             ) : (
-              <LigneVide colonnes={6} message="Aucun membre ne correspond à la recherche." />
+              <LigneVide colonnes={6} icone={ContactIcon} message="Aucun membre ne correspond à la recherche." />
             )}
           </TableBody>
         </Table>
       </div>
-      <div className="mt-4 flex items-center justify-end gap-2">
-        <span className="mr-auto text-sm text-muted-foreground">
+      <div className="mt-4 flex items-center justify-end gap-1.5 text-sm">
+        <span className="mr-auto text-muted-foreground">
           {membres.data ? `${membres.data.count} membre(s)` : ""}
         </span>
-        <Button variant="outline" size="sm" disabled={!membres.data?.previous} onClick={() => setPage(page - 1)}>
-          Précédent
+        <span className="mr-2 text-muted-foreground">Page {page}</span>
+        <Button
+          variant="outline"
+          size="icon-sm"
+          aria-label="Page précédente"
+          disabled={!membres.data?.previous}
+          onClick={() => setPage(page - 1)}
+        >
+          <ChevronLeftIcon />
         </Button>
-        <span className="text-sm text-muted-foreground">Page {page}</span>
-        <Button variant="outline" size="sm" disabled={!membres.data?.next} onClick={() => setPage(page + 1)}>
-          Suivant
+        <Button
+          variant="outline"
+          size="icon-sm"
+          aria-label="Page suivante"
+          disabled={!membres.data?.next}
+          onClick={() => setPage(page + 1)}
+        >
+          <ChevronRightIcon />
         </Button>
       </div>
     </>

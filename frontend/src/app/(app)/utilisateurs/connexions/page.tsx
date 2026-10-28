@@ -59,7 +59,7 @@ export default function PageJournalConnexions() {
           </>
         }
       />
-      <div className="rounded-xl border">
+      <div className="carte-nue">
         <Table>
           <TableHeader>
             <TableRow>

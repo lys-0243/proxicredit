@@ -77,7 +77,7 @@ export default function PageJoursFeries() {
           </CardContent>
         </Card>
       )}
-      <div className="rounded-xl border">
+      <div className="carte-nue">
         <Table>
           <TableHeader>
             <TableRow>

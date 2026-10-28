@@ -19,7 +19,9 @@ export function Champ({
 }) {
   return (
     <div className={cn("grid content-start gap-1.5", className)}>
-      <Label htmlFor={htmlFor}>{label}</Label>
+      <Label htmlFor={htmlFor} className="font-semibold">
+        {label}
+      </Label>
       {children}
       {aide && !erreur && <p className="text-xs text-muted-foreground">{aide}</p>}
       {erreur && <p className="text-xs text-destructive">{erreur}</p>}

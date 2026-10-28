@@ -76,7 +76,7 @@ function GrandLivre() {
           Choisissez un compte mouvementable pour afficher ses mouvements.
         </p>
       ) : (
-        <div className="rounded-xl border">
+        <div className="carte-nue">
           {g && (
             <div className="border-b px-4 py-3 text-sm">
               <span className="font-mono font-medium">{g.compte}</span> {g.libelle}

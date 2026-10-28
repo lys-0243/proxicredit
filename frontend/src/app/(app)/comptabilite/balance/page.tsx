@@ -72,7 +72,7 @@ export default function PageBalance() {
         )}
       </div>
       <ErreurApi erreur={balance.error} />
-      <div className="rounded-xl border">
+      <div className="carte-nue">
         <Table>
           <TableHeader>
             <TableRow>
@@ -105,7 +105,7 @@ export default function PageBalance() {
                         <CellulesTotaux t={l} />
                       </TableRow>
                     ))}
-                  <TableRow className="bg-muted/40 font-medium">
+                  <TableRow className="bg-muted/40 font-bold hover:bg-muted/40">
                     <TableCell>Total classe {classe.classe}</TableCell>
                     <CellulesTotaux t={classe} />
                   </TableRow>

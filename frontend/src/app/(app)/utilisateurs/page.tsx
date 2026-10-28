@@ -257,7 +257,7 @@ export default function PageUtilisateurs() {
           </>
         }
       />
-      <div className="rounded-xl border">
+      <div className="carte-nue">
         <Table>
           <TableHeader>
             <TableRow>

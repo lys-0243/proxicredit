@@ -156,7 +156,7 @@ export function OngletAdhesion({ membre }: { membre: Membre }) {
                   </Champ>
                   <CompteTresorerie valeur={compte} onChange={setCompte} />
                 </div>
-                <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg bg-muted/50 px-3 py-2 text-sm">
+                <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border-soft bg-muted/40 px-4 py-3 text-sm">
                   <span>
                     {adhesion ? "" : `Frais ${formatMontant(c.frais)} + `}
                     {nombre} part(s) {formatMontant(montantParts)}
@@ -172,7 +172,7 @@ export function OngletAdhesion({ membre }: { membre: Membre }) {
         </Card>
       )}
 
-      <div className="rounded-xl border xl:col-span-2">
+      <div className="carte-nue xl:col-span-2">
         <Table>
           <TableHeader>
             <TableRow>

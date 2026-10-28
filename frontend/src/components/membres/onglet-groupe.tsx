@@ -57,7 +57,7 @@ function AjoutMembre({ groupe }: { groupe: Membre }) {
           <Champ label="Personne physique de l'agence" htmlFor="recherche-membre"
             aide="Nom, numéro de membre ou téléphone.">
             {choisi ? (
-              <div className="flex h-8 items-center justify-between rounded-lg border px-2.5 text-sm">
+              <div className="flex h-10 items-center justify-between rounded-xl border border-input bg-card px-3 text-sm shadow-xs">
                 <span>{choisi.numero} – {choisi.nom_complet}</span>
                 <Button type="button" variant="ghost" size="xs" onClick={() => setChoisi(null)}>Changer</Button>
               </div>
@@ -66,10 +66,10 @@ function AjoutMembre({ groupe }: { groupe: Membre }) {
                 <Input id="recherche-membre" autoComplete="off" value={recherche}
                   onChange={(e) => setRecherche(e.target.value)} />
                 {candidats.data && recherche.trim().length >= 2 && (
-                  <ul className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-lg border bg-popover p-1 shadow-md">
+                  <ul className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-xl border border-border-soft bg-popover p-1.5 shadow-lg">
                     {candidats.data.results.length ? candidats.data.results.map((m) => (
                       <li key={m.id}>
-                        <button type="button" className="w-full rounded px-2 py-1.5 text-left text-sm hover:bg-muted"
+                        <button type="button" className="w-full rounded-lg px-2 py-1.5 text-left text-sm hover:bg-accent hover:text-accent-foreground"
                           onClick={() => setChoisi(m)}>
                           {m.numero} – {m.nom_complet} <span className="text-muted-foreground">({m.statut.toLowerCase()})</span>
                         </button>
@@ -117,7 +117,7 @@ export function OngletGroupe({ groupe }: { groupe: Membre }) {
           {anciens ? "Masquer les anciens membres" : "Afficher les anciens membres"}
         </Button>
       </div>
-      <div className="rounded-xl border">
+      <div className="carte-nue">
         <Table>
           <TableHeader>
             <TableRow>

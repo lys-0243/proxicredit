@@ -1,3 +1,5 @@
+import { InboxIcon } from "lucide-react";
+
 import { Skeleton } from "@/components/ui/skeleton";
 import { TableCell, TableRow } from "@/components/ui/table";
 
@@ -13,11 +15,39 @@ export function LignesChargement({ colonnes, lignes = 4 }: { colonnes: number; l
   ));
 }
 
-export function LigneVide({ colonnes, message }: { colonnes: number; message: string }) {
+export function EtatVide({
+  message,
+  icone: Icone = InboxIcon,
+  children,
+}: {
+  message: string;
+  icone?: React.ElementType;
+  children?: React.ReactNode;
+}) {
   return (
-    <TableRow>
-      <TableCell colSpan={colonnes} className="py-10 text-center text-sm text-muted-foreground">
-        {message}
+    <div className="flex flex-col items-center gap-3 px-4 py-14 text-center">
+      <div className="pastille-icone ton-neutre size-14">
+        <Icone className="size-6!" />
+      </div>
+      <p className="max-w-sm text-sm font-medium whitespace-normal text-muted-foreground">{message}</p>
+      {children}
+    </div>
+  );
+}
+
+export function LigneVide({
+  colonnes,
+  message,
+  icone,
+}: {
+  colonnes: number;
+  message: string;
+  icone?: React.ElementType;
+}) {
+  return (
+    <TableRow className="hover:bg-transparent">
+      <TableCell colSpan={colonnes} className="p-0">
+        <EtatVide message={message} icone={icone} />
       </TableCell>
     </TableRow>
   );

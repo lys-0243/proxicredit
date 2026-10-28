@@ -96,7 +96,7 @@ export default function PageTauxChange() {
         </Card>
       )}
 
-      <div className="rounded-xl border">
+      <div className="carte-nue">
         <Table>
           <TableHeader>
             <TableRow>

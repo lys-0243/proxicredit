@@ -34,7 +34,7 @@ export default function PageDevises() {
         titre="Devises"
         description="La devise de référence sert aux contre-valeurs comptables. Une devise utilisée ne se supprime pas : elle se désactive."
       />
-      <div className="rounded-xl border">
+      <div className="carte-nue">
         <Table>
           <TableHeader>
             <TableRow>

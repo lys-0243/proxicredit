@@ -5,8 +5,8 @@ export function ListeDeroulante({ className, ...props }: React.ComponentProps<"s
   return (
     <select
       className={cn(
-        "h-8 w-full rounded-lg border border-input bg-transparent px-2.5 text-sm outline-none",
-        "focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50",
+        "h-10 w-full rounded-xl border border-input bg-card px-3 text-sm shadow-xs outline-none",
+        "focus-visible:border-primary focus-visible:ring-3 focus-visible:ring-primary/15",
         "disabled:cursor-not-allowed disabled:opacity-50 dark:bg-input/30",
         className,
       )}

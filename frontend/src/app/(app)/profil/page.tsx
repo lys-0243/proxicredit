@@ -147,7 +147,7 @@ function DoubleAuthentification({ active }: { active: boolean }) {
       <div className="grid max-w-sm gap-3">
         <p className="text-sm">
           1. Scannez ce QR code avec votre application. Sans caméra, saisissez cette clé :
-          <code className="mt-1 block rounded bg-muted px-2 py-1 font-mono text-xs break-all">
+          <code className="mt-1 block rounded-lg bg-muted px-2.5 py-1.5 font-mono text-xs break-all">
             {config.secret}
           </code>
         </p>

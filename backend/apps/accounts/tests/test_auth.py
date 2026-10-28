@@ -163,3 +163,22 @@ class TestRoles:
         refus = client_api(cree).get("/api/utilisateurs")
         assert refus.status_code == 403
         assert "code" not in refus.data  # refus de permission, pas une obligation en attente
+
+
+def test_comptes_de_demonstration(settings):
+    from django.core.management import CommandError, call_command
+
+    settings.DEBUG = False
+    with pytest.raises(CommandError, match="hors développement"):
+        call_command("creer_comptes_demo")
+
+    settings.DEBUG = True
+    call_command("creer_comptes_demo")
+    accueil = Utilisateur.objects.get(username="accueil.demo")
+    assert accueil.roles == ["AGENT_RECEPTION"]
+    assert accueil.agence.code == "AG001"
+    assert accueil.check_password("Demo-ProxiCredit-2026")
+    assert Utilisateur.objects.filter(username__endswith=".demo").count() == 10
+
+    call_command("creer_comptes_demo", "--desactiver")
+    assert not Utilisateur.objects.filter(username__endswith=".demo", is_active=True).exists()

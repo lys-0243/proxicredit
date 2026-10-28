@@ -159,7 +159,7 @@ export function FormulaireEcriture({
         {mouvementables.map((c) => <option key={c.id} value={c.numero}>{c.libelle}</option>)}
       </datalist>
 
-      <div className="rounded-xl border">
+      <div className="carte-nue">
         <Table>
           <TableHeader>
             <TableRow>

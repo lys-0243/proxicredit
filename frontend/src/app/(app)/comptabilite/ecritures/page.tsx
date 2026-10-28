@@ -77,7 +77,7 @@ export default function PageEcritures() {
         <Input type="date" aria-label="Du" value={filtres.du} onChange={filtrer("du")} />
         <Input type="date" aria-label="Au" value={filtres.au} onChange={filtrer("au")} />
       </div>
-      <div className="rounded-xl border">
+      <div className="carte-nue">
         <Table>
           <TableHeader>
             <TableRow>

@@ -101,7 +101,7 @@ export function OngletDocuments({ membre }: { membre: Membre }) {
           </CardContent>
         </Card>
       )}
-      <div className="rounded-xl border">
+      <div className="carte-nue">
         <Table>
           <TableHeader>
             <TableRow>
@@ -133,7 +133,7 @@ export function OngletDocuments({ membre }: { membre: Membre }) {
                   <TableCell>
                     <a href={urlDocument(membre.id, d.id)} target="_blank" rel="noopener"
                       aria-label={`Ouvrir ${TYPES_DOCUMENT[d.type]}`}
-                      className="inline-flex size-7 items-center justify-center rounded-md hover:bg-muted">
+                      className="inline-flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-info-soft hover:text-info-strong">
                       <ExternalLinkIcon className="size-4" />
                     </a>
                   </TableCell>
