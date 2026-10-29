@@ -203,6 +203,44 @@ sécurité**.
 > **Contrôle à quatre yeux** : une écriture saisie manuellement doit être validée par un **autre**
 > utilisateur. Pour tester la saisie puis la validation, créez donc au moins deux comptes.
 
+### 2.6 Alimenter le coffre et ouvrir les caisses
+
+`manage.py initialiser` crée, pour chaque agence, un **coffre** (compte 5711) et un **guichet G01**
+(compte 5712). Ensuite :
+
+1. Le comptable passe une écriture d'alimentation du coffre (par exemple débit 5711, crédit 5211
+   pour un retrait en banque).
+2. Le caissier ouvre sa session : **Caisse → Ma caisse → Ouvrir la caisse**.
+3. Le chef d'agence approvisionne la caisse depuis le coffre : **Caisse → Sessions de caisse →
+   Approvisionner**.
+4. En fin de journée, le caissier ferme sa session en déclarant le comptage de chaque devise. Un
+   écart est enregistré en compte d'attente 4712. La journée comptable ne peut pas être fermée tant
+   qu'une caisse reste ouverte.
+
+Pour le démarrage, **tout se fait en espèces, à la caisse** : dépôts, remboursements, retraits et
+décaissements passent par la session du caissier (Mobile Money et banque viendront avec la phase 7).
+
+### 2.7 Premier dépôt et activation d'un membre
+
+Il n'y a ni frais d'adhésion ni parts sociales : le premier passage en caisse est un **premier
+dépôt** sur le compte d'épargne du membre (fiche du membre → onglet **Épargne** → **Dépôt**). Le
+compte de la devise choisie s'ouvre à cette occasion ; un membre a au plus un compte en CDF et un en
+USD. Le dossier peut être activé quand les documents KYC sont fournis et que le dépôt atteint le
+minimum (paramètre `epargne.depot_initial` : 10 000 CDF ou 5 USD au départ).
+
+### 2.8 Épargne exigée pour un crédit
+
+Un crédit n'est soumis, approuvé et décaissé que si le membre a déjà **18 % du montant** sur son
+compte d'épargne, dans la devise du crédit. Au décaissement, ces 18 % sont **bloqués** : ils ne
+peuvent plus être retirés ni servir à rembourser, jusqu'à ce que le crédit soit soldé.
+
+> **Paramètres à confirmer** : les produits d'épargne et de crédit (taux, durées, plafonds, frais,
+> épargne exigée, pénalités), le dépôt initial et les règles de crédit (`credits.regles` : un
+> crédit à la fois, taux d'endettement de 40 %) sont des valeurs de départ. Le **Directeur** (ou l'Administrateur) les
+> crée et les modifie dans **Paramétrage → Produits**. Un produit de crédit reçoit à sa création ses
+> règles comptables (comptes d'encours et d'intérêts) ; son code et ses comptes ne changent plus
+> ensuite.
+
 ---
 
 ## 3. Production sur un VPS (Docker Compose)

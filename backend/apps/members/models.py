@@ -123,7 +123,6 @@ class Membre(Horodatage):
             ("activer_membre", "Activer un membre (validation du dossier)"),
             ("changer_statut_membre", "Suspendre, réactiver ou clôturer un membre"),
             ("gerer_liste_noire", "Inscrire ou retirer un membre de la liste noire"),
-            ("encaisser_adhesion", "Encaisser l'adhésion et les parts sociales"),
         ]
         constraints = [
             # Une même pièce d'identité ne peut servir qu'à un seul membre.
@@ -236,55 +235,6 @@ class MembreGroupe(models.Model):
 
     def __str__(self):
         return f"{self.membre} dans {self.groupe} ({self.get_fonction_display()})"
-
-
-class MouvementPartsSociales(models.Model):
-    """Souscriptions (et futurs remboursements) de parts sociales. Le capital détenu par un membre
-    est la somme de ses mouvements."""
-
-    class Type(models.TextChoices):
-        SOUSCRIPTION = "SOUSCRIPTION", "Souscription"
-        REMBOURSEMENT = "REMBOURSEMENT", "Remboursement"
-
-    membre = models.ForeignKey(Membre, on_delete=models.PROTECT, related_name="parts_sociales")
-    type = models.CharField(max_length=15, choices=Type.choices)
-    nombre = models.IntegerField(help_text="Positif en souscription, négatif en remboursement.")
-    valeur_unitaire = champ_montant()
-    montant = champ_montant()
-    devise = models.ForeignKey("core.Devise", on_delete=models.PROTECT, related_name="+")
-    ecriture = models.ForeignKey("accounting.Ecriture", on_delete=models.PROTECT, related_name="+")
-    date_comptable = models.DateField()
-    cree_par = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="+"
-    )
-    cree_le = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ["-cree_le"]
-        verbose_name = "mouvement de parts sociales"
-
-    def __str__(self):
-        return f"{self.membre.numero} {self.type} {self.nombre} part(s)"
-
-
-class Adhesion(models.Model):
-    """Paiement des frais d'adhésion (une seule fois par membre)."""
-
-    membre = models.OneToOneField(Membre, on_delete=models.PROTECT, related_name="adhesion")
-    frais = champ_montant()
-    devise = models.ForeignKey("core.Devise", on_delete=models.PROTECT, related_name="+")
-    ecriture = models.ForeignKey("accounting.Ecriture", on_delete=models.PROTECT, related_name="+")
-    date_comptable = models.DateField()
-    encaisse_par = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="+"
-    )
-    encaisse_le = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        verbose_name = "adhésion"
-
-    def __str__(self):
-        return f"Adhésion {self.membre.numero}"
 
 
 class HistoriqueStatut(models.Model):

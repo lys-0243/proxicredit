@@ -1,28 +1,22 @@
-"""Règles de gestion des membres : numérotation, dossier KYC, activation, statuts, adhésion et
-parts sociales. Les vues ne font qu'appeler ces fonctions."""
+"""Règles de gestion des membres : numérotation, dossier KYC, activation, statuts, groupes.
+Les vues ne font qu'appeler ces fonctions. Le premier dépôt d'épargne, condition d'activation,
+relève du module épargne."""
 
 import uuid
-from dataclasses import dataclass
+from collections.abc import Callable
 from datetime import date
-from decimal import Decimal
 
 from django.db import transaction
-from django.db.models import Sum
 from django.utils import timezone
 
-from apps.accounting import services as compta
-from apps.accounting.models import CompteComptable
 from apps.core import services as core
 from apps.core.exceptions import ErreurMetier
-from apps.core.models import Agence, Devise
-from apps.core.money import arrondir, en_decimal
+from apps.core.models import Agence
 from apps.members.models import (
-    Adhesion,
     DocumentMembre,
     HistoriqueStatut,
     Membre,
     MembreGroupe,
-    MouvementPartsSociales,
     SequenceMembre,
 )
 
@@ -34,29 +28,16 @@ FONCTIONS_BUREAU = (
 )
 
 # Valeurs par défaut, à remplacer par les conditions réelles de la microfinance (paramètres datés).
-PARAMETRE_ADHESION = "membres.adhesion"
-DEFAUT_ADHESION = {"devise": "CDF", "frais": "5000", "valeur_part": "10000", "parts_minimum": 1}
 PARAMETRE_GROUPE = "membres.groupe"
 DEFAUT_GROUPE = {"membres_minimum": 3, "membres_maximum": 30}
 
+# Contrôles avant une démission : chaque module (épargne, crédit) enregistre ici, dans son
+# AppConfig.ready, une fonction qui renvoie un message bloquant, ou None.
+CONTROLES_DEMISSION: list[Callable[[Membre], str | None]] = []
 
-@dataclass(frozen=True)
-class ConditionsAdhesion:
-    devise: Devise
-    frais: Decimal
-    valeur_part: Decimal
-    parts_minimum: int
-
-
-def conditions_adhesion(a_date: date | None = None) -> ConditionsAdhesion:
-    valeur = core.parametre(PARAMETRE_ADHESION, a_date, defaut=DEFAUT_ADHESION)
-    devise = Devise.objects.get(code=valeur["devise"])
-    return ConditionsAdhesion(
-        devise=devise,
-        frais=arrondir(en_decimal(valeur["frais"]), devise.decimales),
-        valeur_part=arrondir(en_decimal(valeur["valeur_part"]), devise.decimales),
-        parts_minimum=int(valeur["parts_minimum"]),
-    )
+# Conditions d'activation venues des autres modules (premier dépôt d'épargne) : même principe, la
+# fonction renvoie l'élément manquant, ou None.
+CONDITIONS_ACTIVATION: list[Callable[[Membre], str | None]] = []
 
 
 def conditions_groupe() -> dict:
@@ -92,13 +73,6 @@ def verifier_modifiable(membre: Membre) -> None:
             f"Dossier clôturé ({membre.get_statut_display().lower()}) : il n'est plus modifiable.",
             "dossier_clos",
         )
-
-
-# --- Parts sociales ---------------------------------------------------------------------
-
-
-def nombre_parts(membre: Membre) -> int:
-    return membre.parts_sociales.aggregate(n=Sum("nombre"))["n"] or 0
 
 
 # --- Dossier et activation ---------------------------------------------------------------
@@ -162,9 +136,7 @@ def elements_manquants(membre: Membre) -> list[str]:
         exiger(T.PV_GROUPE in documents, "PV de constitution du groupe")
 
     exiger(membre.telephone, "Téléphone")
-    exiger(hasattr(membre, "adhesion"), "Frais d'adhésion payés")
-    minimum = conditions_adhesion().parts_minimum
-    exiger(nombre_parts(membre) >= minimum, f"Au moins {minimum} part(s) sociale(s) libérée(s)")
+    manquants.extend(m for condition in CONDITIONS_ACTIVATION if (m := condition(membre)))
     exiger(not membre.en_liste_noire, "Membre inscrit sur la liste noire")
     return manquants
 
@@ -214,8 +186,8 @@ TRANSITIONS = {
 def changer_statut(membre: Membre, action: str, motif: str, utilisateur) -> Membre:
     """Suspension, réactivation, démission, décès. Le motif est obligatoire.
 
-    Les contrôles financiers (crédit en cours, épargne, remboursement des parts) s'ajouteront avec
-    les modules épargne et crédit.
+    Une démission suppose que le membre n'a plus d'engagement (`CONTROLES_DEMISSION`) : crédit
+    soldé, comptes d'épargne vidés.
     """
     if action not in TRANSITIONS:
         raise ErreurMetier(f"Action inconnue : {action}.", "action")
@@ -227,6 +199,10 @@ def changer_statut(membre: Membre, action: str, motif: str, utilisateur) -> Memb
         raise ErreurMetier(
             f"Impossible depuis le statut « {membre.get_statut_display()} ».", "statut"
         )
+    if vers == Membre.Statut.DEMISSIONNAIRE:
+        blocages = [m for controle in CONTROLES_DEMISSION if (m := controle(membre))]
+        if blocages:
+            raise ErreurMetier(" ".join(blocages), "engagements_en_cours")
     if vers in (Membre.Statut.DEMISSIONNAIRE, Membre.Statut.DECEDE):
         MembreGroupe.objects.filter(membre=membre, date_sortie__isnull=True).update(
             date_sortie=timezone.localdate()
@@ -251,132 +227,6 @@ def liste_noire(membre: Membre, inscrire: bool, motif: str, utilisateur) -> Memb
         par=utilisateur,
     )
     return membre
-
-
-# --- Encaissements (adhésion, parts) ------------------------------------------------------
-
-
-# Comptes qui reçoivent réellement l'argent d'un membre : banques, monnaie électronique, caisses.
-# (Les virements internes 58x ne sont jamais la contrepartie d'un encaissement.)
-PREFIXES_TRESORERIE = ("52", "55", "57")
-
-
-def _compte_tresorerie(numero: str) -> CompteComptable:
-    compte = CompteComptable.objects.filter(numero=numero).first()
-    if (
-        compte is None
-        or not compte.numero.startswith(PREFIXES_TRESORERIE)
-        or not compte.est_mouvementable
-        or not compte.actif
-    ):
-        raise ErreurMetier(
-            "Encaissement possible uniquement sur une caisse, une banque ou un compte Mobile Money "
-            "(comptes 52, 55 ou 57 mouvementables).",
-            "compte_tresorerie",
-        )
-    return compte
-
-
-@transaction.atomic
-def encaisser_adhesion(
-    membre: Membre, *, nombre_parts: int, compte_tresorerie: str, utilisateur, cle_idempotence: str
-) -> Adhesion:
-    """Encaisse en une seule écriture les frais d'adhésion et les parts sociales initiales.
-
-    `compte_tresorerie` : en attendant le module caisse (phase 3), le compte de caisse ou de
-    mobile money qui reçoit l'argent ; la phase 3 le fournira depuis la session du caissier.
-    """
-    membre = Membre.objects.select_for_update().get(pk=membre.pk)
-    existante = Adhesion.objects.filter(membre=membre).first()
-    if existante:
-        if existante.ecriture.cle_idempotence == cle_idempotence:
-            return existante  # même demande rejouée (double clic, réseau)
-        raise ErreurMetier("L'adhésion de ce membre est déjà payée.", "adhesion_payee")
-    verifier_modifiable(membre)
-    if membre.en_liste_noire:
-        raise ErreurMetier("Membre inscrit sur la liste noire.", "liste_noire")
-
-    conditions = conditions_adhesion(core.date_comptable(membre.agence))
-    if nombre_parts < conditions.parts_minimum:
-        raise ErreurMetier(
-            f"Au moins {conditions.parts_minimum} part(s) sociale(s) à la souscription.",
-            "parts_minimum",
-        )
-    montant_parts = conditions.valeur_part * nombre_parts
-    ecriture = compta.comptabiliser_operation(
-        "MEMBRE_ADHESION",
-        montants={
-            "total": conditions.frais + montant_parts,
-            "frais": conditions.frais,
-            "parts": montant_parts,
-        },
-        comptes={"TRESORERIE": _compte_tresorerie(compte_tresorerie)},
-        agence=membre.agence,
-        devise=conditions.devise,
-        utilisateur=utilisateur,
-        reference=membre.numero,
-        piece=membre,
-        cle_idempotence=cle_idempotence,
-    )
-    MouvementPartsSociales.objects.create(
-        membre=membre,
-        type=MouvementPartsSociales.Type.SOUSCRIPTION,
-        nombre=nombre_parts,
-        valeur_unitaire=conditions.valeur_part,
-        montant=montant_parts,
-        devise=conditions.devise,
-        ecriture=ecriture,
-        date_comptable=ecriture.date_comptable,
-        cree_par=utilisateur,
-    )
-    return Adhesion.objects.create(
-        membre=membre,
-        frais=conditions.frais,
-        devise=conditions.devise,
-        ecriture=ecriture,
-        date_comptable=ecriture.date_comptable,
-        encaisse_par=utilisateur,
-    )
-
-
-@transaction.atomic
-def souscrire_parts(
-    membre: Membre, *, nombre: int, compte_tresorerie: str, utilisateur, cle_idempotence: str
-) -> MouvementPartsSociales:
-    """Parts sociales supplémentaires, après l'adhésion."""
-    membre = Membre.objects.select_for_update().get(pk=membre.pk)
-    deja = MouvementPartsSociales.objects.filter(ecriture__cle_idempotence=cle_idempotence).first()
-    if deja:
-        return deja
-    verifier_modifiable(membre)
-    if not hasattr(membre, "adhesion"):
-        raise ErreurMetier("Encaissez d'abord l'adhésion du membre.", "adhesion_non_payee")
-    if nombre < 1:
-        raise ErreurMetier("Le nombre de parts doit être positif.", "nombre")
-    conditions = conditions_adhesion(core.date_comptable(membre.agence))
-    montant = conditions.valeur_part * nombre
-    ecriture = compta.comptabiliser_operation(
-        "MEMBRE_PARTS_SOCIALES",
-        montants={"montant": montant},
-        comptes={"TRESORERIE": _compte_tresorerie(compte_tresorerie)},
-        agence=membre.agence,
-        devise=conditions.devise,
-        utilisateur=utilisateur,
-        reference=membre.numero,
-        piece=membre,
-        cle_idempotence=cle_idempotence,
-    )
-    return MouvementPartsSociales.objects.create(
-        membre=membre,
-        type=MouvementPartsSociales.Type.SOUSCRIPTION,
-        nombre=nombre,
-        valeur_unitaire=conditions.valeur_part,
-        montant=montant,
-        devise=conditions.devise,
-        ecriture=ecriture,
-        date_comptable=ecriture.date_comptable,
-        cree_par=utilisateur,
-    )
 
 
 # --- Groupes solidaires -------------------------------------------------------------------

@@ -28,7 +28,7 @@ class MembreViewSet(
 ):
     """Dossiers des membres. On ne supprime jamais un membre : on clôture son dossier."""
 
-    queryset = Membre.objects.select_related("agence", "cree_par", "active_par", "adhesion")
+    queryset = Membre.objects.select_related("agence", "cree_par", "active_par")
     filterset_fields = ["type", "statut", "en_liste_noire"]
     search_fields = ["numero", "nom_complet", "telephone", "numero_piece", "rccm"]
     ordering_fields = ["cree_le", "nom_complet", "numero"]
@@ -38,9 +38,6 @@ class MembreViewSet(
         "activer": ["members.activer_membre"],
         "changer_statut": ["members.changer_statut_membre"],
         "liste_noire": ["members.gerer_liste_noire"],
-        "encaisser_adhesion": ["members.encaisser_adhesion"],
-        "parts_sociales": LECTURE,
-        "souscrire_parts": ["members.encaisser_adhesion"],
         "documents": LECTURE_DOCUMENTS,
         "ajouter_document": ["members.add_documentmembre"],
         "fichier_document": LECTURE_DOCUMENTS,
@@ -52,7 +49,6 @@ class MembreViewSet(
         "retirer_du_groupe": MODIFICATION,
         "historique": LECTURE,
         "doublons": LECTURE,
-        "conditions_adhesion": [],
     }
 
     def get_serializer_class(self):
@@ -127,49 +123,6 @@ class MembreViewSet(
             return Response([])
         resultats = Membre.objects.filter(critere).select_related("agence")[:10]
         return Response(s.MembreListeSerializer(resultats, many=True).data)
-
-    @extend_schema(responses=s.ConditionsAdhesionSerializer)
-    @action(detail=False, methods=["get"], url_path="conditions-adhesion")
-    def conditions_adhesion(self, request):
-        c = services.conditions_adhesion()
-        return Response(
-            s.ConditionsAdhesionSerializer(
-                {
-                    "devise": c.devise.code,
-                    "frais": c.frais,
-                    "valeur_part": c.valeur_part,
-                    "parts_minimum": c.parts_minimum,
-                }
-            ).data
-        )
-
-    # --- Adhésion et parts sociales -------------------------------------------------------
-
-    @extend_schema(request=s.EncaisserAdhesionSerializer, responses=s.MembreSerializer)
-    @action(detail=True, methods=["post"], url_path="adhesion")
-    def encaisser_adhesion(self, request, pk=None):
-        ser = s.EncaisserAdhesionSerializer(data=request.data)
-        ser.is_valid(raise_exception=True)
-        services.encaisser_adhesion(
-            self.get_object(), utilisateur=request.user, **ser.validated_data
-        )
-        return Response(s.MembreSerializer(self.get_object()).data, status=status.HTTP_201_CREATED)
-
-    @extend_schema(responses=s.MouvementPartsSerializer(many=True))
-    @action(detail=True, methods=["get"], url_path="parts-sociales")
-    def parts_sociales(self, request, pk=None):
-        mouvements = self.get_object().parts_sociales.select_related("ecriture", "cree_par")
-        return Response(s.MouvementPartsSerializer(mouvements, many=True).data)
-
-    @extend_schema(request=s.SouscrirePartsSerializer, responses=s.MouvementPartsSerializer)
-    @parts_sociales.mapping.post
-    def souscrire_parts(self, request, pk=None):
-        ser = s.SouscrirePartsSerializer(data=request.data)
-        ser.is_valid(raise_exception=True)
-        mouvement = services.souscrire_parts(
-            self.get_object(), utilisateur=request.user, **ser.validated_data
-        )
-        return Response(s.MouvementPartsSerializer(mouvement).data, status=status.HTTP_201_CREATED)
 
     # --- Documents KYC ----------------------------------------------------------------------
 

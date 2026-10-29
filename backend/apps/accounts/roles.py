@@ -2,7 +2,7 @@
 
 Chaque rôle liste des permissions « app_label.codename ». Le joker `*` est accepté dans l'app ou le
 codename (ex. « core.view_* », « *.view_* »). Les modules ajoutés dans les phases suivantes
-(membres, crédits, caisse...) complètent simplement ces listes.
+complètent simplement ces listes.
 
 Synchronisation : `python manage.py initialiser` (idempotent).
 """
@@ -28,6 +28,35 @@ GESTION_DOSSIERS_MEMBRES = [
     "members.add_documentmembre",
 ]
 
+# Saisie et suivi des demandes de crédit (simulation, saisie, soumission), ouverture de comptes.
+SAISIE_CREDITS = [
+    "credits.view_produitcredit",
+    "credits.view_credit",
+    "credits.add_credit",
+    "credits.change_credit",
+    "savings.view_produitepargne",
+    "savings.view_compteepargne",
+    "savings.add_compteepargne",
+]
+
+# Opérations au guichet : session de caisse, épargne (dont le premier dépôt, qui ouvre le compte),
+# décaissements et remboursements.
+GUICHET = [
+    "cash.view_caisse",
+    "cash.view_sessioncaisse",
+    "cash.view_operationcaisse",
+    "cash.ouvrir_session_caisse",
+    "savings.view_produitepargne",
+    "savings.view_compteepargne",
+    "savings.add_compteepargne",
+    "savings.deposer_epargne",
+    "savings.retirer_epargne",
+    "credits.view_produitcredit",
+    "credits.view_credit",
+    "credits.decaisser_credit",
+    "credits.rembourser_credit",
+]
+
 ROLES: dict[str, dict] = {
     "ADMINISTRATEUR": {
         "libelle": "Administrateur",
@@ -50,6 +79,12 @@ ROLES: dict[str, dict] = {
             "members.activer_membre",
             "members.changer_statut_membre",
             "members.gerer_liste_noire",
+            "cash.add_caisse",
+            "cash.change_caisse",
+            "savings.*_produitepargne",
+            "savings.bloquer_compte_epargne",
+            "credits.*_produitcredit",
+            "credits.approuver_credit",
         ],
     },
     "CHEF_AGENCE": {
@@ -67,22 +102,44 @@ ROLES: dict[str, dict] = {
             "members.activer_membre",
             "members.changer_statut_membre",
             "members.gerer_liste_noire",
-            "members.encaisser_adhesion",
+            "cash.view_caisse",
+            "cash.view_sessioncaisse",
+            "cash.view_operationcaisse",
+            "cash.gerer_coffre",
+            *SAISIE_CREDITS,
+            "savings.bloquer_compte_epargne",
+            # Préside le comité de crédit de l'agence.
+            "credits.approuver_credit",
         ],
     },
     "AGENT_RECEPTION": {
-        # Accueil : création des dossiers membres (prospects) ; simulations et demandes de crédit
-        # en phase 4. Aucun accès caisse, aucune activation ni approbation.
+        # Accueil : création des dossiers membres (prospects), ouverture de comptes d'épargne,
+        # simulations et saisie des demandes de crédit. Aucun accès caisse, aucune activation,
+        # analyse ni approbation.
         "libelle": "Agent de réception",
-        "permissions": [*LECTURE_PARAMETRAGE, *GESTION_DOSSIERS_MEMBRES],
+        "permissions": [*LECTURE_PARAMETRAGE, *GESTION_DOSSIERS_MEMBRES, *SAISIE_CREDITS],
     },
     "AGENT_CREDIT": {
+        # Saisit lui aussi des demandes, et les analyse (avis, capacité de remboursement).
         "libelle": "Agent de crédit",
-        "permissions": [*LECTURE_PARAMETRAGE, *GESTION_DOSSIERS_MEMBRES],
+        "permissions": [
+            *LECTURE_PARAMETRAGE,
+            *GESTION_DOSSIERS_MEMBRES,
+            *SAISIE_CREDITS,
+            "credits.analyser_credit",
+        ],
     },
     "MEMBRE_COMITE": {
         "libelle": "Membre du comité",
-        "permissions": [*LECTURE_PARAMETRAGE, "members.view_membre", "members.view_documentmembre"],
+        "permissions": [
+            *LECTURE_PARAMETRAGE,
+            "members.view_membre",
+            "members.view_documentmembre",
+            "savings.view_compteepargne",
+            "credits.view_produitcredit",
+            "credits.view_credit",
+            "credits.approuver_credit",
+        ],
     },
     "CAISSIER": {
         "libelle": "Caissier",
@@ -91,9 +148,7 @@ ROLES: dict[str, dict] = {
             *LECTURE_PARAMETRAGE,
             "members.view_membre",
             "members.view_documentmembre",
-            "members.encaisser_adhesion",
-            # Choix du compte de caisse ou de mobile money qui reçoit l'argent.
-            "accounting.view_comptecomptable",
+            *GUICHET,
         ],
     },
     "COMPTABLE": {
@@ -113,6 +168,9 @@ ROLES: dict[str, dict] = {
             "accounting.contre_passer_ecriture",
             "accounting.voir_etats",
             "members.view_membre",
+            "cash.view_*",
+            "savings.view_*",
+            "credits.view_*",
         ],
     },
     "AUDITEUR": {

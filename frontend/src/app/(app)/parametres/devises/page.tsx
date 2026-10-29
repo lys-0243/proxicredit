@@ -32,7 +32,7 @@ export default function PageDevises() {
     <>
       <PageHeader
         titre="Devises"
-        description="La devise de référence sert aux contre-valeurs comptables. Une devise utilisée ne se supprime pas : elle se désactive."
+        description="ProxiCrédit travaille en francs congolais (devise de référence des contre-valeurs comptables) et en dollars ; aucune autre devise ne peut être ajoutée."
       />
       <div className="carte-nue">
         <Table>

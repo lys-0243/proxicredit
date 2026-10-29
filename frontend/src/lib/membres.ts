@@ -39,7 +39,7 @@ export const ETATS_CIVILS: Record<Schemas["EtatCivilEnum"], string> = {
 
 export const TYPES_DOCUMENT: Record<Schemas["TypeDocumentEnum"], string> = {
   PIECE_IDENTITE: "Pièce d'identité",
-  PHOTO: "Photo",
+  PHOTO: "Photo passeport",
   SIGNATURE: "Spécimen de signature",
   JUSTIFICATIF_DOMICILE: "Justificatif de domicile",
   STATUTS: "Statuts / RCCM",
@@ -47,11 +47,20 @@ export const TYPES_DOCUMENT: Record<Schemas["TypeDocumentEnum"], string> = {
   AUTRE: "Autre",
 };
 
-/** Documents proposés en premier selon le type de membre. */
-export const DOCUMENTS_ATTENDUS: Record<TypeMembre, Schemas["TypeDocumentEnum"][]> = {
-  PHYSIQUE: ["PIECE_IDENTITE", "PHOTO", "SIGNATURE", "JUSTIFICATIF_DOMICILE", "AUTRE"],
-  MORALE: ["STATUTS", "PIECE_IDENTITE", "JUSTIFICATIF_DOMICILE", "AUTRE"],
-  GROUPE: ["PV_GROUPE", "AUTRE"],
+export type TypeDocument = Schemas["TypeDocumentEnum"];
+
+/** Documents exigés pour l'activation, selon le type de membre. */
+export const DOCUMENTS_OBLIGATOIRES: Record<TypeMembre, TypeDocument[]> = {
+  PHYSIQUE: ["PIECE_IDENTITE", "PHOTO", "SIGNATURE"],
+  MORALE: ["STATUTS"],
+  GROUPE: ["PV_GROUPE"],
+};
+
+/** Documents complémentaires proposés sous les colonnes obligatoires. */
+export const DOCUMENTS_OPTIONNELS: Record<TypeMembre, TypeDocument[]> = {
+  PHYSIQUE: ["JUSTIFICATIF_DOMICILE", "AUTRE"],
+  MORALE: ["PIECE_IDENTITE", "JUSTIFICATIF_DOMICILE", "AUTRE"],
+  GROUPE: ["AUTRE"],
 };
 
 export const FONCTIONS_GROUPE: Record<Schemas["FonctionEnum"], string> = {

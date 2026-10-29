@@ -35,6 +35,9 @@ INSTALLED_APPS = [
     "apps.accounts",
     "apps.accounting",
     "apps.members",
+    "apps.cash",
+    "apps.savings",
+    "apps.credits",
 ]
 
 MIDDLEWARE = [
@@ -128,6 +131,15 @@ SPECTACULAR_SETTINGS = {
         "StatutMembreEnum": "apps.members.models.Membre.Statut",
         "TypeMembreEnum": "apps.members.models.Membre.Type",
         "TypeDocumentEnum": "apps.members.models.DocumentMembre.Type",
+        "TypeCaisseEnum": "apps.cash.models.Caisse.Type",
+        "SensOperationCaisseEnum": "apps.cash.models.OperationCaisse.Sens",
+        "TypeProduitEpargneEnum": "apps.savings.models.ProduitEpargne.Type",
+        "StatutCompteEpargneEnum": "apps.savings.models.CompteEpargne.Statut",
+        "TypeMouvementEpargneEnum": "apps.savings.models.MouvementEpargne.Type",
+        "MethodeCreditEnum": "apps.credits.models.ProduitCredit.Methode",
+        "PeriodiciteCreditEnum": "apps.credits.models.ProduitCredit.Periodicite",
+        "StatutCreditEnum": "apps.credits.models.Credit.Statut",
+        "AvisCreditEnum": "apps.credits.models.Credit.Avis",
     },
 }
 

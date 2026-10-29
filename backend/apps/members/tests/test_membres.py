@@ -5,12 +5,10 @@ from decimal import Decimal
 import pytest
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-from apps.accounting import services as compta
-from apps.accounting.models import Ecriture
 from apps.core.exceptions import ErreurMetier
-from apps.core.services import fermer_journee
 from apps.members import services
 from apps.members.models import DocumentMembre, Membre, MembreGroupe
+from apps.savings import services as epargne
 
 pytestmark = pytest.mark.django_db
 
@@ -26,21 +24,6 @@ def fichier(contenu=JPEG, nom="photo.jpg"):
 
 def cle():
     return str(uuid.uuid4())
-
-
-@pytest.fixture
-def accueil(creer_utilisateur):
-    return creer_utilisateur("AGENT_RECEPTION", username="accueil")
-
-
-@pytest.fixture
-def chef(creer_utilisateur):
-    return creer_utilisateur("CHEF_AGENCE", username="chef")
-
-
-@pytest.fixture
-def caissier(creer_utilisateur):
-    return creer_utilisateur("CAISSIER", username="caissier")
 
 
 IDENTITE = {
@@ -68,16 +51,22 @@ def completer_kyc(membre, utilisateur):
         services.ajouter_document(membre, type_document, fichier(contenu), utilisateur)
 
 
-def membre_actif(accueil, chef, caissier, numero_piece="CE-001", telephone="+243810000001"):
-    membre = physique(accueil, numero_piece=numero_piece, telephone=telephone)
-    completer_kyc(membre, accueil)
-    services.encaisser_adhesion(
+def premier_depot(membre, caissier, montant="10000", devise="CDF"):
+    """Premier passage en caisse : dépôt sur le compte d'épargne, ouvert au passage."""
+    return epargne.deposer_pour_membre(
         membre,
-        nombre_parts=1,
+        devise=devise,
+        montant=D(montant),
         compte_tresorerie="5712",
         utilisateur=caissier,
         cle_idempotence=cle(),
     )
+
+
+def membre_actif(accueil, chef, caissier, numero_piece="CE-001", telephone="+243810000001"):
+    membre = physique(accueil, numero_piece=numero_piece, telephone=telephone)
+    completer_kyc(membre, accueil)
+    premier_depot(membre, caissier)
     return services.activer(membre, chef)
 
 
@@ -134,20 +123,14 @@ class TestActivation:
         reponse = client_api(accueil).get(f"/api/membres/{membre.pk}/controle-activation").data
         assert not reponse["pret"]
         assert "Photo" in reponse["manquants"]
-        assert "Frais d'adhésion payés" in reponse["manquants"]
+        assert "Dépôt initial d'au moins 10 000 CDF ou 5 USD" in reponse["manquants"]
 
-    def test_activation_a_quatre_yeux(self, accueil, chef, caissier, journee):
+    def test_activation_a_quatre_yeux(self, accueil, chef, caissier, caisse_ouverte):
         membre = physique(accueil)
         completer_kyc(membre, accueil)
         with pytest.raises(ErreurMetier, match="Dossier incomplet"):
             services.activer(membre, chef)
-        services.encaisser_adhesion(
-            membre,
-            nombre_parts=1,
-            compte_tresorerie="5712",
-            utilisateur=caissier,
-            cle_idempotence=cle(),
-        )
+        premier_depot(membre, caissier)
         assert services.elements_manquants(membre) == []
         with pytest.raises(ErreurMetier, match="quatre yeux"):
             services.activer(membre, accueil)
@@ -170,112 +153,38 @@ class TestActivation:
         assert "Pièce d'identité expirée" in services.elements_manquants(membre)
 
 
-class TestAdhesion:
-    def test_encaissement_comptabilise(self, client_api, accueil, caissier, journee):
+class TestPremierDepot:
+    def test_depot_insuffisant(self, accueil, chef, caissier, caisse_ouverte):
         membre = physique(accueil)
-        reponse = client_api(caissier).post(
-            f"/api/membres/{membre.pk}/adhesion",
-            {"nombre_parts": 2, "compte_tresorerie": "5712", "cle_idempotence": cle()},
-            format="json",
-        )
+        completer_kyc(membre, accueil)
+        premier_depot(membre, caissier, "9999")
+        assert services.elements_manquants(membre) == [
+            "Dépôt initial d'au moins 10 000 CDF ou 5 USD"
+        ]
+        premier_depot(membre, caissier, "1")  # même compte : le total atteint le minimum
+        assert services.activer(membre, chef).statut == Membre.Statut.ACTIF
+
+    def test_depot_en_dollars(self, accueil, chef, caissier, caisse_ouverte, taux_usd):
+        membre = physique(accueil)
+        completer_kyc(membre, accueil)
+        mouvement = premier_depot(membre, caissier, "5", "USD")
+        assert mouvement.compte.devise_id == "USD"
+        assert services.activer(membre, chef).statut == Membre.Statut.ACTIF
+
+    def test_par_l_api_du_caissier(self, client_api, accueil, caissier, caisse_ouverte):
+        membre = physique(accueil)
+        corps = {
+            "membre": membre.pk,
+            "devise": "CDF",
+            "montant": "10000",
+            "compte_tresorerie": "5712",
+            "cle_idempotence": cle(),
+        }
+        assert client_api(accueil).post("/api/epargne/comptes/depot", corps).status_code == 403
+        reponse = client_api(caissier).post("/api/epargne/comptes/depot", corps, format="json")
         assert reponse.status_code == 201, reponse.data
-        assert reponse.data["nombre_parts"] == 2
-        assert reponse.data["adhesion"]["frais"] == "5000.00"
-        # 5 000 de frais + 2 parts × 10 000, en une seule écriture équilibrée
-        assert compta.solde("5712", "CDF") == D("25000.00")
-        assert compta.solde("7062", "CDF") == D("-5000.00")
-        assert compta.solde("1013", "CDF") == D("-20000.00")
-        ecriture = Ecriture.objects.get(type_operation="MEMBRE_ADHESION")
-        assert ecriture.reference == membre.numero
-        assert ecriture.piece == membre
-
-    def test_le_caissier_voit_les_comptes_de_tresorerie(self, client_api, caissier):
-        comptes = client_api(caissier).get("/api/comptabilite/comptes", {"classe": 5})
-        assert comptes.status_code == 200
-        assert "5712" in [c["numero"] for c in comptes.data]
-
-    def test_idempotence_et_paiement_unique(self, accueil, caissier, journee):
-        membre = physique(accueil)
-        cle_unique = cle()
-        premiere = services.encaisser_adhesion(
-            membre,
-            nombre_parts=1,
-            compte_tresorerie="5712",
-            utilisateur=caissier,
-            cle_idempotence=cle_unique,
-        )
-        rejouee = services.encaisser_adhesion(
-            membre,
-            nombre_parts=1,
-            compte_tresorerie="5712",
-            utilisateur=caissier,
-            cle_idempotence=cle_unique,
-        )
-        assert premiere.pk == rejouee.pk
-        assert Ecriture.objects.count() == 1
-        with pytest.raises(ErreurMetier, match="déjà payée"):
-            services.encaisser_adhesion(
-                membre,
-                nombre_parts=1,
-                compte_tresorerie="5712",
-                utilisateur=caissier,
-                cle_idempotence=cle(),
-            )
-
-    @pytest.mark.parametrize(
-        "parametres, message",
-        [
-            ({"nombre_parts": 0, "compte_tresorerie": "5712"}, "part"),
-            ({"nombre_parts": 1, "compte_tresorerie": "7062"}, "caisse, une banque"),
-            ({"nombre_parts": 1, "compte_tresorerie": "571"}, "caisse, une banque"),
-            ({"nombre_parts": 1, "compte_tresorerie": "5851"}, "caisse, une banque"),
-        ],
-    )
-    def test_encaissements_invalides(self, accueil, caissier, journee, parametres, message):
-        membre = physique(accueil)
-        with pytest.raises(ErreurMetier, match=message):
-            services.encaisser_adhesion(
-                membre, utilisateur=caissier, cle_idempotence=cle(), **parametres
-            )
-        assert not Ecriture.objects.exists()
-
-    def test_journee_fermee(self, accueil, caissier, directeur, journee, agence):
-        fermer_journee(agence, directeur)
-        with pytest.raises(ErreurMetier, match="journée"):
-            services.encaisser_adhesion(
-                physique(accueil),
-                nombre_parts=1,
-                compte_tresorerie="5712",
-                utilisateur=caissier,
-                cle_idempotence=cle(),
-            )
-
-    def test_parts_supplementaires(self, client_api, accueil, caissier, journee):
-        membre = physique(accueil)
-        with pytest.raises(ErreurMetier, match="adhésion"):
-            services.souscrire_parts(
-                membre,
-                nombre=1,
-                compte_tresorerie="5712",
-                utilisateur=caissier,
-                cle_idempotence=cle(),
-            )
-        services.encaisser_adhesion(
-            membre,
-            nombre_parts=1,
-            compte_tresorerie="5712",
-            utilisateur=caissier,
-            cle_idempotence=cle(),
-        )
-        reponse = client_api(caissier).post(
-            f"/api/membres/{membre.pk}/parts-sociales",
-            {"nombre": 3, "compte_tresorerie": "5712", "cle_idempotence": cle()},
-            format="json",
-        )
-        assert reponse.status_code == 201, reponse.data
-        assert services.nombre_parts(membre) == 4
-        assert compta.solde("1013", "CDF") == D("-40000.00")
-        assert len(client_api(caissier).get(f"/api/membres/{membre.pk}/parts-sociales").data) == 2
+        assert reponse.data["solde_apres"] == "10000.00"
+        assert not any("Dépôt initial" in m for m in services.elements_manquants(membre))
 
 
 class TestDocuments:
@@ -329,7 +238,7 @@ class TestDocuments:
 
 
 class TestStatuts:
-    def test_cycle_de_vie(self, client_api, accueil, chef, caissier, journee):
+    def test_cycle_de_vie(self, client_api, accueil, chef, caissier, caisse_ouverte):
         membre = membre_actif(accueil, chef, caissier)
         client = client_api(chef)
         url = f"/api/membres/{membre.pk}/statut"
@@ -347,6 +256,16 @@ class TestStatuts:
                 "statut"
             ]
             == "ACTIF"
+        )
+        # Démission refusée tant que l'épargne n'est pas retirée
+        refus = client.post(url, {"action": "demission", "motif": "Déménagement"}, format="json")
+        assert "non soldés" in refus.data["detail"]
+        epargne.retirer(
+            epargne.compte_de_la_devise(membre, "CDF"),
+            montant=D("10000"),
+            compte_tresorerie="5712",
+            utilisateur=caissier,
+            cle_idempotence=cle(),
         )
         assert (
             client.post(url, {"action": "demission", "motif": "Déménagement"}, format="json").data[
@@ -366,24 +285,20 @@ class TestStatuts:
         with pytest.raises(ErreurMetier, match="Impossible"):
             services.changer_statut(physique(accueil), "suspendre", "motif", chef)
 
-    def test_liste_noire_bloque_l_activation_et_l_adhesion(self, accueil, chef, caissier, journee):
+    def test_liste_noire_bloque_l_activation_et_le_premier_depot(
+        self, accueil, chef, caissier, caisse_ouverte
+    ):
         membre = physique(accueil)
         services.liste_noire(membre, True, "Fraude avérée dans une autre IMF", chef)
         membre.refresh_from_db()
         assert "Membre inscrit sur la liste noire" in services.elements_manquants(membre)
         with pytest.raises(ErreurMetier, match="liste noire"):
-            services.encaisser_adhesion(
-                membre,
-                nombre_parts=1,
-                compte_tresorerie="5712",
-                utilisateur=caissier,
-                cle_idempotence=cle(),
-            )
+            premier_depot(membre, caissier)
 
 
 class TestGroupes:
     def test_constitution_et_activation_d_un_groupe(
-        self, client_api, accueil, chef, caissier, journee
+        self, client_api, accueil, chef, caissier, caisse_ouverte
     ):
         membres = [
             membre_actif(accueil, chef, caissier, f"CE-10{i}", f"+24381000010{i}") for i in range(3)
@@ -407,13 +322,7 @@ class TestGroupes:
 
         assert "PV de constitution du groupe" in services.elements_manquants(groupe)
         services.ajouter_document(groupe, "PV_GROUPE", fichier(PDF, "pv.pdf"), accueil)
-        services.encaisser_adhesion(
-            groupe,
-            nombre_parts=1,
-            compte_tresorerie="5712",
-            utilisateur=caissier,
-            cle_idempotence=cle(),
-        )
+        premier_depot(groupe, caissier)
         assert services.activer(groupe, chef).statut == Membre.Statut.ACTIF
         assert client.get(f"/api/membres/{membres[0].pk}").data["groupe_actuel"]["nom"] == (
             "Les Battantes"

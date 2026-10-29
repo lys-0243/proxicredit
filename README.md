@@ -15,9 +15,9 @@ comptabilité SYSCOHADA, Mobile Money et SMS. Multi-devises (CDF / USD) et multi
 |---|---|---|
 | 0. Fondations | Auth JWT (cookies httpOnly + CSRF), 2FA TOTP, verrouillage, rôles, agences, devises, taux de change, journée comptable, jours fériés, paramètres versionnés, piste d'audit | ✅ |
 | 1. Comptabilité de base | Plan SYSCOHADA, journaux, écritures immuables (triggers en base), quatre yeux, contre-passation, règles de comptabilisation, balance, grand livre | ✅ |
-| 2. Membres et KYC | Personnes physiques, morales et groupes solidaires, documents KYC protégés, adhésion et parts sociales comptabilisées, activation à quatre yeux, statuts, liste noire, bénéficiaires | ✅ |
-| 3. Épargne et caisse | | à venir |
-| 4. Moteur et workflow de crédit | | à venir |
+| 2. Membres et KYC | Personnes physiques, morales et groupes solidaires, documents KYC protégés, activation à quatre yeux après un premier dépôt minimum, statuts, liste noire, bénéficiaires | ✅ |
+| 3. Épargne et caisse | Coffre et guichets, sessions de caisse (approvisionnement, délestage, comptage et écarts), un compte d'épargne par devise (CDF, USD), dépôts et retraits, encaissements en espèces uniquement ; la journée ne ferme pas tant qu'une caisse est ouverte | ✅ |
+| 4. Moteur et workflow de crédit | Produits Éducation et Secours, simulateur et échéancier (dégressif ou intérêts fixes), 18 % du montant déjà épargnés et bloqués pendant le crédit, circuit saisie → analyse → comité → décaissement, remboursements imputés pénalités → intérêts → capital, pénalités de retard | ✅ |
 | 5 à 9 | Garanties, clôture et risque, Mobile Money et SMS, reporting, mise en production | à venir |
 
 ## Démarrage rapide
@@ -62,6 +62,13 @@ puis ouvrez la journée comptable : voir
 Administrateur, Directeur, Chef d'agence, Agent de réception, Agent de crédit, Membre du comité,
 Caissier, Comptable, Auditeur (lecture seule). Les permissions sont définies dans
 `backend/apps/accounts/roles.py` et synchronisées par `python manage.py initialiser`.
+
+Circuit d'une demande de crédit : l'**agent de réception** ou l'**agent de crédit** la saisit et la
+soumet ; l'**agent de crédit** l'analyse ; le **comité** (membre du comité, chef d'agence ou
+directeur, jamais l'auteur de la demande ni l'analyste) statue ; le **caissier** décaisse puis
+encaisse les remboursements. Le membre doit avoir déjà déposé **18 % du montant** sur son compte
+d'épargne : cette part est bloquée jusqu'au remboursement complet.
+
 La 2FA est obligatoire pour les rôles Administrateur, Directeur et Comptable.
 
 ## Production

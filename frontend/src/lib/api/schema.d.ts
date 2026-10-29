@@ -162,9 +162,12 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /** @description Photo de profil : lecture authentifiée, dépôt et suppression par le titulaire du compte. */
         get: operations["auth_moi_photo_retrieve"];
         put?: never;
+        /** @description Photo de profil : lecture authentifiée, dépôt et suppression par le titulaire du compte. */
         post: operations["auth_moi_photo_create"];
+        /** @description Photo de profil : lecture authentifiée, dépôt et suppression par le titulaire du compte. */
         delete: operations["auth_moi_photo_destroy"];
         options?: never;
         head?: never;
@@ -197,6 +200,215 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["auth_rafraichir_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/caisse/caisses": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description ViewSet dont le modèle porte un champ `agence` : l'utilisateur ne voit que son agence,
+         *     sauf s'il a la permission de voir toutes les agences (siège).
+         */
+        get: operations["caisse_caisses_list"];
+        put?: never;
+        /**
+         * @description ViewSet dont le modèle porte un champ `agence` : l'utilisateur ne voit que son agence,
+         *     sauf s'il a la permission de voir toutes les agences (siège).
+         */
+        post: operations["caisse_caisses_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/caisse/caisses/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description ViewSet dont le modèle porte un champ `agence` : l'utilisateur ne voit que son agence,
+         *     sauf s'il a la permission de voir toutes les agences (siège).
+         */
+        get: operations["caisse_caisses_retrieve"];
+        /**
+         * @description ViewSet dont le modèle porte un champ `agence` : l'utilisateur ne voit que son agence,
+         *     sauf s'il a la permission de voir toutes les agences (siège).
+         */
+        put: operations["caisse_caisses_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * @description ViewSet dont le modèle porte un champ `agence` : l'utilisateur ne voit que son agence,
+         *     sauf s'il a la permission de voir toutes les agences (siège).
+         */
+        patch: operations["caisse_caisses_partial_update"];
+        trace?: never;
+    };
+    "/api/caisse/operations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description ViewSet dont le modèle porte un champ `agence` : l'utilisateur ne voit que son agence,
+         *     sauf s'il a la permission de voir toutes les agences (siège).
+         */
+        get: operations["caisse_operations_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/caisse/sessions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Sessions des caissiers. Le caissier ouvre et ferme la sienne ; le responsable du coffre
+         *     l'approvisionne ou la déleste.
+         */
+        get: operations["caisse_sessions_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/caisse/sessions/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Sessions des caissiers. Le caissier ouvre et ferme la sienne ; le responsable du coffre
+         *     l'approvisionne ou la déleste.
+         */
+        get: operations["caisse_sessions_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/caisse/sessions/{id}/fermer": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * @description Sessions des caissiers. Le caissier ouvre et ferme la sienne ; le responsable du coffre
+         *     l'approvisionne ou la déleste.
+         */
+        post: operations["caisse_sessions_fermer_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/caisse/sessions/{id}/operations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Sessions des caissiers. Le caissier ouvre et ferme la sienne ; le responsable du coffre
+         *     l'approvisionne ou la déleste.
+         */
+        get: operations["caisse_sessions_operations_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/caisse/sessions/{id}/transfert-coffre": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * @description Sessions des caissiers. Le caissier ouvre et ferme la sienne ; le responsable du coffre
+         *     l'approvisionne ou la déleste.
+         */
+        post: operations["caisse_sessions_transfert_coffre_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/caisse/sessions/ma-session": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Session ouverte de l'utilisateur connecté (204 s'il n'en a pas). */
+        get: operations["caisse_sessions_ma_session_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/caisse/sessions/ouvrir": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * @description Sessions des caissiers. Le caissier ouvre et ferme la sienne ; le responsable du coffre
+         *     l'approvisionne ou la déleste.
+         */
+        post: operations["caisse_sessions_ouvrir_create"];
         delete?: never;
         options?: never;
         head?: never;
@@ -437,7 +649,231 @@ export interface paths {
         patch: operations["comptabilite_regles_partial_update"];
         trace?: never;
     };
-    "/api/devises": {
+    "/api/credits/dossiers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Dossiers de crédit. Un dossier ne se supprime pas : il est annulé ou rejeté. */
+        get: operations["credits_dossiers_list"];
+        put?: never;
+        /** @description Dossiers de crédit. Un dossier ne se supprime pas : il est annulé ou rejeté. */
+        post: operations["credits_dossiers_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/credits/dossiers/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Dossiers de crédit. Un dossier ne se supprime pas : il est annulé ou rejeté. */
+        get: operations["credits_dossiers_retrieve"];
+        /** @description Dossiers de crédit. Un dossier ne se supprime pas : il est annulé ou rejeté. */
+        put: operations["credits_dossiers_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** @description Dossiers de crédit. Un dossier ne se supprime pas : il est annulé ou rejeté. */
+        patch: operations["credits_dossiers_partial_update"];
+        trace?: never;
+    };
+    "/api/credits/dossiers/{id}/analyser": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Dossiers de crédit. Un dossier ne se supprime pas : il est annulé ou rejeté. */
+        post: operations["credits_dossiers_analyser_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/credits/dossiers/{id}/annuler": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Dossiers de crédit. Un dossier ne se supprime pas : il est annulé ou rejeté. */
+        post: operations["credits_dossiers_annuler_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/credits/dossiers/{id}/controle": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Éligibilité du membre et capacité de remboursement (aide à l'analyse et au comité). */
+        get: operations["credits_dossiers_controle_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/credits/dossiers/{id}/decaisser": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Dossiers de crédit. Un dossier ne se supprime pas : il est annulé ou rejeté. */
+        post: operations["credits_dossiers_decaisser_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/credits/dossiers/{id}/echeancier": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Dossiers de crédit. Un dossier ne se supprime pas : il est annulé ou rejeté. */
+        get: operations["credits_dossiers_echeancier_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/credits/dossiers/{id}/historique": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Dossiers de crédit. Un dossier ne se supprime pas : il est annulé ou rejeté. */
+        get: operations["credits_dossiers_historique_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/credits/dossiers/{id}/remboursements": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Dossiers de crédit. Un dossier ne se supprime pas : il est annulé ou rejeté. */
+        get: operations["credits_dossiers_remboursements_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/credits/dossiers/{id}/rembourser": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Dossiers de crédit. Un dossier ne se supprime pas : il est annulé ou rejeté. */
+        post: operations["credits_dossiers_rembourser_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/credits/dossiers/{id}/renvoyer": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Dossiers de crédit. Un dossier ne se supprime pas : il est annulé ou rejeté. */
+        post: operations["credits_dossiers_renvoyer_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/credits/dossiers/{id}/soumettre": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Dossiers de crédit. Un dossier ne se supprime pas : il est annulé ou rejeté. */
+        post: operations["credits_dossiers_soumettre_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/credits/dossiers/{id}/statuer": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Dossiers de crédit. Un dossier ne se supprime pas : il est annulé ou rejeté. */
+        post: operations["credits_dossiers_statuer_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/credits/produits": {
         parameters: {
             query?: never;
             header?: never;
@@ -445,10 +881,66 @@ export interface paths {
             cookie?: never;
         };
         /** @description Les données de référence ne se suppriment pas : on les désactive. */
-        get: operations["devises_list"];
+        get: operations["credits_produits_list"];
         put?: never;
         /** @description Les données de référence ne se suppriment pas : on les désactive. */
-        post: operations["devises_create"];
+        post: operations["credits_produits_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/credits/produits/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Les données de référence ne se suppriment pas : on les désactive. */
+        get: operations["credits_produits_retrieve"];
+        /** @description Les données de référence ne se suppriment pas : on les désactive. */
+        put: operations["credits_produits_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** @description Les données de référence ne se suppriment pas : on les désactive. */
+        patch: operations["credits_produits_partial_update"];
+        trace?: never;
+    };
+    "/api/credits/produits/simuler": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Échéancier indicatif, sans rien enregistrer (accueil, agent de crédit). */
+        post: operations["credits_produits_simuler_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/devises": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Devises fixées par l'initialisation (CDF et USD) : on peut seulement les désactiver ou
+         *     corriger leur libellé, jamais en créer ni en supprimer.
+         */
+        get: operations["devises_list"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -462,16 +954,199 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description Les données de référence ne se suppriment pas : on les désactive. */
+        /**
+         * @description Devises fixées par l'initialisation (CDF et USD) : on peut seulement les désactiver ou
+         *     corriger leur libellé, jamais en créer ni en supprimer.
+         */
         get: operations["devises_retrieve"];
-        /** @description Les données de référence ne se suppriment pas : on les désactive. */
+        /**
+         * @description Devises fixées par l'initialisation (CDF et USD) : on peut seulement les désactiver ou
+         *     corriger leur libellé, jamais en créer ni en supprimer.
+         */
         put: operations["devises_update"];
         post?: never;
         delete?: never;
         options?: never;
         head?: never;
-        /** @description Les données de référence ne se suppriment pas : on les désactive. */
+        /**
+         * @description Devises fixées par l'initialisation (CDF et USD) : on peut seulement les désactiver ou
+         *     corriger leur libellé, jamais en créer ni en supprimer.
+         */
         patch: operations["devises_partial_update"];
+        trace?: never;
+    };
+    "/api/epargne/comptes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Comptes d'épargne des membres. Ils ne se suppriment pas : on les bloque ou on les clôt. */
+        get: operations["epargne_comptes_list"];
+        put?: never;
+        /** @description Comptes d'épargne des membres. Ils ne se suppriment pas : on les bloque ou on les clôt. */
+        post: operations["epargne_comptes_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/epargne/comptes/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Comptes d'épargne des membres. Ils ne se suppriment pas : on les bloque ou on les clôt. */
+        get: operations["epargne_comptes_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/epargne/comptes/{id}/blocage": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Comptes d'épargne des membres. Ils ne se suppriment pas : on les bloque ou on les clôt. */
+        post: operations["epargne_comptes_blocage_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/epargne/comptes/{id}/deposer": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Comptes d'épargne des membres. Ils ne se suppriment pas : on les bloque ou on les clôt. */
+        post: operations["epargne_comptes_deposer_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/epargne/comptes/{id}/mouvements": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Comptes d'épargne des membres. Ils ne se suppriment pas : on les bloque ou on les clôt. */
+        get: operations["epargne_comptes_mouvements_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/epargne/comptes/{id}/retirer": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Comptes d'épargne des membres. Ils ne se suppriment pas : on les bloque ou on les clôt. */
+        post: operations["epargne_comptes_retirer_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/epargne/comptes/depot": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Dépôt au guichet pour un membre ; le premier dépôt dans une devise ouvre le compte. */
+        post: operations["epargne_comptes_depot_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/epargne/comptes/depots-initiaux": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Premier dépôt minimum par devise, exigé pour activer un membre. */
+        get: operations["epargne_comptes_depots_initiaux_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/epargne/produits": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Les données de référence ne se suppriment pas : on les désactive. */
+        get: operations["epargne_produits_list"];
+        put?: never;
+        /** @description Les données de référence ne se suppriment pas : on les désactive. */
+        post: operations["epargne_produits_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/epargne/produits/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Les données de référence ne se suppriment pas : on les désactive. */
+        get: operations["epargne_produits_retrieve"];
+        /** @description Les données de référence ne se suppriment pas : on les désactive. */
+        put: operations["epargne_produits_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** @description Les données de référence ne se suppriment pas : on les désactive. */
+        patch: operations["epargne_produits_partial_update"];
         trace?: never;
     };
     "/api/journal-connexions": {
@@ -672,23 +1347,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/membres/{id}/adhesion": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** @description Dossiers des membres. On ne supprime jamais un membre : on clôture son dossier. */
-        post: operations["membres_adhesion_create"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/membres/{id}/beneficiaires": {
         parameters: {
             query?: never;
@@ -845,24 +1503,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/membres/{id}/parts-sociales": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** @description Dossiers des membres. On ne supprime jamais un membre : on clôture son dossier. */
-        get: operations["membres_parts_sociales_list"];
-        put?: never;
-        /** @description Dossiers des membres. On ne supprime jamais un membre : on clôture son dossier. */
-        post: operations["membres_parts_sociales_create"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/membres/{id}/statut": {
         parameters: {
             query?: never;
@@ -874,23 +1514,6 @@ export interface paths {
         put?: never;
         /** @description Dossiers des membres. On ne supprime jamais un membre : on clôture son dossier. */
         post: operations["membres_statut_create"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/membres/conditions-adhesion": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** @description Dossiers des membres. On ne supprime jamais un membre : on clôture son dossier. */
-        get: operations["membres_conditions_adhesion_retrieve"];
-        put?: never;
-        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -1144,18 +1767,6 @@ export interface components {
          * @enum {string}
          */
         ActionEnum: "suspendre" | "reactiver" | "demission" | "deces";
-        Adhesion: {
-            /** Format: decimal */
-            readonly frais: string;
-            readonly devise: string;
-            /** Format: date */
-            readonly date_comptable: string;
-            readonly encaisse_par: string;
-            /** Format: date-time */
-            readonly encaisse_le: string;
-            readonly ecriture: number;
-            ecriture_numero: string;
-        };
         Agence: {
             readonly id: number;
             code: string;
@@ -1196,6 +1807,24 @@ export interface components {
             /** @default MEMBRE */
             fonction: components["schemas"]["FonctionEnum"];
         };
+        AnalyseRequest: {
+            avis: components["schemas"]["AvisCreditEnum"];
+            commentaire: string;
+            /** Format: decimal */
+            montant_propose: string;
+            duree_proposee: number;
+            /** Format: decimal */
+            revenu_mensuel?: string | null;
+            /** Format: decimal */
+            charges_mensuelles?: string | null;
+        };
+        /**
+         * @description * `FAVORABLE` - Favorable
+         *     * `RESERVE` - Favorable avec réserves
+         *     * `DEFAVORABLE` - Défavorable
+         * @enum {string}
+         */
+        AvisCreditEnum: "FAVORABLE" | "RESERVE" | "DEFAVORABLE";
         Balance: {
             lignes: components["schemas"]["LigneBalance"][];
             classes: components["schemas"]["ClasseBalance"][];
@@ -1220,6 +1849,47 @@ export interface components {
         };
         /** @enum {unknown} */
         BlankEnum: "";
+        BlocageRequest: {
+            bloquer: boolean;
+            motif: string;
+        };
+        Caisse: {
+            readonly id: number;
+            agence: number;
+            readonly agence_code: string;
+            code: string;
+            libelle: string;
+            /** @default GUICHET */
+            type: components["schemas"]["TypeCaisseEnum"];
+            /** @description Compte de caisse (57x) mouvementé par les opérations. */
+            compte: number;
+            readonly compte_numero: string;
+            /** @default true */
+            active: boolean;
+            readonly session_ouverte: number | null;
+        };
+        CaisseRequest: {
+            agence: number;
+            code: string;
+            libelle: string;
+            /** @default GUICHET */
+            type: components["schemas"]["TypeCaisseEnum"];
+            /** @description Compte de caisse (57x) mouvementé par les opérations. */
+            compte: number;
+            /** @default true */
+            active: boolean;
+        };
+        Capacite: {
+            /** Format: decimal */
+            echeance_max: string;
+            /** Format: decimal */
+            revenu_disponible: string | null;
+            /** Format: decimal */
+            taux_endettement: string | null;
+            /** Format: decimal */
+            taux_endettement_max: string;
+            depasse: boolean;
+        };
         ChangerMotDePasseRequest: {
             ancien: string;
             nouveau: string;
@@ -1268,13 +1938,34 @@ export interface components {
             devise?: string | null;
             actif?: boolean;
         };
-        ConditionsAdhesion: {
-            devise: string;
+        CompteEpargne: {
+            readonly id: number;
+            readonly numero: string;
+            readonly membre: number;
+            readonly membre_numero: string;
+            readonly membre_nom: string;
+            readonly produit: number;
+            readonly produit_libelle: string;
+            readonly produit_type: string;
+            readonly agence: number;
+            readonly agence_code: string;
+            readonly devise: string;
+            /** @default ACTIF */
+            readonly statut: components["schemas"]["StatutCompteEpargneEnum"];
             /** Format: decimal */
-            frais: string;
-            /** Format: decimal */
-            valeur_part: string;
-            parts_minimum: number;
+            readonly solde: string;
+            readonly disponible: string;
+            readonly bloque: string;
+            readonly motif_blocage: string;
+            /** Format: date */
+            readonly date_ouverture: string;
+            readonly ouvert_par: string;
+            /** Format: date-time */
+            readonly cree_le: string;
+        };
+        ComptesProduit: {
+            encours: string | null;
+            interets: string | null;
         };
         ConnexionRequest: {
             username: string;
@@ -1288,28 +1979,145 @@ export interface components {
             pret: boolean;
             manquants: string[];
         };
+        ControleCredit: {
+            bloquants: string[];
+            capacite: components["schemas"]["Capacite"];
+        };
+        /** @description Lecture complète d'un dossier, et saisie ou modification de la demande (en saisie). */
+        Credit: {
+            readonly id: number;
+            readonly numero: string;
+            readonly statut: components["schemas"]["StatutCreditEnum"];
+            readonly agence: number;
+            readonly agence_code: string;
+            membre: number;
+            readonly membre_numero: string;
+            readonly membre_nom: string;
+            produit: number;
+            readonly produit_libelle: string;
+            devise: string;
+            /** Format: decimal */
+            montant_demande: string;
+            /** @description Nombre d'échéances. */
+            duree_demandee: number;
+            /** @description Usage prévu : frais scolaires, soins... */
+            objet: string;
+            readonly cree_par: string;
+            /** Format: date-time */
+            readonly cree_le: string;
+            readonly soumis_par: string;
+            /** Format: date-time */
+            readonly soumis_le: string | null;
+            /** Format: decimal */
+            readonly revenu_mensuel: string | null;
+            /** Format: decimal */
+            readonly charges_mensuelles: string | null;
+            readonly avis_analyse: components["schemas"]["AvisCreditEnum"];
+            readonly commentaire_analyse: string;
+            /** Format: decimal */
+            readonly montant_propose: string | null;
+            readonly duree_proposee: number | null;
+            readonly analyse_par: string;
+            /** Format: date-time */
+            readonly analyse_le: string | null;
+            /** Format: decimal */
+            readonly montant_accorde: string | null;
+            readonly duree_accordee: number | null;
+            /**
+             * Format: decimal
+             * @description Taux du produit à la décision.
+             */
+            readonly taux_interet: string | null;
+            readonly motif_decision: string;
+            readonly decide_par: string;
+            /** Format: date-time */
+            readonly decide_le: string | null;
+            /** Format: decimal */
+            readonly frais_dossier: string | null;
+            /**
+             * Format: decimal
+             * @description Épargne du membre bloquée du décaissement jusqu'au solde.
+             */
+            readonly epargne_bloquee: string;
+            /** Format: date */
+            readonly date_decaissement: string | null;
+            readonly ecriture_decaissement: number | null;
+            readonly ecriture_decaissement_numero: string;
+            readonly decaisse_par: string;
+            /** Format: date */
+            readonly solde_le: string | null;
+            readonly situation: components["schemas"]["SituationCredit"] | null;
+        };
+        CreditListe: {
+            readonly id: number;
+            readonly numero: string;
+            readonly statut: components["schemas"]["StatutCreditEnum"];
+            readonly membre: number;
+            readonly membre_numero: string;
+            readonly membre_nom: string;
+            readonly produit: number;
+            readonly produit_libelle: string;
+            readonly devise: string;
+            readonly montant: string;
+            readonly agence: number;
+            readonly agence_code: string;
+            /** Format: date */
+            readonly date_decaissement: string | null;
+            /** Format: date-time */
+            readonly cree_le: string;
+        };
+        /** @description Lecture complète d'un dossier, et saisie ou modification de la demande (en saisie). */
+        CreditRequest: {
+            membre: number;
+            produit: number;
+            devise: string;
+            /** Format: decimal */
+            montant_demande: string;
+            /** @description Nombre d'échéances. */
+            duree_demandee: number;
+            /** @description Usage prévu : frais scolaires, soins... */
+            objet: string;
+        };
+        DecisionRequest: {
+            approuver: boolean;
+            motif: string;
+            /** Format: decimal */
+            montant_accorde?: string | null;
+            duree_accordee?: number | null;
+        };
+        /** @description Dépôt pour un membre dans une devise : ouvre son compte s'il n'en a pas encore. */
+        DepotMembreRequest: {
+            /** Format: decimal */
+            montant: string;
+            /** @description Compte de la caisse du caissier (session ouverte) qui reçoit ou verse l'argent. */
+            compte_tresorerie: string;
+            /** @description Identifiant unique généré par le client pour cette opération. */
+            cle_idempotence: string;
+            membre: number;
+            devise: string;
+        };
+        DepotsInitiaux: {
+            devise: string;
+            /** Format: decimal */
+            montant: string;
+        };
         Desactiver2FARequest: {
             mot_de_passe: string;
             code: string;
         };
         Devise: {
-            code: string;
+            readonly code: string;
             nom: string;
             symbole: string;
             /** @description Nombre de décimales utilisées pour l'arrondi des montants. */
-            decimales?: number;
+            readonly decimales: number;
             /** @description Devise de référence comptable (contre-valeurs). */
-            est_reference?: boolean;
+            readonly est_reference: boolean;
             active?: boolean;
         };
         DeviseRequest: {
-            code: string;
             nom: string;
             symbole: string;
-            /** @description Nombre de décimales utilisées pour l'arrondi des montants. */
-            decimales?: number;
-            /** @description Devise de référence comptable (contre-valeurs). */
-            est_reference?: boolean;
             active?: boolean;
         };
         DocumentMembre: {
@@ -1322,6 +2130,33 @@ export interface components {
             readonly ajoute_par: string;
             /** Format: date-time */
             readonly ajoute_le: string;
+        };
+        Echeance: {
+            readonly id: number;
+            readonly numero: number;
+            /** Format: date */
+            readonly date: string;
+            /** Format: decimal */
+            readonly capital: string;
+            /** Format: decimal */
+            readonly interet: string;
+            /** Format: decimal */
+            readonly total: string;
+            /** Format: decimal */
+            readonly capital_paye: string;
+            /** Format: decimal */
+            readonly interet_paye: string;
+            /**
+             * Format: decimal
+             * @description Pénalités de retard calculées.
+             */
+            readonly penalite: string;
+            /** Format: decimal */
+            readonly penalite_payee: string;
+            /** Format: decimal */
+            readonly reste_du: string;
+            /** Format: date */
+            readonly soldee_le: string | null;
         };
         Ecriture: {
             readonly id: number;
@@ -1374,13 +2209,6 @@ export interface components {
             reference: string;
             lignes: components["schemas"]["LigneSaisieRequest"][];
         };
-        EncaisserAdhesionRequest: {
-            /** @description Compte de classe 5 qui reçoit l'argent (caisse, mobile money). */
-            compte_tresorerie: string;
-            /** @description Identifiant unique généré par le client pour cette opération. */
-            cle_idempotence: string;
-            nombre_parts: number;
-        };
         /**
          * @description * `CELIBATAIRE` - Célibataire
          *     * `MARIE` - Marié(e)
@@ -1401,6 +2229,14 @@ export interface components {
         EvenementEnum: "SUCCES" | "ECHEC" | "VERROUILLE" | "OTP_ECHEC" | "DECONNEXION";
         FermerJourneeRequest: {
             agence: number;
+        };
+        FermerSessionRequest: {
+            /** @description Montant compté par devise, ex. {"CDF": "150000.00", "USD": "0.00"}. */
+            comptages: {
+                [key: string]: string;
+            };
+            /** @default  */
+            commentaire: string;
         };
         /**
          * @description * `PRESIDENT` - Président(e)
@@ -1424,6 +2260,15 @@ export interface components {
             numero: string;
             nom: string;
             fonction: string;
+        };
+        HistoriqueCredit: {
+            readonly id: number;
+            readonly ancien: string;
+            readonly nouveau: string;
+            readonly commentaire: string;
+            readonly par: string;
+            /** Format: date-time */
+            readonly le: string;
         };
         HistoriqueStatut: {
             readonly id: number;
@@ -1498,6 +2343,19 @@ export interface components {
             compte: string;
             libelle: string;
             classe: number;
+        };
+        LigneEcheancier: {
+            numero: number;
+            /** Format: date */
+            date: string;
+            /** Format: decimal */
+            capital: string;
+            /** Format: decimal */
+            interet: string;
+            /** Format: decimal */
+            total: string;
+            /** Format: decimal */
+            capital_restant: string;
         };
         LigneEcriture: {
             readonly id: number;
@@ -1613,8 +2471,6 @@ export interface components {
             readonly active_par: string;
             /** Format: date-time */
             readonly active_le: string | null;
-            readonly adhesion: components["schemas"]["Adhesion"] | null;
-            readonly nombre_parts: number;
             readonly photo: number | null;
             readonly signature: number | null;
             readonly groupe_actuel: components["schemas"]["GroupeActuel"] | null;
@@ -1700,6 +2556,12 @@ export interface components {
             /** Format: decimal */
             charges_mensuelles?: string | null;
         };
+        /**
+         * @description * `DEGRESSIF` - Dégressif (échéances constantes)
+         *     * `FLAT` - Intérêts fixes sur le capital initial
+         * @enum {string}
+         */
+        MethodeCreditEnum: "DEGRESSIF" | "FLAT";
         Moi: {
             readonly id: number;
             /**
@@ -1717,7 +2579,6 @@ export interface components {
              */
             readonly email: string;
             readonly telephone: string;
-            /** URL authentifiée de la photo de profil, ou null. */
             readonly photo: string | null;
             readonly agence: components["schemas"]["AgenceCourte"];
             readonly roles: string[];
@@ -1735,21 +2596,8 @@ export interface components {
              */
             readonly is_superuser: boolean;
         };
-        MettreAJourProfilRequest: {
-            /** Prénom */
-            first_name?: string;
-            /** Nom */
-            last_name?: string;
-            /**
-             * Adresse électronique
-             * Format: email
-             */
-            email?: string;
-            telephone?: string;
-        };
-        PhotoProfilRequest: {
-            /** Format: binary */
-            photo: string;
+        MotifRequest: {
+            motif: string;
         };
         Mouvement: {
             /** Format: date */
@@ -1764,34 +2612,67 @@ export interface components {
             /** Format: decimal */
             solde: string;
         };
-        MouvementParts: {
+        MouvementEpargne: {
             readonly id: number;
-            readonly type: components["schemas"]["MouvementPartsTypeEnum"];
-            /** @description Positif en souscription, négatif en remboursement. */
-            readonly nombre: number;
-            /** Format: decimal */
-            readonly valeur_unitaire: string;
+            readonly type: components["schemas"]["TypeMouvementEpargneEnum"];
+            /**
+             * @description C : augmente le solde ; D : le diminue.
+             *
+             *     * `D` - Débit
+             *     * `C` - Crédit
+             */
+            readonly sens: components["schemas"]["SensEnum"];
             /** Format: decimal */
             readonly montant: string;
-            readonly devise: string;
+            /** Format: decimal */
+            readonly solde_apres: string;
+            readonly libelle: string;
             /** Format: date */
             readonly date_comptable: string;
             readonly ecriture: number;
-            ecriture_numero: string;
+            readonly ecriture_numero: string;
             readonly cree_par: string;
             /** Format: date-time */
             readonly cree_le: string;
         };
-        /**
-         * @description * `SOUSCRIPTION` - Souscription
-         *     * `REMBOURSEMENT` - Remboursement
-         * @enum {string}
-         */
-        MouvementPartsTypeEnum: "SOUSCRIPTION" | "REMBOURSEMENT";
+        OperationCaisse: {
+            readonly id: number;
+            readonly session: number;
+            /** @description Type de l'écriture d'origine. */
+            readonly type_operation: string;
+            readonly sens: components["schemas"]["SensOperationCaisseEnum"];
+            readonly devise: string;
+            /** Format: decimal */
+            readonly montant: string;
+            readonly libelle: string;
+            readonly membre: number | null;
+            readonly membre_numero: string;
+            readonly membre_nom: string;
+            readonly ecriture: number;
+            readonly ecriture_numero: string;
+            readonly cree_par: string;
+            /** Format: date-time */
+            readonly cree_le: string;
+        };
+        OperationGuichetRequest: {
+            /** Format: decimal */
+            montant: string;
+            /** @description Compte de la caisse du caissier (session ouverte) qui reçoit ou verse l'argent. */
+            compte_tresorerie: string;
+            /** @description Identifiant unique généré par le client pour cette opération. */
+            cle_idempotence: string;
+        };
+        OuvertureCompteRequest: {
+            membre: number;
+            devise: string;
+        };
         OuvrirJourneeRequest: {
             agence: number;
             /** Format: date */
             date: string;
+        };
+        OuvrirSessionRequest: {
+            caisse: number;
         };
         PaginatedBeneficiaireList: {
             /** @example 123 */
@@ -1808,6 +2689,51 @@ export interface components {
             previous?: string | null;
             results: components["schemas"]["Beneficiaire"][];
         };
+        PaginatedCompteEpargneList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["CompteEpargne"][];
+        };
+        PaginatedCreditListeList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["CreditListe"][];
+        };
+        PaginatedDepotsInitiauxList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["DepotsInitiaux"][];
+        };
         PaginatedDocumentMembreList: {
             /** @example 123 */
             count: number;
@@ -1823,6 +2749,21 @@ export interface components {
             previous?: string | null;
             results: components["schemas"]["DocumentMembre"][];
         };
+        PaginatedEcheanceList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Echeance"][];
+        };
         PaginatedEcritureList: {
             /** @example 123 */
             count: number;
@@ -1837,6 +2778,21 @@ export interface components {
              */
             previous?: string | null;
             results: components["schemas"]["Ecriture"][];
+        };
+        PaginatedHistoriqueCreditList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["HistoriqueCredit"][];
         };
         PaginatedHistoriqueStatutList: {
             /** @example 123 */
@@ -1913,7 +2869,7 @@ export interface components {
             previous?: string | null;
             results: components["schemas"]["MembreListe"][];
         };
-        PaginatedMouvementPartsList: {
+        PaginatedMouvementEpargneList: {
             /** @example 123 */
             count: number;
             /**
@@ -1926,7 +2882,22 @@ export interface components {
              * @example http://api.example.org/accounts/?page=2
              */
             previous?: string | null;
-            results: components["schemas"]["MouvementParts"][];
+            results: components["schemas"]["MouvementEpargne"][];
+        };
+        PaginatedOperationCaisseList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["OperationCaisse"][];
         };
         PaginatedParametreList: {
             /** @example 123 */
@@ -1957,6 +2928,36 @@ export interface components {
              */
             previous?: string | null;
             results: components["schemas"]["RegleComptable"][];
+        };
+        PaginatedRemboursementList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Remboursement"][];
+        };
+        PaginatedSessionCaisseList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["SessionCaisse"][];
         };
         PaginatedTauxChangeList: {
             /** @example 123 */
@@ -2011,6 +3012,17 @@ export interface components {
             est_siege?: boolean;
             active?: boolean;
         };
+        PatchedCaisseRequest: {
+            agence?: number;
+            code?: string;
+            libelle?: string;
+            /** @default GUICHET */
+            type: components["schemas"]["TypeCaisseEnum"];
+            /** @description Compte de caisse (57x) mouvementé par les opérations. */
+            compte?: number;
+            /** @default true */
+            active: boolean;
+        };
         PatchedCompteComptableRequest: {
             numero?: string;
             libelle?: string;
@@ -2022,14 +3034,21 @@ export interface components {
             devise?: string | null;
             actif?: boolean;
         };
+        /** @description Lecture complète d'un dossier, et saisie ou modification de la demande (en saisie). */
+        PatchedCreditRequest: {
+            membre?: number;
+            produit?: number;
+            devise?: string;
+            /** Format: decimal */
+            montant_demande?: string;
+            /** @description Nombre d'échéances. */
+            duree_demandee?: number;
+            /** @description Usage prévu : frais scolaires, soins... */
+            objet?: string;
+        };
         PatchedDeviseRequest: {
-            code?: string;
             nom?: string;
             symbole?: string;
-            /** @description Nombre de décimales utilisées pour l'arrondi des montants. */
-            decimales?: number;
-            /** @description Devise de référence comptable (contre-valeurs). */
-            est_reference?: boolean;
             active?: boolean;
         };
         /** @description Saisie manuelle (opération diverse) : enregistrée en brouillon, validée par un tiers. */
@@ -2109,12 +3128,85 @@ export interface components {
             /** Format: decimal */
             charges_mensuelles?: string | null;
         };
+        PatchedMettreAJourProfilRequest: {
+            /** Prénom */
+            first_name?: string;
+            /** Nom */
+            last_name?: string;
+            /** Adresse électronique */
+            email?: string;
+            telephone?: string;
+        };
         PatchedParametreRequest: {
             cle?: string;
             valeur?: unknown;
             /** Format: date */
             date_effet?: string;
             description?: string;
+        };
+        /**
+         * @description Le code et les comptes (encours, intérêts) sont fixés à la création : ils relient le
+         *     produit à ses règles de comptabilisation et aux crédits déjà accordés.
+         */
+        PatchedProduitCreditRequest: {
+            code?: string;
+            libelle?: string;
+            description?: string;
+            methode?: components["schemas"]["MethodeCreditEnum"];
+            periodicite?: components["schemas"]["PeriodiciteCreditEnum"];
+            /**
+             * Format: decimal
+             * @description Taux par période (0,02 = 2 % par mois si mensuel).
+             */
+            taux_interet?: string;
+            /** @description Nombre minimum d'échéances. */
+            duree_min?: number;
+            /** @description Nombre maximum d'échéances. */
+            duree_max?: number;
+            /**
+             * Format: decimal
+             * @description Frais de dossier en proportion du montant, retenus au décaissement.
+             */
+            frais_dossier_taux?: string;
+            /**
+             * Format: decimal
+             * @description Épargne que le membre doit avoir déjà déposée, en proportion du montant ; bloquée pendant le crédit.
+             */
+            epargne_garantie_taux?: string;
+            /**
+             * Format: decimal
+             * @description Pénalité par jour de retard, en proportion du montant impayé.
+             */
+            taux_penalite_jour?: string;
+            /** @description Jours de retard tolérés avant de compter des pénalités. */
+            jours_grace?: number;
+            actif?: boolean;
+            plafonds?: components["schemas"]["PlafondCreditRequest"][];
+            /** @description Création : compte d'encours (41x). */
+            compte_encours?: string;
+            /** @description Création : compte d'intérêts (77x). */
+            compte_interets?: string;
+        };
+        PatchedProduitEpargneRequest: {
+            code?: string;
+            libelle?: string;
+            type?: components["schemas"]["TypeProduitEpargneEnum"];
+            devise?: string;
+            /** @description Compte des dépôts (419x) crédité par les versements. */
+            compte?: number;
+            /**
+             * Format: decimal
+             * @description Solde qui doit rester sur le compte après un retrait.
+             */
+            solde_minimum?: string;
+            /** @description Faux : aucun retrait au guichet (épargne obligatoire, dépôt à terme). */
+            retrait_libre?: boolean;
+            /**
+             * Format: decimal
+             * @description Rémunération annuelle (0,03 = 3 %) ; calcul en phase 6.
+             */
+            taux_interet_annuel?: string;
+            actif?: boolean;
         };
         PatchedRegleComptableRequest: {
             type_operation?: string;
@@ -2164,6 +3256,158 @@ export interface components {
              */
             is_active?: boolean;
             mot_de_passe?: string;
+        };
+        /**
+         * @description * `MENSUELLE` - Mensuelle
+         *     * `HEBDOMADAIRE` - Hebdomadaire
+         * @enum {string}
+         */
+        PeriodiciteCreditEnum: "MENSUELLE" | "HEBDOMADAIRE";
+        PhotoProfilRequest: {
+            /** Format: binary */
+            photo: string;
+        };
+        PlafondCredit: {
+            devise: string;
+            /** Format: decimal */
+            montant_min: string;
+            /** Format: decimal */
+            montant_max: string;
+        };
+        PlafondCreditRequest: {
+            devise: string;
+            /** Format: decimal */
+            montant_min: string;
+            /** Format: decimal */
+            montant_max: string;
+        };
+        /**
+         * @description Le code et les comptes (encours, intérêts) sont fixés à la création : ils relient le
+         *     produit à ses règles de comptabilisation et aux crédits déjà accordés.
+         */
+        ProduitCredit: {
+            readonly id: number;
+            code: string;
+            libelle: string;
+            description?: string;
+            methode?: components["schemas"]["MethodeCreditEnum"];
+            periodicite?: components["schemas"]["PeriodiciteCreditEnum"];
+            /**
+             * Format: decimal
+             * @description Taux par période (0,02 = 2 % par mois si mensuel).
+             */
+            taux_interet: string;
+            /** @description Nombre minimum d'échéances. */
+            duree_min: number;
+            /** @description Nombre maximum d'échéances. */
+            duree_max: number;
+            /**
+             * Format: decimal
+             * @description Frais de dossier en proportion du montant, retenus au décaissement.
+             */
+            frais_dossier_taux?: string;
+            /**
+             * Format: decimal
+             * @description Épargne que le membre doit avoir déjà déposée, en proportion du montant ; bloquée pendant le crédit.
+             */
+            epargne_garantie_taux?: string;
+            /**
+             * Format: decimal
+             * @description Pénalité par jour de retard, en proportion du montant impayé.
+             */
+            taux_penalite_jour?: string;
+            /** @description Jours de retard tolérés avant de compter des pénalités. */
+            jours_grace?: number;
+            actif?: boolean;
+            plafonds: components["schemas"]["PlafondCredit"][];
+            readonly comptes: components["schemas"]["ComptesProduit"];
+        };
+        /**
+         * @description Le code et les comptes (encours, intérêts) sont fixés à la création : ils relient le
+         *     produit à ses règles de comptabilisation et aux crédits déjà accordés.
+         */
+        ProduitCreditRequest: {
+            code: string;
+            libelle: string;
+            description?: string;
+            methode?: components["schemas"]["MethodeCreditEnum"];
+            periodicite?: components["schemas"]["PeriodiciteCreditEnum"];
+            /**
+             * Format: decimal
+             * @description Taux par période (0,02 = 2 % par mois si mensuel).
+             */
+            taux_interet: string;
+            /** @description Nombre minimum d'échéances. */
+            duree_min: number;
+            /** @description Nombre maximum d'échéances. */
+            duree_max: number;
+            /**
+             * Format: decimal
+             * @description Frais de dossier en proportion du montant, retenus au décaissement.
+             */
+            frais_dossier_taux?: string;
+            /**
+             * Format: decimal
+             * @description Épargne que le membre doit avoir déjà déposée, en proportion du montant ; bloquée pendant le crédit.
+             */
+            epargne_garantie_taux?: string;
+            /**
+             * Format: decimal
+             * @description Pénalité par jour de retard, en proportion du montant impayé.
+             */
+            taux_penalite_jour?: string;
+            /** @description Jours de retard tolérés avant de compter des pénalités. */
+            jours_grace?: number;
+            actif?: boolean;
+            plafonds: components["schemas"]["PlafondCreditRequest"][];
+            /** @description Création : compte d'encours (41x). */
+            compte_encours?: string;
+            /** @description Création : compte d'intérêts (77x). */
+            compte_interets?: string;
+        };
+        ProduitEpargne: {
+            readonly id: number;
+            code: string;
+            libelle: string;
+            type: components["schemas"]["TypeProduitEpargneEnum"];
+            devise: string;
+            /** @description Compte des dépôts (419x) crédité par les versements. */
+            compte: number;
+            readonly compte_numero: string;
+            /**
+             * Format: decimal
+             * @description Solde qui doit rester sur le compte après un retrait.
+             */
+            solde_minimum?: string;
+            /** @description Faux : aucun retrait au guichet (épargne obligatoire, dépôt à terme). */
+            retrait_libre?: boolean;
+            /**
+             * Format: decimal
+             * @description Rémunération annuelle (0,03 = 3 %) ; calcul en phase 6.
+             */
+            taux_interet_annuel?: string;
+            actif?: boolean;
+        };
+        ProduitEpargneRequest: {
+            code: string;
+            libelle: string;
+            type: components["schemas"]["TypeProduitEpargneEnum"];
+            devise: string;
+            /** @description Compte des dépôts (419x) crédité par les versements. */
+            compte: number;
+            /**
+             * Format: decimal
+             * @description Solde qui doit rester sur le compte après un retrait.
+             */
+            solde_minimum?: string;
+            /** @description Faux : aucun retrait au guichet (épargne obligatoire, dépôt à terme). */
+            retrait_libre?: boolean;
+            /**
+             * Format: decimal
+             * @description Rémunération annuelle (0,03 = 3 %) ; calcul en phase 6.
+             */
+            taux_interet_annuel?: string;
+            actif?: boolean;
         };
         RegleComptable: {
             readonly id: number;
@@ -2220,6 +3464,36 @@ export interface components {
         ReinitialiserMotDePasseRequest: {
             mot_de_passe: string;
         };
+        Remboursement: {
+            readonly id: number;
+            /** Format: decimal */
+            readonly montant: string;
+            /** Format: decimal */
+            readonly capital: string;
+            /** Format: decimal */
+            readonly interet: string;
+            /** Format: decimal */
+            readonly penalite: string;
+            /** Format: date */
+            readonly date_comptable: string;
+            readonly ecriture: number;
+            readonly ecriture_numero: string;
+            readonly cree_par: string;
+            /** Format: date-time */
+            readonly cree_le: string;
+        };
+        /**
+         * @description Mode de paiement : un compte de trésorerie (caisse, Mobile Money) ou le compte d'épargne à
+         *     vue du membre.
+         */
+        RemboursementDemandeRequest: {
+            /** @default  */
+            compte_tresorerie: string;
+            compte_epargne?: number | null;
+            cle_idempotence: string;
+            /** Format: decimal */
+            montant: string;
+        };
         Role: {
             readonly id: number;
             code: string;
@@ -2232,18 +3506,107 @@ export interface components {
          */
         SensEnum: "D" | "C";
         /**
+         * @description * `ENTREE` - Entrée
+         *     * `SORTIE` - Sortie
+         * @enum {string}
+         */
+        SensOperationCaisseEnum: "ENTREE" | "SORTIE";
+        SessionCaisse: {
+            readonly id: number;
+            readonly caisse: number;
+            readonly caisse_code: string;
+            readonly caisse_libelle: string;
+            readonly compte_numero: string;
+            readonly caissier: string;
+            /** Format: date */
+            readonly date_comptable: string;
+            /** @default OUVERTE */
+            readonly statut: components["schemas"]["StatutJourneeEnum"];
+            /** Format: date-time */
+            readonly ouverte_le: string;
+            /** Format: date-time */
+            readonly fermee_le: string | null;
+            readonly commentaire: string;
+            readonly situation: components["schemas"]["SituationDevise"][];
+        };
+        /**
          * @description * `M` - Masculin
          *     * `F` - Féminin
          * @enum {string}
          */
         SexeEnum: "M" | "F";
-        SouscrirePartsRequest: {
-            /** @description Compte de classe 5 qui reçoit l'argent (caisse, mobile money). */
-            compte_tresorerie: string;
-            /** @description Identifiant unique généré par le client pour cette opération. */
-            cle_idempotence: string;
-            nombre: number;
+        Simulation: {
+            lignes: components["schemas"]["LigneEcheancier"][];
+            /** Format: decimal */
+            total_interets: string;
+            /** Format: decimal */
+            frais_dossier: string;
+            /** Format: decimal */
+            epargne_garantie: string;
+            /** Format: decimal */
+            montant_net: string;
         };
+        SimulationDemandeRequest: {
+            produit: number;
+            devise: string;
+            /** Format: decimal */
+            montant: string;
+            duree: number;
+            /** Format: date */
+            date_depart?: string;
+        };
+        SituationCredit: {
+            /** Format: decimal */
+            capital_restant: string;
+            /** Format: decimal */
+            interet_restant: string;
+            /** Format: decimal */
+            penalites_dues: string;
+            /** Format: decimal */
+            total_du: string;
+            /** Format: decimal */
+            impaye: string;
+            echeances_en_retard: number;
+            jours_retard: number;
+            /** Format: date */
+            prochaine_echeance: string | null;
+            /** Format: decimal */
+            prochain_montant: string;
+        };
+        SituationDevise: {
+            devise: string;
+            /** Format: decimal */
+            ouverture: string;
+            /** Format: decimal */
+            entrees: string;
+            /** Format: decimal */
+            sorties: string;
+            /** Format: decimal */
+            theorique: string;
+            /** Format: decimal */
+            compte: string | null;
+            /** Format: decimal */
+            ecart: string | null;
+        };
+        /**
+         * @description * `ACTIF` - Actif
+         *     * `BLOQUE` - Bloqué
+         *     * `CLOS` - Clos
+         * @enum {string}
+         */
+        StatutCompteEpargneEnum: "ACTIF" | "BLOQUE" | "CLOS";
+        /**
+         * @description * `BROUILLON` - En saisie
+         *     * `SOUMIS` - Soumis à l'analyse
+         *     * `ANALYSE` - Analysé, en attente du comité
+         *     * `APPROUVE` - Approuvé, à décaisser
+         *     * `REJETE` - Rejeté
+         *     * `ANNULE` - Annulé
+         *     * `EN_COURS` - En cours de remboursement
+         *     * `SOLDE` - Soldé
+         * @enum {string}
+         */
+        StatutCreditEnum: "BROUILLON" | "SOUMIS" | "ANALYSE" | "APPROUVE" | "REJETE" | "ANNULE" | "EN_COURS" | "SOLDE";
         /**
          * @description * `BROUILLON` - Brouillon
          *     * `VALIDEE` - Validée
@@ -2305,6 +3668,25 @@ export interface components {
             /** Format: decimal */
             solde_crediteur: string;
         };
+        TransfertCoffreRequest: {
+            /**
+             * @description ENTREE : approvisionnement depuis le coffre ; SORTIE : délestage vers lui.
+             *
+             *     * `ENTREE` - Entrée
+             *     * `SORTIE` - Sortie
+             */
+            sens: components["schemas"]["SensOperationCaisseEnum"];
+            devise: string;
+            /** Format: decimal */
+            montant: string;
+            cle_idempotence: string;
+        };
+        /**
+         * @description * `GUICHET` - Guichet
+         *     * `COFFRE` - Coffre
+         * @enum {string}
+         */
+        TypeCaisseEnum: "GUICHET" | "COFFRE";
         /**
          * @description * `PIECE_IDENTITE` - Pièce d'identité
          *     * `PHOTO` - Photo
@@ -2324,6 +3706,14 @@ export interface components {
          */
         TypeMembreEnum: "PHYSIQUE" | "MORALE" | "GROUPE";
         /**
+         * @description * `DEPOT` - Dépôt
+         *     * `RETRAIT` - Retrait
+         *     * `DECAISSEMENT_CREDIT` - Décaissement de crédit
+         *     * `REMBOURSEMENT_CREDIT` - Remboursement de crédit
+         * @enum {string}
+         */
+        TypeMouvementEpargneEnum: "DEPOT" | "RETRAIT" | "DECAISSEMENT_CREDIT" | "REMBOURSEMENT_CREDIT";
+        /**
          * @description * `CARTE_ELECTEUR` - Carte d'électeur
          *     * `PASSEPORT` - Passeport
          *     * `PERMIS` - Permis de conduire
@@ -2333,6 +3723,13 @@ export interface components {
          * @enum {string}
          */
         TypePieceEnum: "CARTE_ELECTEUR" | "PASSEPORT" | "PERMIS" | "CARTE_SERVICE" | "CARTE_ETUDIANT" | "AUTRE";
+        /**
+         * @description * `VUE` - Épargne à vue
+         *     * `OBLIGATOIRE` - Épargne obligatoire (garantie crédit)
+         *     * `TERME` - Dépôt à terme
+         * @enum {string}
+         */
+        TypeProduitEpargneEnum: "VUE" | "OBLIGATOIRE" | "TERME";
         Utilisateur: {
             readonly id: number;
             /**
@@ -2391,6 +3788,16 @@ export interface components {
              */
             is_active?: boolean;
             mot_de_passe?: string;
+        };
+        /**
+         * @description Mode de paiement : un compte de trésorerie (caisse, Mobile Money) ou le compte d'épargne à
+         *     vue du membre.
+         */
+        VersementRequest: {
+            /** @default  */
+            compte_tresorerie: string;
+            compte_epargne?: number | null;
+            cle_idempotence: string;
         };
     };
     responses: never;
@@ -2687,11 +4094,11 @@ export interface operations {
             path?: never;
             cookie?: never;
         };
-        requestBody: {
+        requestBody?: {
             content: {
-                "application/json": components["schemas"]["MettreAJourProfilRequest"];
-                "application/x-www-form-urlencoded": components["schemas"]["MettreAJourProfilRequest"];
-                "multipart/form-data": components["schemas"]["MettreAJourProfilRequest"];
+                "application/json": components["schemas"]["PatchedMettreAJourProfilRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedMettreAJourProfilRequest"];
+                "multipart/form-data": components["schemas"]["PatchedMettreAJourProfilRequest"];
             };
         };
         responses: {
@@ -2719,10 +4126,10 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "image/jpeg": string;
-                    "image/png": string;
+                    "application/json": string;
                 };
             };
+            /** @description No response body */
             404: {
                 headers: {
                     [name: string]: unknown;
@@ -2740,6 +4147,8 @@ export interface operations {
         };
         requestBody: {
             content: {
+                "application/json": components["schemas"]["PhotoProfilRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["PhotoProfilRequest"];
                 "multipart/form-data": components["schemas"]["PhotoProfilRequest"];
             };
         };
@@ -2763,13 +4172,12 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            200: {
+            /** @description No response body */
+            204: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "application/json": components["schemas"]["Moi"];
-                };
+                content?: never;
             };
         };
     };
@@ -2812,6 +4220,380 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    caisse_caisses_list: {
+        parameters: {
+            query?: {
+                active?: boolean;
+                /** @description Quel champ utiliser pour classer les résultats. */
+                ordering?: string;
+                /** @description Un terme de recherche. */
+                search?: string;
+                /**
+                 * @description * `GUICHET` - Guichet
+                 *     * `COFFRE` - Coffre
+                 */
+                type?: "COFFRE" | "GUICHET";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Caisse"][];
+                };
+            };
+        };
+    };
+    caisse_caisses_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CaisseRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["CaisseRequest"];
+                "multipart/form-data": components["schemas"]["CaisseRequest"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Caisse"];
+                };
+            };
+        };
+    };
+    caisse_caisses_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) caisse. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Caisse"];
+                };
+            };
+        };
+    };
+    caisse_caisses_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) caisse. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CaisseRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["CaisseRequest"];
+                "multipart/form-data": components["schemas"]["CaisseRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Caisse"];
+                };
+            };
+        };
+    };
+    caisse_caisses_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) caisse. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedCaisseRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedCaisseRequest"];
+                "multipart/form-data": components["schemas"]["PatchedCaisseRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Caisse"];
+                };
+            };
+        };
+    };
+    caisse_operations_list: {
+        parameters: {
+            query?: {
+                devise?: string;
+                membre?: number;
+                /** @description Quel champ utiliser pour classer les résultats. */
+                ordering?: string;
+                /** @description Un numéro de page de l'ensemble des résultats. */
+                page?: number;
+                /** @description Un terme de recherche. */
+                search?: string;
+                /**
+                 * @description * `ENTREE` - Entrée
+                 *     * `SORTIE` - Sortie
+                 */
+                sens?: "ENTREE" | "SORTIE";
+                session?: number;
+                /** @description Nombre de résultats à retourner par page. */
+                taille?: number;
+                type_operation?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedOperationCaisseList"];
+                };
+            };
+        };
+    };
+    caisse_sessions_list: {
+        parameters: {
+            query?: {
+                caisse?: number;
+                caissier?: number;
+                date_comptable?: string;
+                /** @description Quel champ utiliser pour classer les résultats. */
+                ordering?: string;
+                /** @description Un numéro de page de l'ensemble des résultats. */
+                page?: number;
+                /** @description Un terme de recherche. */
+                search?: string;
+                /**
+                 * @description * `OUVERTE` - Ouverte
+                 *     * `FERMEE` - Fermée
+                 */
+                statut?: "FERMEE" | "OUVERTE";
+                /** @description Nombre de résultats à retourner par page. */
+                taille?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedSessionCaisseList"];
+                };
+            };
+        };
+    };
+    caisse_sessions_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) session de caisse. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionCaisse"];
+                };
+            };
+        };
+    };
+    caisse_sessions_fermer_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) session de caisse. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FermerSessionRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["FermerSessionRequest"];
+                "multipart/form-data": components["schemas"]["FermerSessionRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionCaisse"];
+                };
+            };
+        };
+    };
+    caisse_sessions_operations_list: {
+        parameters: {
+            query?: {
+                caisse?: number;
+                caissier?: number;
+                date_comptable?: string;
+                /** @description Quel champ utiliser pour classer les résultats. */
+                ordering?: string;
+                /** @description Un numéro de page de l'ensemble des résultats. */
+                page?: number;
+                /** @description Un terme de recherche. */
+                search?: string;
+                /**
+                 * @description * `OUVERTE` - Ouverte
+                 *     * `FERMEE` - Fermée
+                 */
+                statut?: "FERMEE" | "OUVERTE";
+                /** @description Nombre de résultats à retourner par page. */
+                taille?: number;
+            };
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) session de caisse. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedOperationCaisseList"];
+                };
+            };
+        };
+    };
+    caisse_sessions_transfert_coffre_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) session de caisse. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TransfertCoffreRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["TransfertCoffreRequest"];
+                "multipart/form-data": components["schemas"]["TransfertCoffreRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationCaisse"];
+                };
+            };
+        };
+    };
+    caisse_sessions_ma_session_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionCaisse"];
+                };
+            };
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    caisse_sessions_ouvrir_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OuvrirSessionRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["OuvrirSessionRequest"];
+                "multipart/form-data": components["schemas"]["OuvrirSessionRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionCaisse"];
+                };
             };
         };
     };
@@ -3490,6 +5272,651 @@ export interface operations {
             };
         };
     };
+    credits_dossiers_list: {
+        parameters: {
+            query?: {
+                devise?: string;
+                membre?: number;
+                /** @description Quel champ utiliser pour classer les résultats. */
+                ordering?: string;
+                /** @description Un numéro de page de l'ensemble des résultats. */
+                page?: number;
+                produit?: number;
+                /** @description Un terme de recherche. */
+                search?: string;
+                /**
+                 * @description * `BROUILLON` - En saisie
+                 *     * `SOUMIS` - Soumis à l'analyse
+                 *     * `ANALYSE` - Analysé, en attente du comité
+                 *     * `APPROUVE` - Approuvé, à décaisser
+                 *     * `REJETE` - Rejeté
+                 *     * `ANNULE` - Annulé
+                 *     * `EN_COURS` - En cours de remboursement
+                 *     * `SOLDE` - Soldé
+                 */
+                statut?: "ANALYSE" | "ANNULE" | "APPROUVE" | "BROUILLON" | "EN_COURS" | "REJETE" | "SOLDE" | "SOUMIS";
+                /** @description Nombre de résultats à retourner par page. */
+                taille?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedCreditListeList"];
+                };
+            };
+        };
+    };
+    credits_dossiers_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreditRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["CreditRequest"];
+                "multipart/form-data": components["schemas"]["CreditRequest"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Credit"];
+                };
+            };
+        };
+    };
+    credits_dossiers_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) crédit. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Credit"];
+                };
+            };
+        };
+    };
+    credits_dossiers_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) crédit. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreditRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["CreditRequest"];
+                "multipart/form-data": components["schemas"]["CreditRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Credit"];
+                };
+            };
+        };
+    };
+    credits_dossiers_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) crédit. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedCreditRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedCreditRequest"];
+                "multipart/form-data": components["schemas"]["PatchedCreditRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Credit"];
+                };
+            };
+        };
+    };
+    credits_dossiers_analyser_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) crédit. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AnalyseRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["AnalyseRequest"];
+                "multipart/form-data": components["schemas"]["AnalyseRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Credit"];
+                };
+            };
+        };
+    };
+    credits_dossiers_annuler_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) crédit. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MotifRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["MotifRequest"];
+                "multipart/form-data": components["schemas"]["MotifRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Credit"];
+                };
+            };
+        };
+    };
+    credits_dossiers_controle_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) crédit. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ControleCredit"];
+                };
+            };
+        };
+    };
+    credits_dossiers_decaisser_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) crédit. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VersementRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["VersementRequest"];
+                "multipart/form-data": components["schemas"]["VersementRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Credit"];
+                };
+            };
+        };
+    };
+    credits_dossiers_echeancier_list: {
+        parameters: {
+            query?: {
+                devise?: string;
+                membre?: number;
+                /** @description Quel champ utiliser pour classer les résultats. */
+                ordering?: string;
+                /** @description Un numéro de page de l'ensemble des résultats. */
+                page?: number;
+                produit?: number;
+                /** @description Un terme de recherche. */
+                search?: string;
+                /**
+                 * @description * `BROUILLON` - En saisie
+                 *     * `SOUMIS` - Soumis à l'analyse
+                 *     * `ANALYSE` - Analysé, en attente du comité
+                 *     * `APPROUVE` - Approuvé, à décaisser
+                 *     * `REJETE` - Rejeté
+                 *     * `ANNULE` - Annulé
+                 *     * `EN_COURS` - En cours de remboursement
+                 *     * `SOLDE` - Soldé
+                 */
+                statut?: "ANALYSE" | "ANNULE" | "APPROUVE" | "BROUILLON" | "EN_COURS" | "REJETE" | "SOLDE" | "SOUMIS";
+                /** @description Nombre de résultats à retourner par page. */
+                taille?: number;
+            };
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) crédit. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedEcheanceList"];
+                };
+            };
+        };
+    };
+    credits_dossiers_historique_list: {
+        parameters: {
+            query?: {
+                devise?: string;
+                membre?: number;
+                /** @description Quel champ utiliser pour classer les résultats. */
+                ordering?: string;
+                /** @description Un numéro de page de l'ensemble des résultats. */
+                page?: number;
+                produit?: number;
+                /** @description Un terme de recherche. */
+                search?: string;
+                /**
+                 * @description * `BROUILLON` - En saisie
+                 *     * `SOUMIS` - Soumis à l'analyse
+                 *     * `ANALYSE` - Analysé, en attente du comité
+                 *     * `APPROUVE` - Approuvé, à décaisser
+                 *     * `REJETE` - Rejeté
+                 *     * `ANNULE` - Annulé
+                 *     * `EN_COURS` - En cours de remboursement
+                 *     * `SOLDE` - Soldé
+                 */
+                statut?: "ANALYSE" | "ANNULE" | "APPROUVE" | "BROUILLON" | "EN_COURS" | "REJETE" | "SOLDE" | "SOUMIS";
+                /** @description Nombre de résultats à retourner par page. */
+                taille?: number;
+            };
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) crédit. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedHistoriqueCreditList"];
+                };
+            };
+        };
+    };
+    credits_dossiers_remboursements_list: {
+        parameters: {
+            query?: {
+                devise?: string;
+                membre?: number;
+                /** @description Quel champ utiliser pour classer les résultats. */
+                ordering?: string;
+                /** @description Un numéro de page de l'ensemble des résultats. */
+                page?: number;
+                produit?: number;
+                /** @description Un terme de recherche. */
+                search?: string;
+                /**
+                 * @description * `BROUILLON` - En saisie
+                 *     * `SOUMIS` - Soumis à l'analyse
+                 *     * `ANALYSE` - Analysé, en attente du comité
+                 *     * `APPROUVE` - Approuvé, à décaisser
+                 *     * `REJETE` - Rejeté
+                 *     * `ANNULE` - Annulé
+                 *     * `EN_COURS` - En cours de remboursement
+                 *     * `SOLDE` - Soldé
+                 */
+                statut?: "ANALYSE" | "ANNULE" | "APPROUVE" | "BROUILLON" | "EN_COURS" | "REJETE" | "SOLDE" | "SOUMIS";
+                /** @description Nombre de résultats à retourner par page. */
+                taille?: number;
+            };
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) crédit. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedRemboursementList"];
+                };
+            };
+        };
+    };
+    credits_dossiers_rembourser_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) crédit. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RemboursementDemandeRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["RemboursementDemandeRequest"];
+                "multipart/form-data": components["schemas"]["RemboursementDemandeRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Remboursement"];
+                };
+            };
+        };
+    };
+    credits_dossiers_renvoyer_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) crédit. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MotifRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["MotifRequest"];
+                "multipart/form-data": components["schemas"]["MotifRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Credit"];
+                };
+            };
+        };
+    };
+    credits_dossiers_soumettre_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) crédit. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Credit"];
+                };
+            };
+        };
+    };
+    credits_dossiers_statuer_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) crédit. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DecisionRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["DecisionRequest"];
+                "multipart/form-data": components["schemas"]["DecisionRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Credit"];
+                };
+            };
+        };
+    };
+    credits_produits_list: {
+        parameters: {
+            query?: {
+                actif?: boolean;
+                /** @description Quel champ utiliser pour classer les résultats. */
+                ordering?: string;
+                /** @description Un terme de recherche. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProduitCredit"][];
+                };
+            };
+        };
+    };
+    credits_produits_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProduitCreditRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["ProduitCreditRequest"];
+                "multipart/form-data": components["schemas"]["ProduitCreditRequest"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProduitCredit"];
+                };
+            };
+        };
+    };
+    credits_produits_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) produit de crédit. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProduitCredit"];
+                };
+            };
+        };
+    };
+    credits_produits_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) produit de crédit. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProduitCreditRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["ProduitCreditRequest"];
+                "multipart/form-data": components["schemas"]["ProduitCreditRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProduitCredit"];
+                };
+            };
+        };
+    };
+    credits_produits_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) produit de crédit. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedProduitCreditRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedProduitCreditRequest"];
+                "multipart/form-data": components["schemas"]["PatchedProduitCreditRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProduitCredit"];
+                };
+            };
+        };
+    };
+    credits_produits_simuler_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SimulationDemandeRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["SimulationDemandeRequest"];
+                "multipart/form-data": components["schemas"]["SimulationDemandeRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Simulation"];
+                };
+            };
+        };
+    };
     devises_list: {
         parameters: {
             query?: {
@@ -3510,31 +5937,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Devise"][];
-                };
-            };
-        };
-    };
-    devises_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["DeviseRequest"];
-                "application/x-www-form-urlencoded": components["schemas"]["DeviseRequest"];
-                "multipart/form-data": components["schemas"]["DeviseRequest"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Devise"];
                 };
             };
         };
@@ -3613,6 +6015,411 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Devise"];
+                };
+            };
+        };
+    };
+    epargne_comptes_list: {
+        parameters: {
+            query?: {
+                devise?: string;
+                membre?: number;
+                /** @description Quel champ utiliser pour classer les résultats. */
+                ordering?: string;
+                /** @description Un numéro de page de l'ensemble des résultats. */
+                page?: number;
+                produit?: number;
+                /** @description Un terme de recherche. */
+                search?: string;
+                /**
+                 * @description * `ACTIF` - Actif
+                 *     * `BLOQUE` - Bloqué
+                 *     * `CLOS` - Clos
+                 */
+                statut?: "ACTIF" | "BLOQUE" | "CLOS";
+                /** @description Nombre de résultats à retourner par page. */
+                taille?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedCompteEpargneList"];
+                };
+            };
+        };
+    };
+    epargne_comptes_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OuvertureCompteRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["OuvertureCompteRequest"];
+                "multipart/form-data": components["schemas"]["OuvertureCompteRequest"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompteEpargne"];
+                };
+            };
+        };
+    };
+    epargne_comptes_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) compte d'épargne. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompteEpargne"];
+                };
+            };
+        };
+    };
+    epargne_comptes_blocage_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) compte d'épargne. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BlocageRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["BlocageRequest"];
+                "multipart/form-data": components["schemas"]["BlocageRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompteEpargne"];
+                };
+            };
+        };
+    };
+    epargne_comptes_deposer_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) compte d'épargne. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OperationGuichetRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["OperationGuichetRequest"];
+                "multipart/form-data": components["schemas"]["OperationGuichetRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MouvementEpargne"];
+                };
+            };
+        };
+    };
+    epargne_comptes_mouvements_list: {
+        parameters: {
+            query?: {
+                devise?: string;
+                membre?: number;
+                /** @description Quel champ utiliser pour classer les résultats. */
+                ordering?: string;
+                /** @description Un numéro de page de l'ensemble des résultats. */
+                page?: number;
+                produit?: number;
+                /** @description Un terme de recherche. */
+                search?: string;
+                /**
+                 * @description * `ACTIF` - Actif
+                 *     * `BLOQUE` - Bloqué
+                 *     * `CLOS` - Clos
+                 */
+                statut?: "ACTIF" | "BLOQUE" | "CLOS";
+                /** @description Nombre de résultats à retourner par page. */
+                taille?: number;
+            };
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) compte d'épargne. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedMouvementEpargneList"];
+                };
+            };
+        };
+    };
+    epargne_comptes_retirer_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) compte d'épargne. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OperationGuichetRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["OperationGuichetRequest"];
+                "multipart/form-data": components["schemas"]["OperationGuichetRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MouvementEpargne"];
+                };
+            };
+        };
+    };
+    epargne_comptes_depot_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DepotMembreRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["DepotMembreRequest"];
+                "multipart/form-data": components["schemas"]["DepotMembreRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MouvementEpargne"];
+                };
+            };
+        };
+    };
+    epargne_comptes_depots_initiaux_list: {
+        parameters: {
+            query?: {
+                devise?: string;
+                membre?: number;
+                /** @description Quel champ utiliser pour classer les résultats. */
+                ordering?: string;
+                /** @description Un numéro de page de l'ensemble des résultats. */
+                page?: number;
+                produit?: number;
+                /** @description Un terme de recherche. */
+                search?: string;
+                /**
+                 * @description * `ACTIF` - Actif
+                 *     * `BLOQUE` - Bloqué
+                 *     * `CLOS` - Clos
+                 */
+                statut?: "ACTIF" | "BLOQUE" | "CLOS";
+                /** @description Nombre de résultats à retourner par page. */
+                taille?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedDepotsInitiauxList"];
+                };
+            };
+        };
+    };
+    epargne_produits_list: {
+        parameters: {
+            query?: {
+                actif?: boolean;
+                devise?: string;
+                /** @description Quel champ utiliser pour classer les résultats. */
+                ordering?: string;
+                /** @description Un terme de recherche. */
+                search?: string;
+                /**
+                 * @description * `VUE` - Épargne à vue
+                 *     * `OBLIGATOIRE` - Épargne obligatoire (garantie crédit)
+                 *     * `TERME` - Dépôt à terme
+                 */
+                type?: "OBLIGATOIRE" | "TERME" | "VUE";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProduitEpargne"][];
+                };
+            };
+        };
+    };
+    epargne_produits_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProduitEpargneRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["ProduitEpargneRequest"];
+                "multipart/form-data": components["schemas"]["ProduitEpargneRequest"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProduitEpargne"];
+                };
+            };
+        };
+    };
+    epargne_produits_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) produit d'épargne. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProduitEpargne"];
+                };
+            };
+        };
+    };
+    epargne_produits_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) produit d'épargne. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProduitEpargneRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["ProduitEpargneRequest"];
+                "multipart/form-data": components["schemas"]["ProduitEpargneRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProduitEpargne"];
+                };
+            };
+        };
+    };
+    epargne_produits_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Un(une) valeur entière unique identifiant ce(cette) produit d'épargne. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedProduitEpargneRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedProduitEpargneRequest"];
+                "multipart/form-data": components["schemas"]["PatchedProduitEpargneRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProduitEpargne"];
                 };
             };
         };
@@ -4098,34 +6905,6 @@ export interface operations {
             };
         };
     };
-    membres_adhesion_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Un(une) valeur entière unique identifiant ce(cette) membre. */
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["EncaisserAdhesionRequest"];
-                "multipart/form-data": components["schemas"]["EncaisserAdhesionRequest"];
-                "application/x-www-form-urlencoded": components["schemas"]["EncaisserAdhesionRequest"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Membre"];
-                };
-            };
-        };
-    };
     membres_beneficiaires_list: {
         parameters: {
             query?: {
@@ -4510,80 +7289,6 @@ export interface operations {
             };
         };
     };
-    membres_parts_sociales_list: {
-        parameters: {
-            query?: {
-                en_liste_noire?: boolean;
-                /** @description Quel champ utiliser pour classer les résultats. */
-                ordering?: string;
-                /** @description Un numéro de page de l'ensemble des résultats. */
-                page?: number;
-                /** @description Un terme de recherche. */
-                search?: string;
-                /**
-                 * @description * `PROSPECT` - Prospect
-                 *     * `ACTIF` - Actif
-                 *     * `SUSPENDU` - Suspendu
-                 *     * `DEMISSIONNAIRE` - Démissionnaire
-                 *     * `DECEDE` - Décédé
-                 */
-                statut?: "ACTIF" | "DECEDE" | "DEMISSIONNAIRE" | "PROSPECT" | "SUSPENDU";
-                /** @description Nombre de résultats à retourner par page. */
-                taille?: number;
-                /**
-                 * @description * `PHYSIQUE` - Personne physique
-                 *     * `MORALE` - Personne morale
-                 *     * `GROUPE` - Groupe solidaire
-                 */
-                type?: "GROUPE" | "MORALE" | "PHYSIQUE";
-            };
-            header?: never;
-            path: {
-                /** @description Un(une) valeur entière unique identifiant ce(cette) membre. */
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PaginatedMouvementPartsList"];
-                };
-            };
-        };
-    };
-    membres_parts_sociales_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Un(une) valeur entière unique identifiant ce(cette) membre. */
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SouscrirePartsRequest"];
-                "multipart/form-data": components["schemas"]["SouscrirePartsRequest"];
-                "application/x-www-form-urlencoded": components["schemas"]["SouscrirePartsRequest"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["MouvementParts"];
-                };
-            };
-        };
-    };
     membres_statut_create: {
         parameters: {
             query?: never;
@@ -4608,25 +7313,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Membre"];
-                };
-            };
-        };
-    };
-    membres_conditions_adhesion_retrieve: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ConditionsAdhesion"];
                 };
             };
         };

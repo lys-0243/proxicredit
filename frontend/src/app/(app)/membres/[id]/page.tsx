@@ -8,9 +8,9 @@ import { Suspense } from "react";
 
 import { ErreurApi } from "@/components/erreur-api";
 import { EnTeteMembre } from "@/components/membres/en-tete-membre";
-import { OngletAdhesion } from "@/components/membres/onglet-adhesion";
 import { OngletBeneficiaires } from "@/components/membres/onglet-beneficiaires";
 import { OngletDocuments } from "@/components/membres/onglet-documents";
+import { OngletCredits, OngletEpargne } from "@/components/membres/onglet-finances";
 import { OngletGroupe } from "@/components/membres/onglet-groupe";
 import { OngletHistorique } from "@/components/membres/onglet-historique";
 import { OngletIdentite } from "@/components/membres/onglet-identite";
@@ -27,6 +27,8 @@ function FicheMembre() {
   const router = useRouter();
   const pathname = usePathname();
   const voitDocuments = usePermission("members.view_documentmembre");
+  const voitEpargne = usePermission("savings.view_compteepargne");
+  const voitCredits = usePermission("credits.view_credit");
   const membre = useQuery({ queryKey: ["membres", id], queryFn: () => api<Membre>(`/api/membres/${id}`) });
 
   if (membre.isPending) return <Skeleton className="h-96 w-full" />;
@@ -36,7 +38,8 @@ function FicheMembre() {
   const onglets = [
     { valeur: "identite", libelle: "Identité", contenu: <OngletIdentite membre={m} /> },
     ...(voitDocuments ? [{ valeur: "documents", libelle: "Documents KYC", contenu: <OngletDocuments membre={m} /> }] : []),
-    { valeur: "adhesion", libelle: "Adhésion et parts", contenu: <OngletAdhesion membre={m} /> },
+    ...(voitEpargne ? [{ valeur: "epargne", libelle: "Épargne", contenu: <OngletEpargne membre={m} /> }] : []),
+    ...(voitCredits ? [{ valeur: "credits", libelle: "Crédits", contenu: <OngletCredits membre={m} /> }] : []),
     ...(m.type === "GROUPE" ? [{ valeur: "groupe", libelle: "Composition", contenu: <OngletGroupe groupe={m} /> }] : []),
     ...(m.type !== "GROUPE" ? [{ valeur: "beneficiaires", libelle: "Bénéficiaires", contenu: <OngletBeneficiaires membre={m} /> }] : []),
     { valeur: "historique", libelle: "Historique", contenu: <OngletHistorique membre={m} /> },
