@@ -75,3 +75,6 @@ La 2FA est obligatoire pour les rôles Administrateur, Directeur et Comptable.
 
 Déploiement sur VPS avec Docker Compose (HTTPS obligatoire, sauvegardes quotidiennes) :
 voir [docs/LANCEMENT.md](docs/LANCEMENT.md#3-production-sur-un-vps-docker-compose).
+
+Serveur de test pour les partenaires sur DigitalOcean (HTTPS automatique, sans nom de domaine) :
+voir [docs/DEPLOIEMENT_DIGITALOCEAN.md](docs/DEPLOIEMENT_DIGITALOCEAN.md).

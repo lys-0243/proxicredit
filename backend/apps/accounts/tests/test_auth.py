@@ -170,9 +170,7 @@ class TestProfil:
         assert lecture.status_code == 200
         assert lecture["Content-Type"].startswith("image/")
 
-        suppression = navigateur.delete(
-            "/api/auth/moi/photo", HTTP_X_CSRFTOKEN=navigateur.csrf
-        )
+        suppression = navigateur.delete("/api/auth/moi/photo", HTTP_X_CSRFTOKEN=navigateur.csrf)
         assert suppression.status_code == 200
         assert suppression.data["photo"] is None
         user.refresh_from_db()
@@ -244,5 +242,24 @@ def test_comptes_de_demonstration(settings):
     assert accueil.check_password("Demo-ProxiCredit-2026")
     assert Utilisateur.objects.filter(username__endswith=".demo").count() == 10
 
+    call_command("creer_comptes_demo", "--desactiver")
+    assert not Utilisateur.objects.filter(username__endswith=".demo", is_active=True).exists()
+
+
+def test_comptes_de_demonstration_serveur_de_test(settings):
+    from django.core.management import CommandError, call_command
+
+    settings.DEBUG = False
+    settings.DEMO_AUTORISE = True
+    with pytest.raises(CommandError, match="mot de passe propre"):
+        call_command("creer_comptes_demo")
+
+    call_command("creer_comptes_demo", "--mot-de-passe", "Partenaires-Test-2026!")
+    caissier = Utilisateur.objects.get(username="caissier.demo")
+    assert caissier.is_active
+    assert caissier.check_password("Partenaires-Test-2026!")
+    assert not caissier.check_password("Demo-ProxiCredit-2026")
+
+    # La désactivation reste possible sans mot de passe propre.
     call_command("creer_comptes_demo", "--desactiver")
     assert not Utilisateur.objects.filter(username__endswith=".demo", is_active=True).exists()

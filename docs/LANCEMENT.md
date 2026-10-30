@@ -262,7 +262,7 @@ peuvent plus être retirés ni servir à rembourser, jusqu'à ce que le crédit 
 | `db` | PostgreSQL 16 (volume `pgdata`) |
 | `redis` | File de messages pour Celery |
 | `worker`, `beat` | Celery : tâches de fond et tâches planifiées |
-| `backup` | Sauvegarde quotidienne de la base dans `./backups/` (30 jours conservés) |
+| `backup` | Sauvegarde quotidienne de la base et des fichiers (`media`) dans `./backups/` (30 jours conservés) |
 
 ### 3.3 Configuration
 
@@ -301,6 +301,9 @@ Faites ensuite la [première utilisation](#2-première-utilisation) (l'administr
 La configuration nginx fournie (`deploy/nginx/proxicredit.conf`) écoute **uniquement en HTTP**. Il
 faut donc terminer le HTTPS, au choix :
 
+- **le plus simple** : ajouter `docker-compose.staging.yml`, qui place Caddy devant nginx et
+  obtient le certificat tout seul (`DOMAIN` dans `.env`). Voir
+  [DEPLOIEMENT_DIGITALOCEAN.md](DEPLOIEMENT_DIGITALOCEAN.md) ;
 - en amont, avec un proxy qui gère le certificat (Caddy, Traefik, Cloudflare…) et transmet
   l'en-tête `X-Forwarded-Proto: https` ;
 - ou dans ce nginx, en ajoutant un bloc `listen 443 ssl` avec un certificat Let's Encrypt

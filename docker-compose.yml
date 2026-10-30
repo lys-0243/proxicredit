@@ -84,11 +84,15 @@ services:
       PGDATABASE: ${POSTGRES_DB:-proxicredit}
     volumes:
       - ./backups:/backups
-    # Sauvegarde quotidienne à 23h, conservation 30 jours. À copier ensuite hors site (chiffrée).
+      - media:/media:ro
+    # Sauvegarde quotidienne de la base et des fichiers (photos, KYC), conservation 30 jours.
+    # À copier ensuite hors site (chiffrée).
     entrypoint: >
       sh -c "while true; do
                pg_dump -Fc > /backups/proxicredit-$$(date +%F).dump &&
-               find /backups -name '*.dump' -mtime +30 -delete;
+               tar czf /backups/media-$$(date +%F).tar.gz -C /media . &&
+               find /backups -name '*.dump' -mtime +30 -delete &&
+               find /backups -name 'media-*.tar.gz' -mtime +30 -delete;
                sleep 86400;
              done"
     depends_on:

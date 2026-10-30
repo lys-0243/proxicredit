@@ -161,6 +161,9 @@ AUTH_COOKIE_SAMESITE = "Lax"
 # Rôles pour lesquels la double authentification (2FA) est obligatoire
 ROLES_2FA_OBLIGATOIRE = ["ADMINISTRATEUR", "DIRECTEUR", "COMPTABLE"]
 
+# Autorise `creer_comptes_demo` hors développement (serveur de test pour les partenaires).
+DEMO_AUTORISE = env.bool("DEMO_AUTORISE", default=False)
+
 CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=["http://localhost:3000"])
 CORS_ALLOW_CREDENTIALS = True
 

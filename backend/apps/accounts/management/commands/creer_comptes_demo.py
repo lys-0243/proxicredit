@@ -26,7 +26,10 @@ COMPTES = [
 
 
 class Command(BaseCommand):
-    help = "Crée (ou réinitialise) un compte de démonstration par rôle. Développement uniquement."
+    help = (
+        "Crée (ou réinitialise) un compte de démonstration par rôle. Développement uniquement, "
+        "ou serveur de test avec DEMO_AUTORISE=True et un mot de passe propre."
+    )
 
     def add_arguments(self, parser):
         parser.add_argument("--mot-de-passe", default=MOT_DE_PASSE_DEMO)
@@ -36,7 +39,7 @@ class Command(BaseCommand):
 
     @transaction.atomic
     def handle(self, *args, **options):
-        if not settings.DEBUG:
+        if not (settings.DEBUG or settings.DEMO_AUTORISE):
             raise CommandError("Comptes de démonstration interdits hors développement.")
 
         if options["desactiver"]:
@@ -45,6 +48,12 @@ class Command(BaseCommand):
             )
             self.stdout.write(self.style.SUCCESS(f"{n} compte(s) de démonstration désactivé(s)."))
             return
+
+        # Le mot de passe par défaut est public (dépôt, documentation) : jamais sur un serveur.
+        if not settings.DEBUG and options["mot_de_passe"] == MOT_DE_PASSE_DEMO:
+            raise CommandError(
+                "Hors développement, indiquez un mot de passe propre avec --mot-de-passe."
+            )
 
         agence = Agence.objects.filter(code="AG001").first()
         if agence is None:

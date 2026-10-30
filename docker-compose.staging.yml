@@ -1,0 +1,26 @@
+# Serveur unique exposé sur Internet (ex. Droplet DigitalOcean), avec HTTPS automatique.
+# docker compose -f docker-compose.yml -f docker-compose.staging.yml up -d --build
+# Guide : docs/DEPLOIEMENT_DIGITALOCEAN.md
+services:
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      DOMAIN: ${DOMAIN:?nom de domaine requis dans .env}
+    volumes:
+      - ./deploy/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on: [nginx]
+
+  # nginx n'est plus exposé directement : seul Caddy lui parle.
+  nginx:
+    ports: !reset []
+
+volumes:
+  caddy_data:
+  caddy_config:
