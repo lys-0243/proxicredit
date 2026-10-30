@@ -19,7 +19,15 @@ class SansSuppressionViewSet(
     """Les données de référence ne se suppriment pas : on les désactive."""
 
 
-class DeviseViewSet(SansSuppressionViewSet):
+class DeviseViewSet(
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    viewsets.GenericViewSet,
+):
+    """Devises fixées par l'initialisation (CDF et USD) : on peut seulement les désactiver ou
+    corriger leur libellé, jamais en créer ni en supprimer."""
+
     queryset = Devise.objects.all()
     serializer_class = s.DeviseSerializer
     pagination_class = None

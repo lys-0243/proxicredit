@@ -118,3 +118,22 @@ def test_historique_audit_avec_ip(client_api, creer_utilisateur, agence):
     assert dernier.history_user == admin
     assert dernier.adresse_ip == "10.0.0.7"
     assert dernier.telephone == "+243810000000"
+
+
+class TestDevises:
+    def test_pas_de_nouvelle_devise(self, client_api, creer_utilisateur):
+        admin = creer_utilisateur("ADMINISTRATEUR", otp_active=True)
+        client = client_api(admin)
+        corps = {"code": "EUR", "nom": "Euro", "symbole": "€", "decimales": 2}
+        assert client.post("/api/devises", corps, format="json").status_code == 405
+        assert client.delete("/api/devises/USD").status_code == 405
+        assert sorted(d["code"] for d in client.get("/api/devises").data) == ["CDF", "USD"]
+
+    def test_code_et_reference_figes(self, client_api, creer_utilisateur, usd):
+        client = client_api(creer_utilisateur("ADMINISTRATEUR", otp_active=True))
+        reponse = client.patch(
+            "/api/devises/USD", {"code": "EUR", "est_reference": True, "nom": "Dollar US"}
+        )
+        assert reponse.status_code == 200
+        usd.refresh_from_db()
+        assert (usd.code, usd.est_reference, usd.nom) == ("USD", False, "Dollar US")

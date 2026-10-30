@@ -7,6 +7,7 @@ class DeviseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Devise
         fields = ["code", "nom", "symbole", "decimales", "est_reference", "active"]
+        read_only_fields = ["code", "decimales", "est_reference"]
 
 
 class AgenceSerializer(serializers.ModelSerializer):

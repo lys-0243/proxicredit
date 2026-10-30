@@ -7,9 +7,12 @@ from rest_framework.test import APIClient
 from apps.accounting.initialisation import charger_plan_comptable
 from apps.accounts.models import Utilisateur
 from apps.accounts.roles import synchroniser_roles
+from apps.cash.initialisation import charger_parametrage_caisse
 from apps.core.initialisation import charger_referentiel
 from apps.core.models import Agence, Devise, TauxChange
+from apps.credits.initialisation import charger_parametrage_credit
 from apps.members.initialisation import charger_parametrage_membres
+from apps.savings.initialisation import charger_parametrage_epargne
 
 JOUR = date(2026, 10, 1)
 MOT_DE_PASSE = "Motdepasse-solide-2026"
@@ -20,6 +23,9 @@ def referentiel(db):
     charger_referentiel()
     charger_plan_comptable()
     charger_parametrage_membres()
+    charger_parametrage_caisse()
+    charger_parametrage_epargne()
+    charger_parametrage_credit()
     synchroniser_roles()
 
 
@@ -85,6 +91,30 @@ def journee(agence, directeur):
 
 
 @pytest.fixture
+def accueil(creer_utilisateur):
+    return creer_utilisateur("AGENT_RECEPTION", username="accueil")
+
+
+@pytest.fixture
+def chef(creer_utilisateur):
+    return creer_utilisateur("CHEF_AGENCE", username="chef")
+
+
+@pytest.fixture
+def caissier(creer_utilisateur):
+    return creer_utilisateur("CAISSIER", username="caissier")
+
+
+@pytest.fixture
+def caisse_ouverte(caissier, journee, agence):
+    """Session de caisse du caissier au guichet G01 (journée ouverte)."""
+    from apps.cash.models import Caisse
+    from apps.cash.services import ouvrir_session
+
+    return ouvrir_session(Caisse.objects.get(agence=agence, code="G01"), caissier)
+
+
+@pytest.fixture
 def taux_usd(usd, cdf, directeur):
     return TauxChange.objects.create(
         date=JOUR,
@@ -105,5 +135,33 @@ def client_api():
         client = APIClient()
         client.force_authenticate(user)
         return client
+
+    return fabrique
+
+
+@pytest.fixture
+def fabrique_membre(accueil):
+    """Membres actifs prêts à l'emploi pour les modules financiers (le parcours d'activation
+    complet est testé dans le module membres)."""
+    from apps.members.models import Membre
+    from apps.members.services import creer_membre
+
+    compteur = iter(range(1, 10_000))
+
+    def fabrique(**champs) -> Membre:
+        n = next(compteur)
+        membre = creer_membre(
+            {
+                "type": Membre.Type.PHYSIQUE,
+                "nom": f"Membre{n}",
+                "prenom": "Test",
+                "telephone": f"+24381{n:07d}",
+                **champs,
+            },
+            accueil,
+        )
+        Membre.objects.filter(pk=membre.pk).update(statut=Membre.Statut.ACTIF)
+        membre.refresh_from_db()
+        return membre
 
     return fabrique

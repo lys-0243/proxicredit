@@ -6,13 +6,11 @@ from rest_framework import serializers
 from apps.core.models import Devise
 from apps.members import services
 from apps.members.models import (
-    Adhesion,
     Beneficiaire,
     DocumentMembre,
     HistoriqueStatut,
     Membre,
     MembreGroupe,
-    MouvementPartsSociales,
 )
 
 CHAMPS_PHYSIQUE = [
@@ -74,24 +72,6 @@ OBLIGATOIRES_A_LA_CREATION = {
 }
 
 
-class AdhesionSerializer(serializers.ModelSerializer):
-    encaisse_par = serializers.StringRelatedField()
-    ecriture_numero = serializers.CharField(source="ecriture.numero")
-
-    class Meta:
-        model = Adhesion
-        fields = [
-            "frais",
-            "devise",
-            "date_comptable",
-            "encaisse_par",
-            "encaisse_le",
-            "ecriture",
-            "ecriture_numero",
-        ]
-        read_only_fields = fields
-
-
 class MembreListeSerializer(serializers.ModelSerializer):
     agence_code = serializers.CharField(source="agence.code", read_only=True)
 
@@ -123,8 +103,6 @@ class MembreSerializer(serializers.ModelSerializer):
     agence_code = serializers.CharField(source="agence.code", read_only=True)
     cree_par = serializers.StringRelatedField()
     active_par = serializers.StringRelatedField()
-    adhesion = serializers.SerializerMethodField()
-    nombre_parts = serializers.SerializerMethodField()
     photo = serializers.SerializerMethodField()
     signature = serializers.SerializerMethodField()
     groupe_actuel = serializers.SerializerMethodField()
@@ -152,8 +130,6 @@ class MembreSerializer(serializers.ModelSerializer):
             "cree_le",
             "active_par",
             "active_le",
-            "adhesion",
-            "nombre_parts",
             "photo",
             "signature",
             "groupe_actuel",
@@ -170,14 +146,6 @@ class MembreSerializer(serializers.ModelSerializer):
             "cree_le",
             "active_le",
         ]
-
-    @extend_schema_field(AdhesionSerializer(allow_null=True))
-    def get_adhesion(self, obj):
-        adhesion = getattr(obj, "adhesion", None)
-        return AdhesionSerializer(adhesion).data if adhesion else None
-
-    def get_nombre_parts(self, obj) -> int:
-        return services.nombre_parts(obj)
 
     def _dernier_document(self, obj, type_document) -> int | None:
         document = obj.documents.filter(type=type_document).order_by("-ajoute_le").first()
@@ -330,28 +298,6 @@ class AjoutGroupeSerializer(serializers.Serializer):
     )
 
 
-class MouvementPartsSerializer(serializers.ModelSerializer):
-    cree_par = serializers.StringRelatedField()
-    ecriture_numero = serializers.CharField(source="ecriture.numero")
-
-    class Meta:
-        model = MouvementPartsSociales
-        fields = [
-            "id",
-            "type",
-            "nombre",
-            "valeur_unitaire",
-            "montant",
-            "devise",
-            "date_comptable",
-            "ecriture",
-            "ecriture_numero",
-            "cree_par",
-            "cree_le",
-        ]
-        read_only_fields = fields
-
-
 class HistoriqueStatutSerializer(serializers.ModelSerializer):
     par = serializers.StringRelatedField()
 
@@ -374,27 +320,3 @@ class ChangerStatutSerializer(serializers.Serializer):
 class ListeNoireSerializer(serializers.Serializer):
     inscrire = serializers.BooleanField()
     motif = serializers.CharField(max_length=255)
-
-
-class EncaissementSerializer(serializers.Serializer):
-    compte_tresorerie = serializers.CharField(
-        help_text="Compte de classe 5 qui reçoit l'argent (caisse, mobile money)."
-    )
-    cle_idempotence = serializers.CharField(
-        max_length=100, help_text="Identifiant unique généré par le client pour cette opération."
-    )
-
-
-class EncaisserAdhesionSerializer(EncaissementSerializer):
-    nombre_parts = serializers.IntegerField(min_value=1)
-
-
-class SouscrirePartsSerializer(EncaissementSerializer):
-    nombre = serializers.IntegerField(min_value=1)
-
-
-class ConditionsAdhesionSerializer(serializers.Serializer):
-    devise = serializers.CharField()
-    frais = serializers.DecimalField(max_digits=20, decimal_places=2)
-    valeur_part = serializers.DecimalField(max_digits=20, decimal_places=2)
-    parts_minimum = serializers.IntegerField()

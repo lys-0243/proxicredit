@@ -13,8 +13,6 @@ import { useMoi, usePermission } from "@/lib/auth";
 import { formatDate, formatTaux } from "@/lib/format";
 
 const MODULES_A_VENIR = [
-  "Épargne et caisse",
-  "Crédits Éducation et Secours (simulateur, demandes, comité, décaissement)",
   "Garanties et groupes solidaires",
   "Clôture journalière, pénalités et provisions",
   "Mobile Money et SMS",

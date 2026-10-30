@@ -1,3 +1,4 @@
+from collections.abc import Callable
 from datetime import date, timedelta
 from decimal import Decimal
 
@@ -9,6 +10,10 @@ from apps.core.exceptions import ErreurMetier
 from apps.core.models import Agence, Devise, JourFerie, JourneeComptable, Parametre, TauxChange
 
 _ABSENT = object()
+
+# Contrôles exécutés avant la fermeture d'une journée : chaque module enregistre ici (dans son
+# AppConfig.ready) une fonction qui renvoie un message bloquant, ou None si tout est en ordre.
+CONTROLES_FERMETURE: list[Callable[[Agence], str | None]] = []
 
 
 # --- Journée comptable --------------------------------------------------------
@@ -55,8 +60,10 @@ def fermer_journee(agence: Agence, utilisateur) -> JourneeComptable:
     )
     if journee is None:
         raise ErreurMetier("Aucune journée ouverte à fermer.", "journee_fermee")
-    # Les contrôles de clôture (caisses fermées, cohérence grand livre...) s'ajouteront ici
-    # au fil des modules (phase 6 : clôture journalière complète).
+    # Contrôles des modules (caisses fermées...) ; la clôture complète viendra en phase 6.
+    blocages = [m for controle in CONTROLES_FERMETURE if (m := controle(agence))]
+    if blocages:
+        raise ErreurMetier(" ".join(blocages), "cloture_impossible")
     journee.statut = JourneeComptable.Statut.FERMEE
     journee.fermee_par = utilisateur
     journee.fermee_le = timezone.now()

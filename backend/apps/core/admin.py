@@ -6,7 +6,16 @@ from apps.core.models import Agence, Devise, JourFerie, JourneeComptable, Parame
 
 @admin.register(Devise)
 class DeviseAdmin(SimpleHistoryAdmin):
+    """Les devises (CDF et USD) sont créées par `manage.py initialiser`, jamais à la main."""
+
     list_display = ["code", "nom", "symbole", "decimales", "est_reference", "active"]
+    readonly_fields = ["code", "decimales", "est_reference"]
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 @admin.register(Agence)
