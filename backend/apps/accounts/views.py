@@ -43,6 +43,7 @@ def _extension_photo(fichier) -> str:
             return {"image/jpeg": "jpg", "image/png": "png"}[type_contenu]
     raise ErreurMetier("Format non accepté : JPEG ou PNG uniquement.", "format")
 
+
 EMETTEUR_OTP = "ProxiCrédit"
 
 
@@ -243,7 +244,9 @@ class PhotoProfilView(APIView):
     def get(self, request):
         if not request.user.photo:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        type_contenu = mimetypes.guess_type(request.user.photo.name)[0] or "application/octet-stream"
+        type_contenu = (
+            mimetypes.guess_type(request.user.photo.name)[0] or "application/octet-stream"
+        )
         reponse = FileResponse(request.user.photo.open("rb"), content_type=type_contenu)
         reponse["Cache-Control"] = "private, max-age=3600"
         return reponse

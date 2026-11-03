@@ -1,0 +1,5 @@
+# HTTPS automatique (Let's Encrypt) devant nginx. DOMAIN vient du fichier .env.
+{$DOMAIN} {
+	encode gzip
+	reverse_proxy nginx:80
+}
