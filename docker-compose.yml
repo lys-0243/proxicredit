@@ -29,7 +29,7 @@ services:
     command: >
       sh -c "python manage.py migrate --noinput &&
              python manage.py initialiser &&
-             gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 60"
+             gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers ${GUNICORN_WORKERS:-3} --timeout 60"
     volumes:
       - media:/app/media
     depends_on:

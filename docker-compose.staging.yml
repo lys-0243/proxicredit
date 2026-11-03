@@ -21,6 +21,15 @@ services:
   nginx:
     ports: !reset []
 
+  # Celery n'exécute encore aucune tâche (elles arriveront avec Mobile Money et SMS) : arrêté par
+  # défaut pour économiser ~250 Mo sur un petit serveur. Pour le relancer : COMPOSE_PROFILES=celery
+  # dans .env, puis `docker compose up -d`.
+  worker:
+    profiles: [celery]
+
+  beat:
+    profiles: [celery]
+
 volumes:
   caddy_data:
   caddy_config:
