@@ -1,7 +1,7 @@
 # Déployer ProxiCrédit sur DigitalOcean (serveur de test)
 
 Ce guide met toute l'application en ligne sur **un seul serveur (Droplet)** pour la faire tester
-par des partenaires : API Django, application Next.js, PostgreSQL, Redis/Celery et fichiers
+par des partenaires : API Django, application Next.js, PostgreSQL, Redis et fichiers
 (photos de profil, documents KYC), avec un **HTTPS automatique** (Let's Encrypt via Caddy).
 
 Aucun nom de domaine n'est nécessaire : on utilise une adresse gratuite `sslip.io` construite à
@@ -10,7 +10,7 @@ partir de l'adresse IP du serveur.
 ```
 Internet ──► Caddy (80/443, certificat HTTPS)
                 └─► nginx ──┬─ /api, /admin, /static ──► Django (gunicorn) ──┬─ PostgreSQL (volume pgdata)
-                            └─ le reste ──────────────► Next.js              ├─ Redis + Celery
+                            └─ le reste ──────────────► Next.js              ├─ Redis
                                                                              └─ fichiers (volume media)
 ```
 
@@ -24,11 +24,23 @@ renvoyer.
 
 | Élément | Prix |
 |---|---|
-| Droplet Basic 4 Go RAM / 2 vCPU | ~24 $/mois |
-| Droplet Backups (facultatif, recommandé) | +20 %, soit ~4,80 $/mois |
+| Droplet Basic 1 Go RAM / 1 vCPU | ~6 $/mois |
+| Droplet Backups (facultatif, recommandé) | +20 %, soit ~1,20 $/mois |
 | Nom de domaine | 0 $ (sslip.io) |
 
 DigitalOcean facture à l'heure : un Droplet détruit après la période de test ne coûte plus rien.
+
+### Pourquoi 1 Go suffit (pour un petit groupe de testeurs)
+
+Le serveur de 1 Go convient à une poignée de testeurs (environ 5) grâce à trois réglages :
+
+- **Celery (worker + beat) est arrêté** : aucune tâche de fond n'existe encore. Gain : ~250 Mo.
+- **Django tourne avec 2 processus gunicorn** au lieu de 3 (`GUNICORN_WORKERS=2`). Gain : ~100 Mo.
+- **2 Go de swap** (section 2.3) : indispensable pour compiler l'application web sur le serveur.
+
+Limites à connaître : la première compilation et chaque mise à jour sont **lentes** (20 à 40 minutes)
+et la marge mémoire est faible. Si l'application devient lente ou qu'une compilation échoue, agrandissez
+le Droplet : **Droplet → Resize → 2 Go (12 $/mois)**, sans rien réinstaller.
 
 ---
 
@@ -42,7 +54,7 @@ Dans le panneau DigitalOcean : **Create → Droplets**.
 |---|---|
 | Région | Frankfurt (FRA1), Amsterdam (AMS3) ou London (LON1) : les plus proches de la RDC |
 | Image | **Marketplace → Docker** (Ubuntu 24.04 avec Docker et Compose déjà installés) |
-| Taille | **Basic, Regular, 4 Go / 2 vCPU**. Avec 2 Go, la compilation de Next.js peut échouer |
+| Taille | **Basic, Regular, 1 Go / 1 vCPU (6 $/mois)**. Passer à 2 Go si davantage de testeurs |
 | Authentification | **Clé SSH** (plus sûr qu'un mot de passe) |
 | Backups | Cochez **Enable automated backups** si vous voulez une copie hors serveur |
 | Nom | `proxicredit-test` |
@@ -71,7 +83,8 @@ Depuis votre PC :
 ssh root@164.90.1.2
 ```
 
-Sur le serveur, ajoutez 2 Go de swap (marge de sécurité pendant les compilations) :
+Sur le serveur, ajoutez 2 Go de swap. **Obligatoire avec 1 Go de mémoire** : sans swap, la
+compilation de l'application web est interrompue faute de mémoire.
 
 ```bash
 fallocate -l 2G /swapfile && chmod 600 /swapfile && mkswap /swapfile && swapon /swapfile
@@ -129,10 +142,14 @@ POSTGRES_PASSWORD=<résultat de openssl rand -hex 24>
 TIME_ZONE=Africa/Kinshasa
 DOMAIN=proxicredit.164-90-1-2.sslip.io
 DEMO_AUTORISE=True
+GUNICORN_WORKERS=2
 
 # Toutes les commandes `docker compose` utiliseront automatiquement la configuration HTTPS
 COMPOSE_FILE=docker-compose.yml:docker-compose.staging.yml
 ```
+
+`worker` et `beat` (Celery) ne démarrent pas : ils sont rangés dans le profil `celery` de
+`docker-compose.staging.yml`. Voir [5.5](#55-réactiver-celery) pour les relancer.
 
 Grâce à `COMPOSE_FILE`, une simple commande `docker compose ...` suffit dans la suite : plus
 besoin d'écrire `-f docker-compose.yml -f docker-compose.staging.yml`.
@@ -228,7 +245,8 @@ docker compose up -d --build      # migrations et initialiser s'appliquent au re
 ### 5.2 Journaux
 
 ```bash
-docker compose logs -f backend    # ou frontend, nginx, caddy, worker…
+docker compose logs -f backend    # ou frontend, nginx, caddy, db…
+free -h                           # mémoire et swap utilisés
 ```
 
 ### 5.3 Sauvegardes
@@ -254,7 +272,7 @@ Ces fichiers contiennent des données personnelles (KYC) : conservez-les sur un 
 
 ```bash
 cd ~/proxicredit
-docker compose stop backend worker beat
+docker compose stop backend
 
 # Base
 docker compose exec -T db pg_restore -U proxicredit -d proxicredit --clean --if-exists \
@@ -264,8 +282,17 @@ docker compose exec -T db pg_restore -U proxicredit -d proxicredit --clean --if-
 docker run --rm -v proxicredit_media:/media -v "$PWD/backups:/backups" alpine \
   tar xzf /backups/media-2026-10-30.tar.gz -C /media
 
-docker compose start backend worker beat
+docker compose start backend
 ```
+
+### 5.5 Réactiver Celery
+
+À faire le jour où des tâches de fond sont livrées (Mobile Money, SMS, traitements planifiés) :
+sans Celery, ces tâches s'accumuleraient dans Redis sans jamais être exécutées.
+
+1. Agrandir d'abord le Droplet à **2 Go** (Celery ajoute ~250 Mo).
+2. Ajouter dans `.env` : `COMPOSE_PROFILES=celery`.
+3. Lancer `docker compose up -d --build` : `worker` et `beat` démarrent.
 
 ---
 
@@ -277,7 +304,8 @@ docker compose start backend worker beat
 | « Bad Request (400) » | Domaine absent de `DJANGO_ALLOWED_HOSTS` | Corriger `.env`, puis `docker compose up -d` |
 | « Échec de la vérification CSRF » | `DJANGO_CSRF_TRUSTED_ORIGINS` sans `https://` ou autre domaine | Corriger `.env`, puis `docker compose up -d` |
 | Trop de redirections | nginx d'une ancienne version qui écrase `X-Forwarded-Proto` | `git pull`, puis `docker compose up -d` |
-| Compilation interrompue (`Killed`) | Mémoire insuffisante | Ajouter le swap (2.3) ou passer à 4 Go |
+| Compilation interrompue (`Killed`) | Mémoire insuffisante | Vérifier le swap (`free -h`, section 2.3) ou passer à 2 Go |
+| Application très lente | Mémoire saturée, le serveur travaille sur le swap | `free -h` ; passer à 2 Go (Resize) |
 | `password authentication failed` | `POSTGRES_PASSWORD` modifié après la création de la base | Remettre l'ancien mot de passe (la base garde celui du premier démarrage) |
 
 Les autres erreurs courantes sont dans [LANCEMENT.md](LANCEMENT.md#4-dépannage).
