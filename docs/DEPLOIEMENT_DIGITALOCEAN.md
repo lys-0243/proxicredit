@@ -53,7 +53,7 @@ Dans le panneau DigitalOcean : **Create → Droplets**.
 | Réglage | Valeur |
 |---|---|
 | Région | Frankfurt (FRA1), Amsterdam (AMS3) ou London (LON1) : les plus proches de la RDC |
-| Image | **Marketplace → Docker** (Ubuntu 24.04 avec Docker et Compose déjà installés) |
+| Image | **Marketplace → Docker** (Ubuntu 24.04 avec Docker et Compose déjà installés). Ubuntu 24.04 simple convient aussi : Docker s'installe en une commande (2.3) |
 | Taille | **Basic, Regular, 1 Go / 1 vCPU (6 $/mois)**. Passer à 2 Go si davantage de testeurs |
 | Authentification | **Clé SSH** (plus sûr qu'un mot de passe) |
 | Backups | Cochez **Enable automated backups** si vous voulez une copie hors serveur |
@@ -75,22 +75,48 @@ Notez l'**adresse IP** du Droplet, par exemple `164.90.1.2`.
 Appliquez-le au Droplet `proxicredit-test`. Utilisez ce pare-feu DigitalOcean plutôt que `ufw` :
 Docker contourne `ufw` pour les ports qu'il publie.
 
-### 2.3 Connexion et mémoire d'appoint (swap)
+### 2.3 Connexion, mémoire d'appoint (swap) et Docker
 
-Depuis votre PC :
+Depuis votre PC (PowerShell sous Windows) :
 
 ```bash
 ssh root@164.90.1.2
 ```
 
+Sans clé SSH ni mot de passe sous la main : **Droplet → Access → Launch Droplet Console** ouvre un
+terminal root dans le navigateur.
+
 Sur le serveur, ajoutez 2 Go de swap. **Obligatoire avec 1 Go de mémoire** : sans swap, la
-compilation de l'application web est interrompue faute de mémoire.
+compilation de l'application web est interrompue faute de mémoire. Ce bloc peut être relancé sans
+risque :
 
 ```bash
-fallocate -l 2G /swapfile && chmod 600 /swapfile && mkswap /swapfile && swapon /swapfile
-echo '/swapfile none swap sw 0 0' >> /etc/fstab
-docker compose version            # doit afficher la version du plugin Compose
+if ! swapon --show | grep -q /swapfile; then
+  fallocate -l 2G /swapfile && chmod 600 /swapfile && mkswap /swapfile && swapon /swapfile
+fi
+grep -q '^/swapfile ' /etc/fstab || echo '/swapfile none swap sw 0 0' >> /etc/fstab
+free -h
 ```
+
+`free -h` doit afficher `Swap: 2.0Gi`.
+
+Vérifiez ensuite Docker :
+
+```bash
+docker compose version
+```
+
+Si la commande `docker` est introuvable (Droplet créé avec l'image Ubuntu simple au lieu de l'image
+Docker), installez la version officielle. N'utilisez pas `apt install docker.io` : son Compose est
+trop ancien (il faut la version 2.24 ou plus).
+
+```bash
+curl -fsSL https://get.docker.com | sh
+docker compose version
+```
+
+Collez les commandes bloc par bloc : un commentaire `# …` collé en fin de ligne peut fusionner avec
+la commande suivante.
 
 ---
 
